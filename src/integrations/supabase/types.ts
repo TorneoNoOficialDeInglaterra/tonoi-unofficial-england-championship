@@ -14,16 +14,307 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goalkeeper_stats: {
+        Row: {
+          clean_sheets: number
+          created_at: string
+          goalkeeper_name: string
+          id: string
+          season_id: string
+          team_id: string | null
+        }
+        Insert: {
+          clean_sheets?: number
+          created_at?: string
+          goalkeeper_name: string
+          id?: string
+          season_id: string
+          team_id?: string | null
+        }
+        Update: {
+          clean_sheets?: number
+          created_at?: string
+          goalkeeper_name?: string
+          id?: string
+          season_id?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goalkeeper_stats_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goalkeeper_stats_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goalkeeper_stats_history: {
+        Row: {
+          archived_at: string
+          clean_sheets: number
+          goalkeeper_name: string
+          id: string
+          season_label: string
+          team_id: string | null
+        }
+        Insert: {
+          archived_at?: string
+          clean_sheets?: number
+          goalkeeper_name: string
+          id?: string
+          season_label: string
+          team_id?: string | null
+        }
+        Update: {
+          archived_at?: string
+          clean_sheets?: number
+          goalkeeper_name?: string
+          id?: string
+          season_label?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goalkeeper_stats_history_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          loser_goals: number
+          loser_team_id: string
+          match_date: string
+          notes: string | null
+          title_changed: boolean
+          was_draw: boolean
+          winner_goals: number
+          winner_team_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          loser_goals?: number
+          loser_team_id: string
+          match_date: string
+          notes?: string | null
+          title_changed?: boolean
+          was_draw?: boolean
+          winner_goals?: number
+          winner_team_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          loser_goals?: number
+          loser_team_id?: string
+          match_date?: string
+          notes?: string | null
+          title_changed?: boolean
+          was_draw?: boolean
+          winner_goals?: number
+          winner_team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_loser_team_id_fkey"
+            columns: ["loser_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matches_winner_team_id_fkey"
+            columns: ["winner_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_stats: {
+        Row: {
+          assists: number
+          created_at: string
+          goals: number
+          id: string
+          player_name: string
+          season_id: string
+          team_id: string | null
+        }
+        Insert: {
+          assists?: number
+          created_at?: string
+          goals?: number
+          id?: string
+          player_name: string
+          season_id: string
+          team_id?: string | null
+        }
+        Update: {
+          assists?: number
+          created_at?: string
+          goals?: number
+          id?: string
+          player_name?: string
+          season_id?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_stats_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "player_stats_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_stats_history: {
+        Row: {
+          archived_at: string
+          assists: number
+          goals: number
+          id: string
+          player_name: string
+          season_label: string
+          team_id: string | null
+        }
+        Insert: {
+          archived_at?: string
+          assists?: number
+          goals?: number
+          id?: string
+          player_name: string
+          season_label: string
+          team_id?: string | null
+        }
+        Update: {
+          archived_at?: string
+          assists?: number
+          goals?: number
+          id?: string
+          player_name?: string
+          season_label?: string
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_stats_history_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seasons: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          is_active: boolean
+          label: string
+          started_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean
+          label: string
+          started_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string
+          started_at?: string | null
+        }
+        Relationships: []
+      }
+      teams: {
+        Row: {
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +441,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
