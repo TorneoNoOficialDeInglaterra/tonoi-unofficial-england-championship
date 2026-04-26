@@ -104,8 +104,8 @@ function PlayersTable({ seasonId }: { seasonId: string }) {
         const cmp = a.player_name.localeCompare(b.player_name);
         return sortDir === "asc" ? cmp : -cmp;
       }
-      const av = (a as Record<string, number>)[sortKey];
-      const bv = (b as Record<string, number>)[sortKey];
+      const av = (a as unknown as Record<string, number>)[sortKey];
+      const bv = (b as unknown as Record<string, number>)[sortKey];
       return sortDir === "asc" ? av - bv : bv - av;
     });
     return r;
