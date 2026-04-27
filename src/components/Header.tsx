@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
-const LOGO = "https://raw.githubusercontent.com/TorneoNoOficialDeInglaterra/TorneoNoOficialdeInglaterra/refs/heads/main/logo.png";
+import logoImg from "@/assets/logo.png";
+const LOGO = logoImg;
 
 const NAV = [
   { to: "/", label: "Inicio" },
