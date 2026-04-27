@@ -28,10 +28,9 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[image:var(--gradient-hero)] opacity-95" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),transparent_60%)]" />
-        <div className="container py-16 text-primary-foreground sm:py-24">
+      <section className="relative overflow-hidden bg-[image:var(--gradient-hero)]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),transparent_60%)]" />
+        <div className="container relative py-16 text-primary-foreground sm:py-24">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] opacity-90">
             <Trophy className="h-4 w-4" /> Torneo No Oficial de Inglaterra
           </div>
