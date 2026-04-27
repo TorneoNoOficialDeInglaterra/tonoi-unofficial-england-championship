@@ -81,7 +81,9 @@ export default function Home() {
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             <Calendar className="h-4 w-4" /> Último partido
           </div>
-          {last && lastWinner && lastLoser ? (
+          {teamsQ.isLoading || matchesQ.isLoading ? (
+            <Skeleton className="mt-4 h-20 w-full" />
+          ) : last && lastWinner && lastLoser ? (
             <div className="mt-4">
               <p className="text-xs text-muted-foreground">{new Date(last.match_date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</p>
               <div className="mt-3 flex items-center justify-between gap-3">
@@ -97,7 +99,7 @@ export default function Home() {
                   <TeamBadge team={lastLoser} size={36} />
                 </div>
               </div>
-              {last.was_draw && <p className="mt-2 text-xs text-muted-foreground">Decidido en penaltis · ganó {lastWinner.name}.</p>}
+              {last.was_draw && <p className="mt-2 text-xs text-muted-foreground">Empate.</p>}
               {last.title_changed && <p className="mt-1 text-xs font-semibold text-primary">¡Cambio de campeón!</p>}
             </div>
           ) : (
