@@ -353,7 +353,6 @@ function PlayersAdmin() {
   async function bumpField(name: string, field: "goals" | "assists") {
     const trimmed = name.trim();
     if (!trimmed) return;
-    // Find existing (case-insensitive)
     const { data: existing } = await supabase
       .from("player_stats")
       .select("*")
@@ -361,12 +360,17 @@ function PlayersAdmin() {
       .ilike("player_name", trimmed);
     if (existing && existing.length > 0) {
       const row = existing[0];
-      const newVal = (row[field] ?? 0) + 1;
-      const { error } = await supabase.from("player_stats").update({ [field]: newVal }).eq("id", row.id);
+      const newVal = ((field === "goals" ? row.goals : row.assists) ?? 0) + 1;
+      const patch = field === "goals" ? { goals: newVal } : { assists: newVal };
+      const { error } = await supabase.from("player_stats").update(patch).eq("id", row.id);
       if (error) throw error;
     } else {
-      const insert: Record<string, unknown> = { season_id: season, player_name: trimmed, goals: 0, assists: 0 };
-      insert[field] = 1;
+      const insert = {
+        season_id: season,
+        player_name: trimmed,
+        goals: field === "goals" ? 1 : 0,
+        assists: field === "assists" ? 1 : 0,
+      };
       const { error } = await supabase.from("player_stats").insert(insert);
       if (error) throw error;
     }

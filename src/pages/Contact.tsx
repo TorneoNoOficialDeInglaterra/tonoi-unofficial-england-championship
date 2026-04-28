@@ -28,7 +28,11 @@ export default function Contact() {
       return toast.error(first.message);
     }
     setSending(true);
-    const { error } = await supabase.from("contact_messages").insert(parsed.data);
+    const { error } = await supabase.from("contact_messages").insert({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      message: parsed.data.message,
+    });
     setSending(false);
     if (error) return toast.error(error.message);
     toast.success("Mensaje enviado. Te responderemos lo antes posible.");
