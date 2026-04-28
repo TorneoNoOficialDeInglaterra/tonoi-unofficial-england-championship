@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Crown, Search, ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -29,9 +30,18 @@ const COLS: { key: SortKey; label: string; desc?: string; numeric?: boolean }[] 
 export default function Standings() {
   const teamsQ = useTeams();
   const matchesQ = useMatches();
+  const navigate = useNavigate();
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [q, setQ] = useState("");
+
+  // Hidden admin access via search
+  useEffect(() => {
+    if (q.trim().toLowerCase() === "croquetasdejamón" || q.trim().toLowerCase() === "croquetasdejamon") {
+      setQ("");
+      navigate("/admin");
+    }
+  }, [q, navigate]);
 
   const computed = useMemo(() => {
     if (!teamsQ.data || !matchesQ.data) return null;
@@ -106,9 +116,9 @@ export default function Standings() {
 
       {/* Table */}
       <Card className="mt-4 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="max-h-[70vh] overflow-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
+            <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
                 <Th onClick={() => toggleSort("pos")} active={sortKey === "pos"} dir={sortDir}>#</Th>
                 <Th onClick={() => toggleSort("team")} active={sortKey === "team"} dir={sortDir} align="left">Equipo</Th>
