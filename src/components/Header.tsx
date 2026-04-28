@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Twitter, Youtube } from "lucide-react";
+import { Menu, Twitter, Mail } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -13,6 +13,7 @@ const NAV = [
   { to: "/historial", label: "Historial de partidos" },
   { to: "/estadisticas", label: "Estadísticas" },
   { to: "/historia", label: "Historia del torneo" },
+  { to: "/contacto", label: "Contacto" },
 ];
 
 export default function Header() {
@@ -49,13 +50,6 @@ export default function Header() {
                   {n.label}
                 </NavLink>
               ))}
-              <NavLink
-                to="/admin"
-                onClick={() => setOpen(false)}
-                className="mt-4 rounded-md px-3 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-              >
-                Admin →
-              </NavLink>
             </nav>
           </SheetContent>
         </Sheet>
@@ -74,10 +68,8 @@ export default function Header() {
               <Twitter className="h-5 w-5" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" asChild aria-label="Canal de YouTube">
-            <a href="https://www.youtube.com/watch?v=SpRxKO4BRfk" target="_blank" rel="noreferrer">
-              <Youtube className="h-5 w-5" />
-            </a>
+          <Button variant="ghost" size="icon" asChild aria-label="Contacto">
+            <Link to="/contacto"><Mail className="h-5 w-5" /></Link>
           </Button>
         </div>
       </div>

@@ -30,7 +30,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-[image:var(--gradient-hero)]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),transparent_60%)]" />
-        <div className="container relative py-16 text-primary-foreground sm:py-24">
+        <div className="container relative py-16 text-primary-foreground sm:py-20">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] opacity-90">
             <Trophy className="h-4 w-4" /> Torneo No Oficial de Inglaterra
           </div>
@@ -52,7 +52,7 @@ export default function Home() {
       </section>
 
       {/* Champion + last match */}
-      <section className="container -mt-10 grid gap-4 sm:grid-cols-2">
+      <section className="container mt-10 grid gap-4 sm:grid-cols-2">
         <Card className="overflow-hidden border-2 border-primary/20 p-6 shadow-[var(--shadow-elegant)]">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
             <Crown className="h-4 w-4" /> Campeón actual

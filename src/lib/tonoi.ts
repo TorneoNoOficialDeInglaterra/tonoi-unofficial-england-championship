@@ -138,6 +138,10 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
     b.p - a.p || b.dg - a.dg || b.gf - a.gf || a.team.name.localeCompare(b.team.name),
   );
 
-  const lastMatch = matchesAsc.length ? matchesAsc[matchesAsc.length - 1] : null;
+  // Last match by REAL date (not array order — older matches loaded later may sit at the end)
+  let lastMatch: Match | null = null;
+  for (const m of matchesAsc) {
+    if (!lastMatch || m.match_date > lastMatch.match_date) lastMatch = m;
+  }
   return { rows, champion, championSinceDate, lastMatch };
 }

@@ -126,9 +126,9 @@ function PlayersTable({ seasonId }: { seasonId: string }) {
         <span className="text-xs text-muted-foreground">{rows.length} jugadores</span>
       </div>
       <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="max-h-[70vh] overflow-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
+            <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
                 <SortTh onClick={() => toggle("name")} active={sortKey === "name"} dir={sortDir} align="left">Jugador</SortTh>
                 <SortTh onClick={() => toggle("goals")} active={sortKey === "goals"} dir={sortDir}>Goles</SortTh>
@@ -191,9 +191,9 @@ function KeepersTable({ seasonId }: { seasonId: string }) {
 
   return (
     <Card className="overflow-hidden">
-      <div className="overflow-x-auto">
+      <div className="max-h-[70vh] overflow-auto">
         <table className="min-w-full text-sm">
-          <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
+          <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
             <tr>
               <th className="px-3 py-3 text-left">Portero</th>
               <th className="px-3 py-3 text-center">Porterías a 0</th>

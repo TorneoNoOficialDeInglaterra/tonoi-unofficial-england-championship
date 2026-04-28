@@ -102,11 +102,6 @@ export default function MatchHistory() {
                         <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
                           {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
                         </span>
-                        {m.was_draw && (
-                          <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                            Empate
-                          </div>
-                        )}
                       </td>
                       <td className="px-3 py-2.5">
                         <div className="flex items-center gap-2">
