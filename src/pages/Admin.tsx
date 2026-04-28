@@ -595,3 +595,64 @@ function SeasonsAdmin() {
     </div>
   );
 }
+
+/* ================== MESSAGES ================== */
+function MessagesAdmin() {
+  const qc = useQueryClient();
+  const q = useQuery({
+    queryKey: ["contact_messages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("contact_messages")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  async function remove(id: string) {
+    if (!confirm("¿Eliminar mensaje?")) return;
+    const { error } = await supabase.from("contact_messages").delete().eq("id", id);
+    if (error) toast.error(error.message);
+    else qc.invalidateQueries({ queryKey: ["contact_messages"] });
+  }
+
+  const messages = q.data ?? [];
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4 border-primary/20 border-2">
+        <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+          <Mail className="h-4 w-4" /> Mensajes de contacto
+        </h3>
+        <p className="mt-2 text-sm text-foreground/80">
+          Mensajes enviados desde el formulario de la página de Contacto. Próximamente también llegarán al correo del torneo.
+        </p>
+      </Card>
+      {messages.length === 0 ? (
+        <Card className="p-8 text-center text-sm text-muted-foreground">No hay mensajes todavía.</Card>
+      ) : (
+        <div className="space-y-3">
+          {messages.map((m) => (
+            <Card key={m.id} className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="font-bold">{m.name}</span>
+                    <a href={`mailto:${m.email}`} className="text-sm text-primary hover:underline">{m.email}</a>
+                    <span className="text-xs text-muted-foreground">{new Date(m.created_at).toLocaleString("es-ES")}</span>
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/90">{m.message}</p>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => remove(m.id)}>
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
