@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail } from "lucide-react";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { cn } from "@/lib/utils";
 import type { Team } from "@/lib/tonoi";
@@ -66,6 +66,7 @@ export default function Admin() {
             <TabsTrigger value="players" className="whitespace-nowrap">Jugadores</TabsTrigger>
             <TabsTrigger value="keepers" className="whitespace-nowrap">Porteros</TabsTrigger>
             <TabsTrigger value="seasons" className="whitespace-nowrap">Temporadas</TabsTrigger>
+            <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="teams" className="mt-4"><TeamsAdmin /></TabsContent>
@@ -73,6 +74,7 @@ export default function Admin() {
         <TabsContent value="players" className="mt-4"><PlayersAdmin /></TabsContent>
         <TabsContent value="keepers" className="mt-4"><KeepersAdmin /></TabsContent>
         <TabsContent value="seasons" className="mt-4"><SeasonsAdmin /></TabsContent>
+        <TabsContent value="messages" className="mt-4"><MessagesAdmin /></TabsContent>
       </Tabs>
     </div>
   );
