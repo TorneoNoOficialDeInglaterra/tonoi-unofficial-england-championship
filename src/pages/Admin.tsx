@@ -486,10 +486,21 @@ function KeepersAdmin() {
       const { error } = await supabase.from("goalkeeper_stats").insert({ season_id: season, goalkeeper_name: trimmed, clean_sheets: 1 });
       if (error) return toast.error(error.message);
     }
+    // Bump all-time goalkeeper stats
+    const { data: at } = await supabase
+      .from("goalkeeper_stats_alltime")
+      .select("*")
+      .ilike("goalkeeper_name", trimmed);
+    if (at && at.length > 0) {
+      await supabase.from("goalkeeper_stats_alltime").update({ clean_sheets: (at[0].clean_sheets ?? 0) + 1 }).eq("id", at[0].id);
+    } else {
+      await supabase.from("goalkeeper_stats_alltime").insert({ goalkeeper_name: trimmed, clean_sheets: 1 });
+    }
     toast.success("Portería a 0 registrada");
     setName("");
     qc.invalidateQueries({ queryKey: ["admin-keepers", season] });
     qc.invalidateQueries({ queryKey: ["keepers", season] });
+    qc.invalidateQueries({ queryKey: ["keepers", "__historic__"] });
   }
 
   async function remove(id: string) {
