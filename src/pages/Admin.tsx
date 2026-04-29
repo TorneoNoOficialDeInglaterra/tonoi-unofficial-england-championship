@@ -352,6 +352,25 @@ function PlayersAdmin() {
   const [scorer, setScorer] = useState("");
   const [assister, setAssister] = useState("");
 
+  async function bumpAlltimePlayer(name: string, field: "goals" | "assists") {
+    const { data: existing } = await supabase
+      .from("player_stats_alltime")
+      .select("*")
+      .ilike("player_name", name);
+    if (existing && existing.length > 0) {
+      const row = existing[0];
+      const newVal = ((field === "goals" ? row.goals : row.assists) ?? 0) + 1;
+      const patch = field === "goals" ? { goals: newVal } : { assists: newVal };
+      await supabase.from("player_stats_alltime").update(patch).eq("id", row.id);
+    } else {
+      await supabase.from("player_stats_alltime").insert({
+        player_name: name,
+        goals: field === "goals" ? 1 : 0,
+        assists: field === "assists" ? 1 : 0,
+      });
+    }
+  }
+
   async function bumpField(name: string, field: "goals" | "assists") {
     const trimmed = name.trim();
     if (!trimmed) return;
@@ -376,6 +395,7 @@ function PlayersAdmin() {
       const { error } = await supabase.from("player_stats").insert(insert);
       if (error) throw error;
     }
+    await bumpAlltimePlayer(trimmed, field);
   }
 
   async function registerGoal() {
@@ -387,6 +407,7 @@ function PlayersAdmin() {
       setScorer(""); setAssister("");
       qc.invalidateQueries({ queryKey: ["admin-players", season] });
       qc.invalidateQueries({ queryKey: ["players", season] });
+      qc.invalidateQueries({ queryKey: ["players", "__historic__"] });
     } catch (e: unknown) {
       toast.error((e as Error).message);
     }
@@ -465,10 +486,21 @@ function KeepersAdmin() {
       const { error } = await supabase.from("goalkeeper_stats").insert({ season_id: season, goalkeeper_name: trimmed, clean_sheets: 1 });
       if (error) return toast.error(error.message);
     }
+    // Bump all-time goalkeeper stats
+    const { data: at } = await supabase
+      .from("goalkeeper_stats_alltime")
+      .select("*")
+      .ilike("goalkeeper_name", trimmed);
+    if (at && at.length > 0) {
+      await supabase.from("goalkeeper_stats_alltime").update({ clean_sheets: (at[0].clean_sheets ?? 0) + 1 }).eq("id", at[0].id);
+    } else {
+      await supabase.from("goalkeeper_stats_alltime").insert({ goalkeeper_name: trimmed, clean_sheets: 1 });
+    }
     toast.success("Portería a 0 registrada");
     setName("");
     qc.invalidateQueries({ queryKey: ["admin-keepers", season] });
     qc.invalidateQueries({ queryKey: ["keepers", season] });
+    qc.invalidateQueries({ queryKey: ["keepers", "__historic__"] });
   }
 
   async function remove(id: string) {

@@ -1,121 +1,81 @@
-# Plan de mejoras ToNOI
+## Plan
 
-## 1. Página principal (Home)
+### 1. Histórico de estadísticas en tiempo real
 
-**Hueco entre hero y tarjetas / hero "se come" la parte de abajo**
-- Quitar el `-mt-10` que hace que las tarjetas de Campeón / Último partido se solapen con el hero.
-- Añadir un `pb-10` extra al hero y un `mt-8` a la sección de tarjetas para tener separación clara.
+**Problema**: el "Histórico" solo lee `player_stats_history` y `goalkeeper_stats_history`, que se rellenan al cerrar temporada. Hasta entonces el histórico aparece vacío.
 
-**Último partido no aparece**
-- Causa: en `useMatches` se ordena por `match_date asc, created_at asc`, pero los partidos antiguos (1879, etc.) que se han cargado más tarde quedan al final. El "último partido" se calcula como el último de la lista, no como el más reciente por fecha real.
-- Arreglar `computeStandings` para que `lastMatch` sea el partido con la fecha **más reciente** real (`max(match_date)`), no el último del array.
+**Solución**: crear dos tablas nuevas que se actualicen en vivo cada vez que se registra un gol/asistencia/portería en el panel admin.
 
-## 2. Header
+- Migración: nuevas tablas
+  - `player_stats_alltime` (player_name unique, goals, assists)
+  - `goalkeeper_stats_alltime` (goalkeeper_name unique, clean_sheets)
+  - RLS: lectura pública, escritura solo admin (igual que el resto).
+- Modificar `bumpField` (Players) y `registerCleanSheet` (Keepers) en `src/pages/Admin.tsx` para hacer un `upsert` adicional sobre la tabla all-time (sumando 1 al valor existente, o creando la fila).
+- Backfill: la migración rellenará las nuevas tablas sumando lo que ya existe en `player_stats` + `player_stats_history` (y equivalente porteros) para no perder los datos actuales.
+- En `src/pages/Stats.tsx`, cuando el usuario elige "Histórico", leer de las nuevas tablas all-time (más rápido y siempre al día).
+- Al cerrar temporada, dejar el flujo actual intacto pero NO sumar de nuevo al all-time (ya estaba contado en cada gol).
 
-- Eliminar el botón de YouTube de la cabecera (mantener solo Twitter).
-- **Esconder enlace a Admin**: quitar el link "Admin →" del menú lateral. El acceso será sólo escribiendo `croquetasdejamón` en el buscador de la página de Clasificación, que redirigirá a `/admin`.
+### 2. Header opaco (no transparente)
 
-## 3. Footer
+En `src/components/Header.tsx`, cambiar:
+- `bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80` → `bg-background` (sólido, sin transparencia ni blur).
 
-- Cambiar el texto a algo como:
-  > © {año} Torneo No Oficial de Inglaterra (ToNOI) — Web oficial del torneo. Creado y gestionado por sus fundadores.
+### 3. Hero principal: carrusel + logo grande
 
-## 4. Clasificación
+En `src/pages/Home.tsx` reemplazar el bloque rojo del hero por:
+- Fondo: carrusel automático con fotos icónicas del fútbol de distintas épocas (blanco y negro antiguas, mid-century, modernas). Usaremos el componente `Carousel` ya disponible (`src/components/ui/carousel.tsx`) con autoplay simple via `setInterval`.
+  - Imágenes: descargaremos 5–7 fotos libres de derechos (Wikimedia Commons / Unsplash) y las guardaremos en `src/assets/hero/`.
+  - Overlay oscuro semitransparente para que el texto se siga leyendo.
+- Layout: en escritorio, dos columnas — texto y CTAs a la izquierda; logo del torneo grande (~280px) a la derecha. En móvil se apila (logo arriba o debajo, más pequeño).
 
-- **Tabla con scroll propio**: envolver la tabla en un contenedor con `max-h-[70vh] overflow-y-auto` y `thead` con `sticky top-0` para que sólo la tabla baje, no la página entera.
-- **Acceso oculto a admin**: si el usuario escribe exactamente `croquetasdejamón` en el buscador, hacer `navigate("/admin")` y limpiar el input.
-- **Datos al día**: ya se calculan en cliente con `computeStandings` sobre todos los partidos. Confirmar que `useMatches` invalida cache al añadir partido nuevo (ya lo hace en Admin con `invalidateQueries({ queryKey: ["matches"] })`). Sin cambios estructurales necesarios — sólo verificar.
+### 4. Layout de la página principal a dos columnas
 
-## 5. Estadísticas
+En `src/pages/Home.tsx`, después de la sección "Campeón actual + Último partido", la zona "¿Qué es el ToNOI?" + Reglamento se alineará a la izquierda en una rejilla de 2 columnas (≥`lg`):
 
-- Aplicar el mismo patrón de **scroll interno** (`max-h-[70vh] overflow-y-auto` + `thead sticky`) a las tablas de jugadores y porteros.
+```text
+┌────────────────────────┬──────────────────┐
+│ ¿Qué es el ToNOI?      │  Top 10          │
+│ (texto + Reglamento)   │  clasificación   │
+│                        │                  │
+│                        │  Últimos 5       │
+│                        │  partidos        │
+└────────────────────────┴──────────────────┘
+```
 
-## 6. Historial de partidos
+- Columna derecha (`sticky top-20`): dos `Card`s.
+  - **Top 10**: usa `computeStandings(...)` (ya disponible en `useMatches`/`useTeams`) y muestra las primeras 10 filas con escudo + nombre + puntos. Botón "Ver completa" → `/clasificacion`.
+  - **Últimos 5 partidos**: ordenar `matches` por `match_date` desc y mostrar 5 con escudos pequeños y resultado. Botón "Ver historial" → `/historial`.
+- En móvil/tablet (<`lg`), las tarjetas se muestran apiladas debajo del texto.
+- El vídeo de YouTube se queda como está (sección aparte, ancho completo centrado).
 
-- Quitar la etiqueta "Empate" debajo del marcador en partidos empatados (mantener sólo el resultado).
+### 5. Local/visitante alternado para empates
 
-## 7. Admin — móvil
+Regla nueva (sustituye al hash aleatorio): para cada empate, si el partido **anterior** (cronológicamente, sea empate o no) lo jugó como local, ahora le toca de visitante; y viceversa. Independiente del partido siguiente.
 
-- En `Admin.tsx`, las pestañas (`TabsList`) se desbordan en móvil y arrastran toda la página.
-- Solución: envolver `TabsList` en un contenedor con `overflow-x-auto` propio y `w-full max-w-full`, y poner `whitespace-nowrap` en los triggers. Así sólo la barra de pestañas se desplaza horizontalmente, no la página entera.
+- En `src/pages/MatchHistory.tsx` ya no usaremos `hashHome`. Calcularemos un mapa `matchId → localTeamId` recorriendo todos los partidos en orden ascendente:
+  - Mantener `lastVenue: Map<teamId, "home" | "away">`.
+  - En partidos no empate: el resultado se sigue registrando con winner/loser; pero también determinamos quién es local con la misma regla de alternancia (para mantener coherencia visual).
+  - En empates: el equipo que jugó de visitante en su partido anterior es ahora local; si es el primer partido del equipo, se asigna por orden alfabético (estable).
+  - Tras decidir, actualizar `lastVenue` para ambos equipos.
+- El cálculo se hace una sola vez con `useMemo` en `MatchHistory.tsx`.
 
-## 8. Admin — Añadir partido (simplificado)
+### 6. Buscador de partidos por equipo
 
-Sustituir el formulario actual por uno minimalista:
+En `src/pages/MatchHistory.tsx`, añadir encima del selector de década:
+- Un `Input` con icono de búsqueda y autocompletado básico (o un `Combobox` similar al `TeamCombobox` del admin) para elegir un equipo.
+- Si hay equipo seleccionado: ocultar la navegación por décadas y mostrar **todos** los partidos de ese equipo (winner_team_id == teamId OR loser_team_id == teamId), ordenados por fecha desc, en la misma tabla.
+- Botón "Limpiar" para volver a la vista por décadas.
 
-- **Fecha** (date)
-- **Equipo ganador** (Combobox con búsqueda)
-- **Equipo perdedor** (Combobox con búsqueda)
-- **Resultado completo**: un sólo input tipo texto con formato `X-Y` (ej. `2-1`, `0-0`). Se parsea para deducir `winner_goals` y `loser_goals`. La asignación local/visitante seguirá siendo aleatoria estable como ya lo es en el historial (no se almacena venue), pero el orden del resultado introducido `local-visitante` se podrá interpretar luego en el historial. **Nota**: como el modelo actual sólo guarda `winner_goals` y `loser_goals`, asumimos que el primer número es el del ganador y el segundo el del perdedor (en empates ambos iguales).
-- **Empate** (switch) — sin texto de "decidido por penaltis"
-- **Eliminar**: notas, switch de "cambio de campeón" (se deduce automáticamente: si el ganador NO era el campeón actual antes de este partido y no es empate, hay cambio).
-- **Deducción automática de `title_changed`**: al insertar, calcular el campeón vigente justo antes de `match_date` desde los partidos existentes y comparar con el ganador. Si distinto y no empate ⇒ `title_changed = true`.
-- **Combobox con búsqueda** para selección de equipos: usar el componente `Command` de shadcn dentro de un `Popover` (patrón estándar de shadcn Combobox), igual para ganador y perdedor.
+### Detalles técnicos / archivos tocados
 
-## 9. Admin — Jugadores (incremental)
+- Migración SQL nueva: tablas `player_stats_alltime`, `goalkeeper_stats_alltime`, RLS, índice único por nombre, backfill desde tablas existentes.
+- `src/pages/Admin.tsx`: upsert al all-time en `bumpField` y `registerCleanSheet`.
+- `src/pages/Stats.tsx`: rama "Histórico" lee de las tablas all-time.
+- `src/components/Header.tsx`: fondo sólido.
+- `src/assets/hero/*.jpg`: 5–7 imágenes históricas de fútbol.
+- `src/pages/Home.tsx`: hero rediseñado (carrusel + logo grande), layout 2 columnas con widgets de Top 10 y últimos 5 partidos.
+- `src/pages/MatchHistory.tsx`: regla alternancia local/visitante, buscador por equipo.
 
-Reemplazar el formulario actual por uno tipo "registro de gol":
+### Pregunta abierta
 
-- Input **Goleador** (texto, obligatorio)
-- Input **Asistente** (texto, opcional)
-- Botón "Registrar gol"
-
-Lógica al guardar (en la temporada activa seleccionada):
-- Buscar `player_stats` por `season_id` + `player_name` (case-insensitive trim).
-  - Si existe ⇒ `update goals = goals + 1`.
-  - Si no existe ⇒ `insert { season_id, player_name, goals: 1, assists: 0 }`.
-- Si hay asistente, mismo proceso para `assists + 1` en su fila.
-- Mantener la tabla resumen debajo (con opción de borrar, sin edición manual de números).
-
-## 10. Admin — Porteros (incremental)
-
-- Input **Portero** + botón "Registrar portería a 0".
-- Misma lógica: si existe ⇒ `clean_sheets + 1`; si no ⇒ insert con `clean_sheets: 1`.
-
-## 11. Temporadas — explicación
-
-Las temporadas sirven para agrupar las estadísticas individuales (goleadores, asistentes, porteros) por año futbolístico. La tabla de **clasificación histórica** y los partidos NO dependen de temporadas — son acumulados desde 1879 hasta hoy. Las temporadas sólo afectan a la pestaña **Estadísticas**, donde puedes ver:
-- Goleadores/asistentes de la temporada activa.
-- Porteros con porterías a 0 de la temporada activa.
-- O el "Histórico" que suma todas las temporadas pasadas archivadas.
-
-Cuando termina una temporada, sus datos pueden archivarse a las tablas `_history` para empezar limpia en la siguiente. **Si no quieres usar temporadas**, podemos crear sólo una "Temporada general" permanentemente activa y todo se acumula ahí — dímelo si lo prefieres.
-
-## 12. Página de Contacto
-
-- Nueva ruta `/contacto` con un formulario: nombre, email, mensaje (validado con zod).
-- Al enviar, llama a una **edge function** `send-contact-email` que usa el sistema de emails de Lovable (Lovable Cloud Email) para enviar el mensaje a `torneonooficialdeinglaterra@gmail.com`.
-- **Pre-requisito**: configurar dominio de email en Lovable Cloud (te aparecerá un diálogo de configuración de dominio la primera vez). Mientras se verifica el DNS, el formulario seguirá guardando los envíos en una tabla `contact_messages` para no perder mensajes.
-- Añadir enlace "Contacto" en el menú lateral del header.
-
-## 13. Escudos de equipos
-
-- Recopilar URLs de escudos para todos los equipos existentes en la base de datos.
-- Hacer un script de migración tipo `INSERT/UPDATE` que asigne `logo_url` a cada equipo por nombre.
-- **Necesito que me confirmes**: ¿quieres que use Wikipedia/Wikimedia Commons como fuente (URLs públicas estables tipo `upload.wikimedia.org/.../escudo.svg`)? Si tienes una fuente preferida o un set ya recopilado, dímelo. Si no, los recopilo yo de Wikipedia para los equipos que ya estén en la base de datos.
-
----
-
-## Detalles técnicos (resumen)
-
-| Archivo | Cambio principal |
-|---|---|
-| `src/pages/Home.tsx` | Quitar `-mt-10`, añadir `pb-10`/`mt-8` para separación |
-| `src/lib/tonoi.ts` | `lastMatch` = max por `match_date` real (tie-break `created_at`) |
-| `src/components/Header.tsx` | Quitar YouTube y enlace Admin |
-| `src/components/Footer.tsx` | Nuevo texto "Web oficial / Creado por fundadores" |
-| `src/pages/Standings.tsx` | Tabla con `max-h + overflow-y-auto + thead sticky`; trigger oculto admin (`croquetasdejamón`) |
-| `src/pages/Stats.tsx` | Mismo patrón sticky en tablas |
-| `src/pages/MatchHistory.tsx` | Quitar etiqueta "Empate" |
-| `src/pages/Admin.tsx` | TabsList con scroll horizontal aislado; rehacer MatchesAdmin (combobox+resultado), PlayersAdmin (incremental), KeepersAdmin (incremental) |
-| `src/components/ui/combobox` (nuevo) | Combobox de shadcn (Command + Popover) reutilizable para selección de equipo |
-| `src/pages/Contact.tsx` (nuevo) | Formulario con zod |
-| `src/App.tsx` | Ruta `/contacto` |
-| `supabase/functions/send-contact-email` (nueva) | Edge function que envía email a la cuenta admin |
-| Migración SQL | Crear tabla `contact_messages` (RLS: admin lee, anyone insert) y actualizar `logo_url` de los equipos |
-
-## Preguntas para ti antes de implementar
-
-1. **Escudos**: ¿uso Wikipedia como fuente de URLs o me das tu propio listado?
-2. **Resultado del partido**: ¿confirmas que el formato `X-Y` se interpretará como `goles del ganador - goles del perdedor`? (Es lo más simple dado el modelo actual). Si prefieres `local-visitante`, habría que añadir un selector "el ganador era local/visitante".
-3. **Temporadas**: ¿quieres mantener temporadas por año o prefieres una sola temporada permanente?
+Cuando un equipo aparece en su **primer** partido y es empate, no hay "partido anterior" para alternar. Lo resolveré asignando local al equipo cuyo nombre va antes alfabéticamente (criterio estable y sin aleatoriedad). Si prefieres otra regla (p.ej. siempre el winner_team_id como local en el primer empate), avísame.
