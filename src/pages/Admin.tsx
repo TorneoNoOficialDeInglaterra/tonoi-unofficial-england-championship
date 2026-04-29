@@ -352,6 +352,25 @@ function PlayersAdmin() {
   const [scorer, setScorer] = useState("");
   const [assister, setAssister] = useState("");
 
+  async function bumpAlltimePlayer(name: string, field: "goals" | "assists") {
+    const { data: existing } = await supabase
+      .from("player_stats_alltime")
+      .select("*")
+      .ilike("player_name", name);
+    if (existing && existing.length > 0) {
+      const row = existing[0];
+      const newVal = ((field === "goals" ? row.goals : row.assists) ?? 0) + 1;
+      const patch = field === "goals" ? { goals: newVal } : { assists: newVal };
+      await supabase.from("player_stats_alltime").update(patch).eq("id", row.id);
+    } else {
+      await supabase.from("player_stats_alltime").insert({
+        player_name: name,
+        goals: field === "goals" ? 1 : 0,
+        assists: field === "assists" ? 1 : 0,
+      });
+    }
+  }
+
   async function bumpField(name: string, field: "goals" | "assists") {
     const trimmed = name.trim();
     if (!trimmed) return;
@@ -376,6 +395,7 @@ function PlayersAdmin() {
       const { error } = await supabase.from("player_stats").insert(insert);
       if (error) throw error;
     }
+    await bumpAlltimePlayer(trimmed, field);
   }
 
   async function registerGoal() {
