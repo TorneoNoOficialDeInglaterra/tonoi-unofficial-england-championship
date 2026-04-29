@@ -1,12 +1,21 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Crown, Calendar, ArrowRight, Trophy, Play } from "lucide-react";
+import { Crown, Calendar, ArrowRight, Trophy, Play, ListOrdered, History } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings, daysBetween } from "@/lib/tonoi";
+
+import logoImg from "@/assets/logo.png";
+import hero1 from "@/assets/hero/hero1.jpg";
+import hero2 from "@/assets/hero/hero2.jpg";
+import hero3 from "@/assets/hero/hero3.jpg";
+import hero4 from "@/assets/hero/hero4.jpg";
+import hero5 from "@/assets/hero/hero5.jpg";
+
+const HERO_IMAGES = [hero1, hero2, hero3, hero4, hero5];
 
 export default function Home() {
   const teamsQ = useTeams();
@@ -25,28 +34,81 @@ export default function Home() {
   const lastWinner = last ? teamById.get(last.winner_team_id) : null;
   const lastLoser = last ? teamById.get(last.loser_team_id) : null;
 
+  // Top 10 (by points)
+  const top10 = useMemo(() => (data?.rows ?? []).slice(0, 10), [data]);
+
+  // Last 5 matches by date desc
+  const last5 = useMemo(() => {
+    const arr = [...(matchesQ.data ?? [])];
+    arr.sort((a, b) => b.match_date.localeCompare(a.match_date));
+    return arr.slice(0, 5);
+  }, [matchesQ.data]);
+
+  // Hero carousel
+  const [heroIdx, setHeroIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setHeroIdx((i) => (i + 1) % HERO_IMAGES.length), 5000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[image:var(--gradient-hero)]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.25),transparent_60%)]" />
-        <div className="container relative py-16 text-primary-foreground sm:py-20">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] opacity-90">
-            <Trophy className="h-4 w-4" /> Torneo No Oficial de Inglaterra
+      {/* Hero with photo carousel + big logo */}
+      <section className="relative overflow-hidden">
+        {/* Carousel layer */}
+        <div className="absolute inset-0">
+          {HERO_IMAGES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ${i === heroIdx ? "opacity-100" : "opacity-0"}`}
+            />
+          ))}
+          {/* Dark overlay for legibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+        </div>
+
+        <div className="container relative py-16 text-white sm:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] opacity-90">
+                <Trophy className="h-4 w-4" /> Torneo No Oficial de Inglaterra
+              </div>
+              <h1 className="mt-3 max-w-3xl text-5xl font-black leading-none sm:text-7xl">
+                Para ser campeón,<br />gana al campeón.
+              </h1>
+              <p className="mt-5 max-w-xl text-base opacity-90 sm:text-lg">
+                Un solo título. Una sola regla. Sigue la historia viva del ToNOI partido a partido.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button asChild size="lg" variant="secondary">
+                  <Link to="/clasificacion">Ver clasificación <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/0 text-white hover:bg-white/10 hover:text-white">
+                  <Link to="/historial">Historial de partidos</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Big logo */}
+            <div className="hidden justify-center lg:flex">
+              <div className="rounded-full bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/20">
+                <img src={logoImg} alt="Logo ToNOI" className="h-64 w-64 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]" />
+              </div>
+            </div>
           </div>
-          <h1 className="mt-3 max-w-3xl text-5xl font-black leading-none sm:text-7xl">
-            Para ser campeón,<br />gana al campeón.
-          </h1>
-          <p className="mt-5 max-w-xl text-base opacity-90 sm:text-lg">
-            Un solo título. Una sola regla. Sigue la historia viva del ToNOI partido a partido.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" variant="secondary">
-              <Link to="/clasificacion">Ver clasificación <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/0 text-white hover:bg-white/10 hover:text-white">
-              <Link to="/historial">Historial de partidos</Link>
-            </Button>
+
+          {/* Carousel dots */}
+          <div className="mt-10 flex gap-1.5">
+            {HERO_IMAGES.map((_, i) => (
+              <button
+                key={i}
+                aria-label={`Imagen ${i + 1}`}
+                onClick={() => setHeroIdx(i)}
+                className={`h-1.5 rounded-full transition-all ${i === heroIdx ? "w-8 bg-white" : "w-3 bg-white/40 hover:bg-white/60"}`}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -73,7 +135,7 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <p className="mt-4 text-sm text-muted-foreground">Aún no hay partidos registrados. Añade el primero desde el panel admin.</p>
+            <p className="mt-4 text-sm text-muted-foreground">Aún no hay partidos registrados.</p>
           )}
         </Card>
 
@@ -108,57 +170,125 @@ export default function Home() {
         </Card>
       </section>
 
-      {/* What is ToNOI */}
-      <section className="container mt-20">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="text-4xl font-black sm:text-5xl">¿Qué es el ToNOI?</h2>
-          <div className="mt-6 space-y-4 text-base leading-relaxed text-foreground/90">
-            <p>
-              ¿Te imaginas que pasaría si en el fútbol se decidiera quién es el campeón como se hace en el boxeo?
-              Pues nosotros estamos aquí para contarlo.
-            </p>
-            <p>
-              El <strong>Torneo No Oficial de Inglaterra (ToNOI)</strong> es un campeonato en el que para ser campeón
-              debes ganar al actual campeón. No existen fase de grupos, eliminatorias ni nada por el estilo:{" "}
-              <strong>solo finales</strong>. Si te enfrentas al equipo campeón y resultas victorioso, serás el nuevo
-              <strong> CAMPEÓN NO OFICIAL DE INGLATERRA</strong> y comenzarás a hacer historia hasta verte derrotado por otro equipo.
-            </p>
-            <p>
-              El título cambia de manos partido a partido, atravesando décadas, generaciones y rivalidades. Aquí no
-              importa la liga ni la copa: lo único que cuenta es ese duelo concreto en el que un club desafía al
-              campeón del momento.
+      {/* What is ToNOI + side widgets (2-column on desktop) */}
+      <section className="container mt-16">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+          {/* Left column: text + reglamento */}
+          <div>
+            <h2 className="text-4xl font-black sm:text-5xl">¿Qué es el ToNOI?</h2>
+            <div className="mt-6 space-y-4 text-base leading-relaxed text-foreground/90">
+              <p>
+                ¿Te imaginas que pasaría si en el fútbol se decidiera quién es el campeón como se hace en el boxeo?
+                Pues nosotros estamos aquí para contarlo.
+              </p>
+              <p>
+                El <strong>Torneo No Oficial de Inglaterra (ToNOI)</strong> es un campeonato en el que para ser campeón
+                debes ganar al actual campeón. No existen fase de grupos, eliminatorias ni nada por el estilo:{" "}
+                <strong>solo finales</strong>. Si te enfrentas al equipo campeón y resultas victorioso, serás el nuevo
+                <strong> CAMPEÓN NO OFICIAL DE INGLATERRA</strong> y comenzarás a hacer historia hasta verte derrotado por otro equipo.
+              </p>
+              <p>
+                El título cambia de manos partido a partido, atravesando décadas, generaciones y rivalidades. Aquí no
+                importa la liga ni la copa: lo único que cuenta es ese duelo concreto en el que un club desafía al
+                campeón del momento.
+              </p>
+            </div>
+
+            <Card className="mt-10 border-2 border-primary/20 p-6">
+              <h3 className="flex items-center gap-2 text-2xl font-black">
+                <Trophy className="h-5 w-5 text-primary" /> Reglamento Oficial
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm">
+                {[
+                  "Si ganas al actual campeón, te conviertes en campeón.",
+                  "Solo valen partidos oficiales.",
+                  "Si en una liga no hay registros oficiales se contará el siguiente partido oficial.",
+                  "En caso de desaparición del club campeón, el título vuelve al anterior campeón.",
+                  "Todas las prórrogas cuentan.",
+                  "Los penaltis cuentan: si el partido acaba en empate global o requiere desempate, el ganador se lleva el título.",
+                ].map((r, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{i + 1}</span>
+                    <span>{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+
+            <p className="mt-8 text-lg font-semibold italic text-primary">
+              Sumérgete con nosotros en esta aventura y disfruta del fútbol como nunca.
             </p>
           </div>
 
-          <Card className="mt-10 border-2 border-primary/20 p-6">
-            <h3 className="flex items-center gap-2 text-2xl font-black">
-              <Trophy className="h-5 w-5 text-primary" /> Reglamento Oficial
-            </h3>
-            <ul className="mt-4 space-y-3 text-sm">
-              {[
-                "Si ganas al actual campeón, te conviertes en campeón.",
-                "Solo valen partidos oficiales.",
-                "Si en una liga no hay registros oficiales se contará el siguiente partido oficial.",
-                "En caso de desaparición del club campeón, el título vuelve al anterior campeón.",
-                "Todas las prórrogas cuentan.",
-                "Los penaltis cuentan: si el partido acaba en empate global o requiere desempate, el ganador se lleva el título.",
-              ].map((r, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="mt-0.5 inline-flex h-6 w-6 flex-none items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{i + 1}</span>
-                  <span>{r}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+          {/* Right column: widgets */}
+          <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+            {/* Top 10 */}
+            <Card className="p-4">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+                  <ListOrdered className="h-4 w-4" /> Top 10
+                </h3>
+                <Link to="/clasificacion" className="text-xs font-semibold text-primary hover:underline">Ver todo →</Link>
+              </div>
+              {teamsQ.isLoading || matchesQ.isLoading ? (
+                <div className="mt-3 space-y-2">{Array.from({ length: 10 }).map((_, i) => <Skeleton key={i} className="h-7 w-full" />)}</div>
+              ) : top10.length === 0 ? (
+                <p className="mt-3 text-xs text-muted-foreground">Sin datos.</p>
+              ) : (
+                <ol className="mt-3 space-y-1.5 text-sm">
+                  {top10.map((row, i) => (
+                    <li key={row.team.id} className="flex items-center gap-2">
+                      <span className="w-5 flex-none text-right text-xs font-bold text-muted-foreground">{i + 1}</span>
+                      <TeamBadge team={row.team} size={20} />
+                      <span className="min-w-0 flex-1 truncate font-medium">{row.team.name}</span>
+                      <span className="flex-none font-mono text-xs font-bold tabular-nums">{row.p}</span>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </Card>
 
-          <p className="mt-8 text-center text-lg font-semibold italic text-primary">
-            Sumérgete con nosotros en esta aventura y disfruta del fútbol como nunca.
-          </p>
+            {/* Últimos 5 */}
+            <Card className="p-4">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+                  <History className="h-4 w-4" /> Últimos 5 partidos
+                </h3>
+                <Link to="/historial" className="text-xs font-semibold text-primary hover:underline">Ver todo →</Link>
+              </div>
+              {teamsQ.isLoading || matchesQ.isLoading ? (
+                <div className="mt-3 space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}</div>
+              ) : last5.length === 0 ? (
+                <p className="mt-3 text-xs text-muted-foreground">Sin partidos.</p>
+              ) : (
+                <ul className="mt-3 space-y-2">
+                  {last5.map((m) => {
+                    const w = teamById.get(m.winner_team_id);
+                    const l = teamById.get(m.loser_team_id);
+                    return (
+                      <li key={m.id} className="rounded-md border border-border p-2 text-xs">
+                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                          {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                        </div>
+                        <div className="mt-1 flex items-center gap-2">
+                          <TeamBadge team={w} size={18} />
+                          <span className="min-w-0 flex-1 truncate font-medium">{w?.name ?? "—"}</span>
+                          <span className="font-mono font-bold tabular-nums">{m.winner_goals}–{m.loser_goals}</span>
+                          <span className="min-w-0 flex-1 truncate text-right font-medium">{l?.name ?? "—"}</span>
+                          <TeamBadge team={l} size={18} />
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </Card>
+          </aside>
         </div>
       </section>
 
       {/* YouTube video */}
-      <section className="container mt-16">
+      <section className="container mt-16 pb-16">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             <Play className="h-4 w-4" /> Vídeo de origen
