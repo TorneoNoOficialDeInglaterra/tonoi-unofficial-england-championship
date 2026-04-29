@@ -69,16 +69,10 @@ function PlayersTable({ seasonId }: { seasonId: string }) {
     queryFn: async (): Promise<Player[]> => {
       if (isHistoric) {
         const { data, error } = await supabase
-          .from("player_stats_history")
-          .select("player_name, goals, assists");
+          .from("player_stats_alltime")
+          .select("id, player_name, goals, assists");
         if (error) throw error;
-        const byName = new Map<string, Player>();
-        (data ?? []).forEach((r) => {
-          const cur = byName.get(r.player_name) ?? { id: r.player_name, player_name: r.player_name, goals: 0, assists: 0 };
-          cur.goals += r.goals; cur.assists += r.assists;
-          byName.set(r.player_name, cur);
-        });
-        return [...byName.values()];
+        return (data ?? []).map((r) => ({ id: r.id, player_name: r.player_name, goals: r.goals, assists: r.assists }));
       }
       const { data, error } = await supabase
         .from("player_stats")
