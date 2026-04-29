@@ -407,6 +407,7 @@ function PlayersAdmin() {
       setScorer(""); setAssister("");
       qc.invalidateQueries({ queryKey: ["admin-players", season] });
       qc.invalidateQueries({ queryKey: ["players", season] });
+      qc.invalidateQueries({ queryKey: ["players", "__historic__"] });
     } catch (e: unknown) {
       toast.error((e as Error).message);
     }
