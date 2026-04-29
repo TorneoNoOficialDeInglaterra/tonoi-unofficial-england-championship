@@ -161,16 +161,10 @@ function KeepersTable({ seasonId }: { seasonId: string }) {
     queryFn: async (): Promise<Keeper[]> => {
       if (isHistoric) {
         const { data, error } = await supabase
-          .from("goalkeeper_stats_history")
-          .select("goalkeeper_name, clean_sheets");
+          .from("goalkeeper_stats_alltime")
+          .select("id, goalkeeper_name, clean_sheets");
         if (error) throw error;
-        const byName = new Map<string, Keeper>();
-        (data ?? []).forEach((r) => {
-          const cur = byName.get(r.goalkeeper_name) ?? { id: r.goalkeeper_name, goalkeeper_name: r.goalkeeper_name, clean_sheets: 0 };
-          cur.clean_sheets += r.clean_sheets;
-          byName.set(r.goalkeeper_name, cur);
-        });
-        return [...byName.values()];
+        return (data ?? []).map((r) => ({ id: r.id, goalkeeper_name: r.goalkeeper_name, clean_sheets: r.clean_sheets }));
       }
       const { data, error } = await supabase
         .from("goalkeeper_stats")
