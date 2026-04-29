@@ -80,6 +80,27 @@ export type Database = {
           },
         ]
       }
+      goalkeeper_stats_alltime: {
+        Row: {
+          clean_sheets: number
+          goalkeeper_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          clean_sheets?: number
+          goalkeeper_name: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          clean_sheets?: number
+          goalkeeper_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       goalkeeper_stats_history: {
         Row: {
           archived_at: string
@@ -213,6 +234,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      player_stats_alltime: {
+        Row: {
+          assists: number
+          goals: number
+          id: string
+          player_name: string
+          updated_at: string
+        }
+        Insert: {
+          assists?: number
+          goals?: number
+          id?: string
+          player_name: string
+          updated_at?: string
+        }
+        Update: {
+          assists?: number
+          goals?: number
+          id?: string
+          player_name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       player_stats_history: {
         Row: {
