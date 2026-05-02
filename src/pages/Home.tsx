@@ -93,8 +93,8 @@ export default function Home() {
 
             {/* Big logo */}
             <div className="hidden justify-center lg:flex">
-              <div className="rounded-full bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/20">
-                <img src={logoImg} alt="Logo ToNOI" className="h-64 w-64 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]" />
+              <div className="rounded-full bg-white p-6 ring-1 ring-white/40 shadow-[0_10px_40px_rgba(0,0,0,0.4)]">
+                <img src={logoImg} alt="Logo ToNOI" className="h-64 w-64 object-contain" />
               </div>
             </div>
           </div>
