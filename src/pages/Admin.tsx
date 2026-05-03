@@ -373,7 +373,10 @@ function MatchesAdmin() {
                   <td className="px-3 py-2 font-medium">{teamById.get(m.winner_team_id)?.name ?? "?"}</td>
                   <td className="px-3 py-2 text-center font-mono">{m.winner_goals} – {m.loser_goals}</td>
                   <td className="px-3 py-2">{teamById.get(m.loser_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
+                  <td className="px-3 py-2 text-right">
+                    <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
