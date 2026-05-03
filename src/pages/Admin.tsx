@@ -246,19 +246,20 @@ function MatchesAdmin() {
   }
 
   async function add() {
-    if (!winner || !loser || winner === loser) return toast.error("Selecciona dos equipos distintos");
+    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
     const m = score.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!m) return toast.error("Resultado inválido. Usa formato 2-1");
-    const wg = Number(m[1]);
-    const lg = Number(m[2]);
-    if (!draw && wg === lg) return toast.error("Si es empate marca el switch. Si no, los goles del ganador deben ser mayores.");
-    if (!draw && wg < lg) return toast.error("Los goles del ganador deben ser mayores que los del perdedor");
-    if (draw && wg !== lg) return toast.error("En empates ambos goles deben ser iguales");
+    if (!m) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+    const hg = Number(m[1]);
+    const ag = Number(m[2]);
+
+    const draw = hg === ag;
+    const winner = draw ? home : (hg > ag ? home : away);
+    const loser = draw ? away : (hg > ag ? away : home);
+    const wg = draw ? hg : Math.max(hg, ag);
+    const lg = draw ? ag : Math.min(hg, ag);
 
     // Auto-deduce title_changed
     const currentChamp = championAt(date);
-    const titleChanged = currentChamp !== null && currentChamp !== winner && !draw && (currentChamp === loser || currentChamp === winner ? currentChamp !== winner : false);
-    // Simpler: title changes if there was a champion, the champion is involved, and the new winner != champion (and not a draw)
     const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
     const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
 
@@ -269,12 +270,12 @@ function MatchesAdmin() {
       winner_goals: wg,
       loser_goals: lg,
       was_draw: draw,
-      title_changed: computedTitleChanged || titleChanged,
+      title_changed: computedTitleChanged,
       notes: null,
     });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
-    setScore(""); setDraw(false);
+    setScore("");
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
 
