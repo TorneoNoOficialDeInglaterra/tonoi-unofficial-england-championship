@@ -384,6 +384,34 @@ function MatchesAdmin() {
         </div>
         <p className="px-3 py-2 text-xs text-muted-foreground">Mostrando los últimos 50 partidos.</p>
       </Card>
+
+      <Dialog open={!!editId} onOpenChange={(o) => !o && setEditId(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Editar partido</DialogTitle></DialogHeader>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <Label>Fecha</Label>
+              <Input type="date" value={editDate} onChange={(e) => setEditDate(e.target.value)} />
+            </div>
+            <div>
+              <Label>Resultado (local - visitante)</Label>
+              <Input placeholder="Ej: 2-4" value={editScore} onChange={(e) => setEditScore(e.target.value)} />
+            </div>
+            <div>
+              <Label>Equipo local</Label>
+              <TeamCombobox teams={sortedTeams} value={editHome} onChange={setEditHome} placeholder="Buscar equipo..." />
+            </div>
+            <div>
+              <Label>Equipo visitante</Label>
+              <TeamCombobox teams={sortedTeams} value={editAway} onChange={setEditAway} placeholder="Buscar equipo..." />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditId(null)}>Cancelar</Button>
+            <Button onClick={saveEdit}>Guardar cambios</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
