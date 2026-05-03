@@ -12,7 +12,8 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { cn } from "@/lib/utils";
 import type { Team } from "@/lib/tonoi";
@@ -285,6 +286,54 @@ function MatchesAdmin() {
     if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["matches"] });
   }
 
+  // Edit state
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editDate, setEditDate] = useState("");
+  const [editHome, setEditHome] = useState("");
+  const [editAway, setEditAway] = useState("");
+  const [editScore, setEditScore] = useState("");
+
+  function openEdit(m: any) {
+    setEditId(m.id);
+    setEditDate(m.match_date);
+    // Treat winner as "home" and loser as "away" by default for editing
+    setEditHome(m.winner_team_id);
+    setEditAway(m.loser_team_id);
+    setEditScore(`${m.winner_goals}-${m.loser_goals}`);
+  }
+
+  async function saveEdit() {
+    if (!editId) return;
+    if (!editHome || !editAway || editHome === editAway) return toast.error("Selecciona dos equipos distintos");
+    const mm = editScore.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
+    if (!mm) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+    const hg = Number(mm[1]);
+    const ag = Number(mm[2]);
+    const draw = hg === ag;
+    const winner = draw ? editHome : (hg > ag ? editHome : editAway);
+    const loser = draw ? editAway : (hg > ag ? editAway : editHome);
+    const wg = draw ? hg : Math.max(hg, ag);
+    const lg = draw ? ag : Math.min(hg, ag);
+
+    const currentChamp = championAt(editDate);
+    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
+    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+
+    const { error } = await supabase.from("matches").update({
+      match_date: editDate,
+      winner_team_id: winner,
+      loser_team_id: loser,
+      winner_goals: wg,
+      loser_goals: lg,
+      was_draw: draw,
+      title_changed: computedTitleChanged,
+    }).eq("id", editId);
+    if (error) return toast.error(error.message);
+    toast.success("Partido actualizado");
+    setEditId(null);
+    qc.invalidateQueries({ queryKey: ["matches"] });
+  }
+
   return (
     <div className="space-y-4">
       <Card className="p-4">
@@ -324,7 +373,10 @@ function MatchesAdmin() {
                   <td className="px-3 py-2 font-medium">{teamById.get(m.winner_team_id)?.name ?? "?"}</td>
                   <td className="px-3 py-2 text-center font-mono">{m.winner_goals} – {m.loser_goals}</td>
                   <td className="px-3 py-2">{teamById.get(m.loser_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
+                  <td className="px-3 py-2 text-right">
+                    <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -332,6 +384,34 @@ function MatchesAdmin() {
         </div>
         <p className="px-3 py-2 text-xs text-muted-foreground">Mostrando los últimos 50 partidos.</p>
       </Card>
+
+      <Dialog open={!!editId} onOpenChange={(o) => !o && setEditId(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Editar partido</DialogTitle></DialogHeader>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <Label>Fecha</Label>
+              <Input type="date" value={editDate} onChange={(e) => setEditDate(e.target.value)} />
+            </div>
+            <div>
+              <Label>Resultado (local - visitante)</Label>
+              <Input placeholder="Ej: 2-4" value={editScore} onChange={(e) => setEditScore(e.target.value)} />
+            </div>
+            <div>
+              <Label>Equipo local</Label>
+              <TeamCombobox teams={sortedTeams} value={editHome} onChange={setEditHome} placeholder="Buscar equipo..." />
+            </div>
+            <div>
+              <Label>Equipo visitante</Label>
+              <TeamCombobox teams={sortedTeams} value={editAway} onChange={setEditAway} placeholder="Buscar equipo..." />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditId(null)}>Cancelar</Button>
+            <Button onClick={saveEdit}>Guardar cambios</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
