@@ -286,6 +286,54 @@ function MatchesAdmin() {
     if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["matches"] });
   }
 
+  // Edit state
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editDate, setEditDate] = useState("");
+  const [editHome, setEditHome] = useState("");
+  const [editAway, setEditAway] = useState("");
+  const [editScore, setEditScore] = useState("");
+
+  function openEdit(m: any) {
+    setEditId(m.id);
+    setEditDate(m.match_date);
+    // Treat winner as "home" and loser as "away" by default for editing
+    setEditHome(m.winner_team_id);
+    setEditAway(m.loser_team_id);
+    setEditScore(`${m.winner_goals}-${m.loser_goals}`);
+  }
+
+  async function saveEdit() {
+    if (!editId) return;
+    if (!editHome || !editAway || editHome === editAway) return toast.error("Selecciona dos equipos distintos");
+    const mm = editScore.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
+    if (!mm) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+    const hg = Number(mm[1]);
+    const ag = Number(mm[2]);
+    const draw = hg === ag;
+    const winner = draw ? editHome : (hg > ag ? editHome : editAway);
+    const loser = draw ? editAway : (hg > ag ? editAway : editHome);
+    const wg = draw ? hg : Math.max(hg, ag);
+    const lg = draw ? ag : Math.min(hg, ag);
+
+    const currentChamp = championAt(editDate);
+    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
+    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+
+    const { error } = await supabase.from("matches").update({
+      match_date: editDate,
+      winner_team_id: winner,
+      loser_team_id: loser,
+      winner_goals: wg,
+      loser_goals: lg,
+      was_draw: draw,
+      title_changed: computedTitleChanged,
+    }).eq("id", editId);
+    if (error) return toast.error(error.message);
+    toast.success("Partido actualizado");
+    setEditId(null);
+    qc.invalidateQueries({ queryKey: ["matches"] });
+  }
+
   return (
     <div className="space-y-4">
       <Card className="p-4">
