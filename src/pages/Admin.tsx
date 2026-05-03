@@ -222,10 +222,9 @@ function MatchesAdmin() {
   const qc = useQueryClient();
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
-  const [winner, setWinner] = useState("");
-  const [loser, setLoser] = useState("");
+  const [home, setHome] = useState("");
+  const [away, setAway] = useState("");
   const [score, setScore] = useState("");
-  const [draw, setDraw] = useState(false);
 
   const teams = teamsQ.data ?? [];
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
@@ -247,19 +246,20 @@ function MatchesAdmin() {
   }
 
   async function add() {
-    if (!winner || !loser || winner === loser) return toast.error("Selecciona dos equipos distintos");
+    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
     const m = score.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!m) return toast.error("Resultado inválido. Usa formato 2-1");
-    const wg = Number(m[1]);
-    const lg = Number(m[2]);
-    if (!draw && wg === lg) return toast.error("Si es empate marca el switch. Si no, los goles del ganador deben ser mayores.");
-    if (!draw && wg < lg) return toast.error("Los goles del ganador deben ser mayores que los del perdedor");
-    if (draw && wg !== lg) return toast.error("En empates ambos goles deben ser iguales");
+    if (!m) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+    const hg = Number(m[1]);
+    const ag = Number(m[2]);
+
+    const draw = hg === ag;
+    const winner = draw ? home : (hg > ag ? home : away);
+    const loser = draw ? away : (hg > ag ? away : home);
+    const wg = draw ? hg : Math.max(hg, ag);
+    const lg = draw ? ag : Math.min(hg, ag);
 
     // Auto-deduce title_changed
     const currentChamp = championAt(date);
-    const titleChanged = currentChamp !== null && currentChamp !== winner && !draw && (currentChamp === loser || currentChamp === winner ? currentChamp !== winner : false);
-    // Simpler: title changes if there was a champion, the champion is involved, and the new winner != champion (and not a draw)
     const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
     const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
 
@@ -270,12 +270,12 @@ function MatchesAdmin() {
       winner_goals: wg,
       loser_goals: lg,
       was_draw: draw,
-      title_changed: computedTitleChanged || titleChanged,
+      title_changed: computedTitleChanged,
       notes: null,
     });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
-    setScore(""); setDraw(false);
+    setScore("");
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
 
@@ -295,24 +295,20 @@ function MatchesAdmin() {
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
           <div>
-            <Label>Resultado</Label>
-            <Input placeholder="Ej: 2-1" value={score} onChange={(e) => setScore(e.target.value)} />
+            <Label>Resultado (local - visitante)</Label>
+            <Input placeholder="Ej: 2-4" value={score} onChange={(e) => setScore(e.target.value)} />
           </div>
           <div>
-            <Label>Equipo ganador</Label>
-            <TeamCombobox teams={sortedTeams} value={winner} onChange={setWinner} placeholder="Buscar equipo..." />
+            <Label>Equipo local</Label>
+            <TeamCombobox teams={sortedTeams} value={home} onChange={setHome} placeholder="Buscar equipo..." />
           </div>
           <div>
-            <Label>Equipo perdedor</Label>
-            <TeamCombobox teams={sortedTeams} value={loser} onChange={setLoser} placeholder="Buscar equipo..." />
-          </div>
-          <div className="flex items-center gap-2">
-            <Switch checked={draw} onCheckedChange={setDraw} />
-            <Label>Empate</Label>
+            <Label>Equipo visitante</Label>
+            <TeamCombobox teams={sortedTeams} value={away} onChange={setAway} placeholder="Buscar equipo..." />
           </div>
           <div className="sm:col-span-2"><Button onClick={add}>Añadir partido</Button></div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">El cambio de campeón se calcula automáticamente. En empates, el campeón mantiene el título.</p>
+        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. El cambio de campeón se calcula automáticamente.</p>
       </Card>
 
       <Card className="overflow-hidden">
