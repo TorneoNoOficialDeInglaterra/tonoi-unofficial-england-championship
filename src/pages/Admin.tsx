@@ -81,6 +81,7 @@ export default function Admin() {
 }
 
 function BootstrapAdmin({ userId, onDone }: { userId: string; onDone: () => void }) {
+  const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [hasAny, setHasAny] = useState<boolean | null>(null);
   useEffect(() => {
