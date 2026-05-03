@@ -266,6 +266,10 @@ function MatchesAdmin() {
 
     const { error } = await supabase.from("matches").insert({
       match_date: date,
+      home_team_id: home,
+      away_team_id: away,
+      home_goals: hg,
+      away_goals: ag,
       winner_team_id: winner,
       loser_team_id: loser,
       winner_goals: wg,
