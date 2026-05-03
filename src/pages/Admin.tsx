@@ -295,24 +295,20 @@ function MatchesAdmin() {
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
           <div>
-            <Label>Resultado</Label>
-            <Input placeholder="Ej: 2-1" value={score} onChange={(e) => setScore(e.target.value)} />
+            <Label>Resultado (local - visitante)</Label>
+            <Input placeholder="Ej: 2-4" value={score} onChange={(e) => setScore(e.target.value)} />
           </div>
           <div>
-            <Label>Equipo ganador</Label>
-            <TeamCombobox teams={sortedTeams} value={winner} onChange={setWinner} placeholder="Buscar equipo..." />
+            <Label>Equipo local</Label>
+            <TeamCombobox teams={sortedTeams} value={home} onChange={setHome} placeholder="Buscar equipo..." />
           </div>
           <div>
-            <Label>Equipo perdedor</Label>
-            <TeamCombobox teams={sortedTeams} value={loser} onChange={setLoser} placeholder="Buscar equipo..." />
-          </div>
-          <div className="flex items-center gap-2">
-            <Switch checked={draw} onCheckedChange={setDraw} />
-            <Label>Empate</Label>
+            <Label>Equipo visitante</Label>
+            <TeamCombobox teams={sortedTeams} value={away} onChange={setAway} placeholder="Buscar equipo..." />
           </div>
           <div className="sm:col-span-2"><Button onClick={add}>Añadir partido</Button></div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">El cambio de campeón se calcula automáticamente. En empates, el campeón mantiene el título.</p>
+        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. El cambio de campeón se calcula automáticamente.</p>
       </Card>
 
       <Card className="overflow-hidden">
