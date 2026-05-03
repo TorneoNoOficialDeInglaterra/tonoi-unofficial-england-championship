@@ -81,6 +81,7 @@ export default function Admin() {
 }
 
 function BootstrapAdmin({ userId, onDone }: { userId: string; onDone: () => void }) {
+  const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [hasAny, setHasAny] = useState<boolean | null>(null);
   useEffect(() => {
@@ -107,6 +108,13 @@ function BootstrapAdmin({ userId, onDone }: { userId: string; onDone: () => void
         ) : (
           <p className="mt-2 text-sm text-muted-foreground">Tu cuenta no tiene permisos de admin. Pide a un administrador existente que te dé acceso.</p>
         )}
+        <Button
+          variant="outline"
+          className="mt-6 w-full"
+          onClick={async () => { await supabase.auth.signOut(); nav("/auth"); }}
+        >
+          <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión
+        </Button>
       </Card>
     </div>
   );
