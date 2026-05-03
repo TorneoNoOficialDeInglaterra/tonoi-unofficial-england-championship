@@ -51,6 +51,10 @@ CREATE POLICY "admins write seasons" ON public.seasons FOR ALL TO authenticated 
 CREATE TABLE public.matches (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   match_date DATE NOT NULL,
+  home_team_id UUID NOT NULL REFERENCES public.teams(id) ON DELETE RESTRICT,
+  away_team_id UUID NOT NULL REFERENCES public.teams(id) ON DELETE RESTRICT,
+  home_goals INTEGER NOT NULL DEFAULT 0,
+  away_goals INTEGER NOT NULL DEFAULT 0,
   winner_team_id UUID NOT NULL REFERENCES public.teams(id) ON DELETE RESTRICT,
   loser_team_id UUID NOT NULL REFERENCES public.teams(id) ON DELETE RESTRICT,
   winner_goals INTEGER NOT NULL DEFAULT 0,
