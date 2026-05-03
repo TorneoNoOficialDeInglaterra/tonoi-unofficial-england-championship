@@ -222,10 +222,9 @@ function MatchesAdmin() {
   const qc = useQueryClient();
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
-  const [winner, setWinner] = useState("");
-  const [loser, setLoser] = useState("");
+  const [home, setHome] = useState("");
+  const [away, setAway] = useState("");
   const [score, setScore] = useState("");
-  const [draw, setDraw] = useState(false);
 
   const teams = teamsQ.data ?? [];
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
