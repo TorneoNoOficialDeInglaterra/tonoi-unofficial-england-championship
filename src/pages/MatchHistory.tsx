@@ -86,6 +86,10 @@ export default function MatchHistory() {
   const currentDecade = Math.floor(new Date().getUTCFullYear() / 10) * 10;
   const initialDecade = decades.includes(currentDecade) ? currentDecade : (decades[0] ?? currentDecade);
   const [decade, setDecade] = useState<number>(initialDecade);
+  const changeDecade = (d: number) => {
+    setDecade(d);
+    window.scrollTo({ top: 0, left: 0 });
+  };
 
   useEffect(() => {
     if (decades.length && !decades.includes(decade)) setDecade(decades[0]);
