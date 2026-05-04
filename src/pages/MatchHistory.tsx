@@ -86,6 +86,10 @@ export default function MatchHistory() {
   const currentDecade = Math.floor(new Date().getUTCFullYear() / 10) * 10;
   const initialDecade = decades.includes(currentDecade) ? currentDecade : (decades[0] ?? currentDecade);
   const [decade, setDecade] = useState<number>(initialDecade);
+  const changeDecade = (d: number) => {
+    setDecade(d);
+    window.scrollTo({ top: 0, left: 0 });
+  };
 
   useEffect(() => {
     if (decades.length && !decades.includes(decade)) setDecade(decades[0]);
@@ -217,16 +221,16 @@ export default function MatchHistory() {
       {!teamFilter && (
         <div className="mt-6 flex flex-col items-center gap-4">
           <div className="flex items-center gap-3">
-            <Button variant="outline" disabled={!prevDecade} onClick={() => prevDecade && setDecade(prevDecade)}>
+            <Button variant="outline" disabled={!prevDecade} onClick={() => prevDecade && changeDecade(prevDecade)}>
               <ChevronLeft className="mr-1 h-4 w-4" /> Década anterior
             </Button>
-            <Button variant="outline" disabled={!nextDecade} onClick={() => nextDecade && setDecade(nextDecade)}>
+            <Button variant="outline" disabled={!nextDecade} onClick={() => nextDecade && changeDecade(nextDecade)}>
               Década siguiente <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
           {decades.length > 0 && (
             <div className="w-full max-w-xs">
-              <Select value={String(decade)} onValueChange={(v) => setDecade(Number(v))}>
+              <Select value={String(decade)} onValueChange={(v) => changeDecade(Number(v))}>
                 <SelectTrigger><SelectValue placeholder="Saltar a década" /></SelectTrigger>
                 <SelectContent>
                   {decades.map((d) => (
