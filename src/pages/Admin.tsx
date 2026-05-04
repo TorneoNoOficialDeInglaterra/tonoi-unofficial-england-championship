@@ -16,7 +16,7 @@ import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { cn } from "@/lib/utils";
-import type { Team } from "@/lib/tonoi";
+import type { Match, Team } from "@/lib/tonoi";
 
 export default function Admin() {
   const nav = useNavigate();
@@ -227,7 +227,7 @@ function MatchesAdmin() {
   const [away, setAway] = useState("");
   const [score, setScore] = useState("");
 
-  const teams = teamsQ.data ?? [];
+  const teams = useMemo(() => teamsQ.data ?? [], [teamsQ.data]);
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
   const sortedTeams = useMemo(() => [...teams].sort((a, b) => a.name.localeCompare(b.name)), [teams]);
 
@@ -274,7 +274,7 @@ function MatchesAdmin() {
       title_changed: computedTitleChanged,
       notes: null,
       home_team_id: home,
-    } as any);
+    });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
     setScore("");
@@ -294,7 +294,7 @@ function MatchesAdmin() {
   const [editAway, setEditAway] = useState("");
   const [editScore, setEditScore] = useState("");
 
-  function openEdit(m: any) {
+  function openEdit(m: Match) {
     setEditId(m.id);
     setEditDate(m.match_date);
     const homeId = m.home_team_id ?? m.winner_team_id;
@@ -332,7 +332,7 @@ function MatchesAdmin() {
       was_draw: draw,
       title_changed: computedTitleChanged,
       home_team_id: editHome,
-    } as any).eq("id", editId);
+    }).eq("id", editId);
     if (error) return toast.error(error.message);
     toast.success("Partido actualizado");
     setEditId(null);
