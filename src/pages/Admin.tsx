@@ -16,7 +16,7 @@ import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { cn } from "@/lib/utils";
-import type { Team } from "@/lib/tonoi";
+import type { Match, Team } from "@/lib/tonoi";
 
 export default function Admin() {
   const nav = useNavigate();
@@ -227,7 +227,7 @@ function MatchesAdmin() {
   const [away, setAway] = useState("");
   const [score, setScore] = useState("");
 
-  const teams = teamsQ.data ?? [];
+  const teams = useMemo(() => teamsQ.data ?? [], [teamsQ.data]);
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
   const sortedTeams = useMemo(() => [...teams].sort((a, b) => a.name.localeCompare(b.name)), [teams]);
 
@@ -274,7 +274,7 @@ function MatchesAdmin() {
       title_changed: computedTitleChanged,
       notes: null,
       home_team_id: home,
-    } as any);
+    });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
     setScore("");
@@ -294,7 +294,7 @@ function MatchesAdmin() {
   const [editAway, setEditAway] = useState("");
   const [editScore, setEditScore] = useState("");
 
-  function openEdit(m: any) {
+  function openEdit(m: Match) {
     setEditId(m.id);
     setEditDate(m.match_date);
     const homeId = m.home_team_id ?? m.winner_team_id;
@@ -332,7 +332,7 @@ function MatchesAdmin() {
       was_draw: draw,
       title_changed: computedTitleChanged,
       home_team_id: editHome,
-    } as any).eq("id", editId);
+    }).eq("id", editId);
     if (error) return toast.error(error.message);
     toast.success("Partido actualizado");
     setEditId(null);
@@ -369,21 +369,28 @@ function MatchesAdmin() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/60 text-xs uppercase text-muted-foreground">
-              <tr><th className="px-3 py-2 text-left">Fecha</th><th className="px-3 py-2 text-left">Ganador</th><th className="px-3 py-2 text-center">Resultado</th><th className="px-3 py-2 text-left">Perdedor</th><th /></tr>
+              <tr><th className="px-3 py-2 text-left">Fecha</th><th className="px-3 py-2 text-left">Local</th><th className="px-3 py-2 text-center">Resultado</th><th className="px-3 py-2 text-left">Visitante</th><th /></tr>
             </thead>
             <tbody>
-              {[...(matchesQ.data ?? [])].reverse().slice(0, 50).map((m) => (
-                <tr key={m.id} className="border-t border-border">
-                  <td className="px-3 py-2 text-muted-foreground">{m.match_date}</td>
-                  <td className="px-3 py-2 font-medium">{teamById.get(m.winner_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-center font-mono">{m.winner_goals} – {m.loser_goals}</td>
-                  <td className="px-3 py-2">{teamById.get(m.loser_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-right">
-                    <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </td>
-                </tr>
-              ))}
+              {[...(matchesQ.data ?? [])].reverse().slice(0, 50).map((m) => {
+                const localId = m.home_team_id ?? m.winner_team_id;
+                const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
+                const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
+                const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+
+                return (
+                  <tr key={m.id} className="border-t border-border">
+                    <td className="px-3 py-2 text-muted-foreground">{m.match_date}</td>
+                    <td className="px-3 py-2 font-medium">{teamById.get(localId)?.name ?? "?"}</td>
+                    <td className="px-3 py-2 text-center font-mono">{localGoals} – {visitorGoals}</td>
+                    <td className="px-3 py-2">{teamById.get(visitorId)?.name ?? "?"}</td>
+                    <td className="px-3 py-2 text-right">
+                      <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
