@@ -17,6 +17,7 @@ export type Match = {
   was_draw: boolean;
   title_changed: boolean;
   notes: string | null;
+  home_team_id?: string | null;
 };
 
 export type StandingRow = {

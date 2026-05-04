@@ -176,7 +176,7 @@ export default function MatchHistory() {
                 <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">Sin partidos.</td></tr>
               ) : (
                 matches.map((m) => {
-                  const localId = localByMatch.get(m.id) ?? m.winner_team_id;
+                  const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
                   const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
                   const local = teamById.get(localId);
                   const visitor = teamById.get(visitorId);
