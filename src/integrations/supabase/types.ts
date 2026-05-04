@@ -139,6 +139,7 @@ export type Database = {
       matches: {
         Row: {
           created_at: string
+          home_team_id: string | null
           id: string
           loser_goals: number
           loser_team_id: string
@@ -151,6 +152,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          home_team_id?: string | null
           id?: string
           loser_goals?: number
           loser_team_id: string
@@ -163,6 +165,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          home_team_id?: string | null
           id?: string
           loser_goals?: number
           loser_team_id?: string
@@ -174,6 +177,13 @@ export type Database = {
           winner_team_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "matches_home_team_id_fkey"
+            columns: ["home_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "matches_loser_team_id_fkey"
             columns: ["loser_team_id"]
