@@ -297,10 +297,13 @@ function MatchesAdmin() {
   function openEdit(m: any) {
     setEditId(m.id);
     setEditDate(m.match_date);
-    // Treat winner as "home" and loser as "away" by default for editing
-    setEditHome(m.winner_team_id);
-    setEditAway(m.loser_team_id);
-    setEditScore(`${m.winner_goals}-${m.loser_goals}`);
+    const homeId = m.home_team_id ?? m.winner_team_id;
+    const awayId = homeId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
+    const homeGoals = homeId === m.winner_team_id ? m.winner_goals : m.loser_goals;
+    const awayGoals = homeId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+    setEditHome(homeId);
+    setEditAway(awayId);
+    setEditScore(`${homeGoals}-${awayGoals}`);
   }
 
   async function saveEdit() {
@@ -328,7 +331,8 @@ function MatchesAdmin() {
       loser_goals: lg,
       was_draw: draw,
       title_changed: computedTitleChanged,
-    }).eq("id", editId);
+      home_team_id: editHome,
+    } as any).eq("id", editId);
     if (error) return toast.error(error.message);
     toast.success("Partido actualizado");
     setEditId(null);
