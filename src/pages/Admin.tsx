@@ -273,7 +273,8 @@ function MatchesAdmin() {
       was_draw: draw,
       title_changed: computedTitleChanged,
       notes: null,
-    });
+      home_team_id: home,
+    } as any);
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
     setScore("");
