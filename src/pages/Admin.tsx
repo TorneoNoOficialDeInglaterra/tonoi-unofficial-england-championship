@@ -369,21 +369,28 @@ function MatchesAdmin() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted/60 text-xs uppercase text-muted-foreground">
-              <tr><th className="px-3 py-2 text-left">Fecha</th><th className="px-3 py-2 text-left">Ganador</th><th className="px-3 py-2 text-center">Resultado</th><th className="px-3 py-2 text-left">Perdedor</th><th /></tr>
+              <tr><th className="px-3 py-2 text-left">Fecha</th><th className="px-3 py-2 text-left">Local</th><th className="px-3 py-2 text-center">Resultado</th><th className="px-3 py-2 text-left">Visitante</th><th /></tr>
             </thead>
             <tbody>
-              {[...(matchesQ.data ?? [])].reverse().slice(0, 50).map((m) => (
-                <tr key={m.id} className="border-t border-border">
-                  <td className="px-3 py-2 text-muted-foreground">{m.match_date}</td>
-                  <td className="px-3 py-2 font-medium">{teamById.get(m.winner_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-center font-mono">{m.winner_goals} – {m.loser_goals}</td>
-                  <td className="px-3 py-2">{teamById.get(m.loser_team_id)?.name ?? "?"}</td>
-                  <td className="px-3 py-2 text-right">
-                    <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                  </td>
-                </tr>
-              ))}
+              {[...(matchesQ.data ?? [])].reverse().slice(0, 50).map((m) => {
+                const localId = m.home_team_id ?? m.winner_team_id;
+                const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
+                const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
+                const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+
+                return (
+                  <tr key={m.id} className="border-t border-border">
+                    <td className="px-3 py-2 text-muted-foreground">{m.match_date}</td>
+                    <td className="px-3 py-2 font-medium">{teamById.get(localId)?.name ?? "?"}</td>
+                    <td className="px-3 py-2 text-center font-mono">{localGoals} – {visitorGoals}</td>
+                    <td className="px-3 py-2">{teamById.get(visitorId)?.name ?? "?"}</td>
+                    <td className="px-3 py-2 text-right">
+                      <Button variant="ghost" size="icon" onClick={() => openEdit(m)}><Pencil className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" onClick={() => remove(m.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
