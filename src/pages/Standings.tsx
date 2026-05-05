@@ -116,7 +116,7 @@ export default function Standings() {
 
       {/* Table */}
       <Card className="mt-4 overflow-hidden">
-        <div className="max-h-[70vh] overflow-auto">
+        <div className="max-h-[88vh] overflow-auto">
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
