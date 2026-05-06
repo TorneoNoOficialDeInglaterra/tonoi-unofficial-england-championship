@@ -1,26 +1,81 @@
-## Problema
+# Generador de imágenes para redes sociales
 
-El formulario actual tiene campos "Equipo ganador" / "Equipo perdedor" y un resultado tipo `2-1` donde el primer número se asigna al ganador y el segundo al perdedor. Esto es contraintuitivo: cuando metiste Athletic vs Alavés con resultado `2-4` (gana el visitante), el sistema interpretó 2 goles para el "ganador" (Athletic) y 4 para el "perdedor" (Alavés), generando el error.
+Nueva pestaña en la pantalla de **Administrador** que genera automáticamente las imágenes de "Próximo partido" y "Resultado" usando las plantillas que enviaste, renderizando HTML/CSS a PNG.
 
-## Solución
+## Plantillas soportadas
 
-Reestructurar el formulario para usar **Equipo local / Equipo visitante** con un resultado en formato `local-visitante`, y deducir automáticamente quién es ganador y perdedor a partir del marcador.
+- **Anuncio de partido** (1 plantilla)
+- **Resultado**:
+  - LaLiga: 2 plantillas (alternancia automática)
+  - Champions League: 1 plantilla
+  - Europa League: 1 plantilla
+  - Copa (Carabao/Copa del Rey): 1 plantilla
+  - Conference League: pendiente — se deja un hueco preparado para añadirla más tarde
 
-### Cambios en `src/pages/Admin.tsx` (componente `MatchesAdmin`)
+Cada plantilla = un componente React a tamaño fijo **1080×1080** con su fondo, marco, tipografías y posiciones tal como aparecen en los diseños adjuntos.
 
-1. Renombrar los selectores: `Equipo ganador` → **Equipo local**, `Equipo perdedor` → **Equipo visitante**. Cambiar estados `winner`/`loser` por `home`/`away`.
-2. Cambiar la etiqueta del resultado para dejar claro el orden: **"Resultado (local - visitante)"**, placeholder `Ej: 2-4`.
-3. En la función `add()`:
-   - Parsear el marcador como `homeGoals - awayGoals`.
-   - Si `homeGoals === awayGoals` → tratar como empate automáticamente (sin necesitar el switch). Quitar el switch de "Empate" o dejarlo como solo lectura informativo. Propongo **eliminarlo** ya que el empate se deduce del marcador.
-   - Si `homeGoals > awayGoals` → `winner = home`, `loser = away`, `winner_goals = homeGoals`, `loser_goals = awayGoals`.
-   - Si `homeGoals < awayGoals` → `winner = away`, `loser = home`, `winner_goals = awayGoals`, `loser_goals = homeGoals`.
-   - En empate, mantener `winner_team_id = home`, `loser_team_id = away` (la BBDD requiere ambos NOT NULL) con `was_draw = true` y los goles correspondientes.
-4. Recalcular `championAt` y `computedTitleChanged` con los valores derivados (la lógica sigue igual usando winner/loser ya deducidos).
-5. Actualizar mensajes de error: validar que ambos equipos sean distintos y que el formato del marcador sea válido. Eliminar las validaciones obsoletas sobre "goles del ganador deben ser mayores".
+## Flujo en /admin
 
-### Texto auxiliar
+Nueva pestaña **"Generar imagen"** con un formulario:
 
-Actualizar la nota inferior para reflejar el nuevo flujo: "El ganador y el empate se deducen automáticamente del marcador."
+1. **Tipo**: Anuncio del partido / Resultado
+2. **Competición**: LaLiga, Champions, Europa League, Copa, Conference *(deshabilitada hasta que subas el diseño)*
+3. **Equipo local** (selector con los equipos ya existentes en la BD)
+4. **Equipo visitante** (selector)
+5. **Fecha y hora** (datetime)
+6. **Estadio** (texto libre)
+7. Si es resultado:
+   - **Goles local** y **goles visitante** (números)
+   - **Goleadores**: lista dinámica con botón "+ Añadir goleador" → cada fila tiene: equipo (local/visitante), minuto (texto, p.ej. "90'+3"), nombre del jugador. Botón eliminar por fila.
 
-No hay cambios de base de datos: las columnas `winner_team_id`, `loser_team_id`, `winner_goals`, `loser_goals`, `was_draw` se siguen rellenando como hasta ahora, solo cambia la UI y la deducción.
+A la derecha del formulario, **vista previa en vivo** del diseño escalado, y dos botones: **Descargar PNG** y **Copiar al portapapeles**.
+
+## Assets que necesito que subas
+
+Crearé una carpeta `src/assets/social/` con esta estructura. Sube los archivos con esos nombres exactos:
+
+```
+src/assets/social/
+  logo-tonoi.png                  (escudo ToNOI 1863)
+  competitions/
+    laliga.png
+    champions.png
+    europa-league.png
+    copa.png                      (Carabao Cup / Copa del Rey)
+    conference.png                (opcional, cuando lo tengas)
+  templates/
+    anuncio-bg.jpg                (fondo del diseño de anuncio)
+    resultado-laliga-1.jpg        (fondo plantilla LaLiga estilo "estadio antiguo")
+    resultado-laliga-2.jpg        (fondo plantilla LaLiga estilo "Sheffield Steelworks")
+    resultado-champions.jpg       (fondo plantilla CL color verde-azulado)
+    resultado-europa.jpg          (fondo plantilla EL color naranja/rojo)
+    resultado-copa.jpg            (fondo plantilla Copa estilo Stamford Bridge)
+```
+
+Los logos de los equipos los toma directamente de `teams.logo_url` en la base de datos (ya están).
+
+## Detalles técnicos
+
+- Librería: **`html-to-image`** (`toPng`) — convierte el componente React a PNG a 1080×1080 sin servidor.
+- Componente `<TemplateRenderer />` que recibe `{ type, competition, homeTeam, awayTeam, date, stadium, homeGoals, awayGoals, scorers }` y elige la plantilla correcta.
+- Para LaLiga: alternancia entre las 2 plantillas usando un hash determinista (fecha + equipos) para que sea reproducible pero variado.
+- Cada plantilla es un componente con su layout propio (no un sistema único parametrizado) para respetar fielmente cada diseño.
+- Tipografías: cargar las que mejor encajen con cada plantilla desde Google Fonts (p.ej. Cinzel/serif para Champions, Playfair Display para LaLiga vintage, etc.).
+- Resultado se descarga como `tonoi-[tipo]-[fecha]-[local]-vs-[visitante].png`.
+
+## Archivos a crear/editar
+
+- `src/pages/Admin.tsx` — añadir nueva pestaña "Generar imagen"
+- `src/components/social/ImageGenerator.tsx` — formulario + preview + descarga
+- `src/components/social/templates/AnuncioPartido.tsx`
+- `src/components/social/templates/ResultadoLaLiga1.tsx`
+- `src/components/social/templates/ResultadoLaLiga2.tsx`
+- `src/components/social/templates/ResultadoChampions.tsx`
+- `src/components/social/templates/ResultadoEuropa.tsx`
+- `src/components/social/templates/ResultadoCopa.tsx`
+- `src/components/social/TemplateRenderer.tsx` — selector de plantilla
+- Instalar `html-to-image`
+
+## Lo que necesito de ti antes de implementar
+
+Sube los assets listados arriba (logos de competiciones + fondos de cada plantilla + logo del ToNOI en alta resolución). Sin ellos las plantillas saldrán con placeholders.

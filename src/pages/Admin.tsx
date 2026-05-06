@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
+import { ImageGenerator } from "@/components/social/ImageGenerator";
 import { cn } from "@/lib/utils";
 import type { Match, Team } from "@/lib/tonoi";
 
@@ -68,6 +69,7 @@ export default function Admin() {
             <TabsTrigger value="keepers" className="whitespace-nowrap">Porteros</TabsTrigger>
             <TabsTrigger value="seasons" className="whitespace-nowrap">Temporadas</TabsTrigger>
             <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
+            <TabsTrigger value="images" className="whitespace-nowrap">Generar imagen</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="teams" className="mt-4"><TeamsAdmin /></TabsContent>
@@ -76,6 +78,7 @@ export default function Admin() {
         <TabsContent value="keepers" className="mt-4"><KeepersAdmin /></TabsContent>
         <TabsContent value="seasons" className="mt-4"><SeasonsAdmin /></TabsContent>
         <TabsContent value="messages" className="mt-4"><MessagesAdmin /></TabsContent>
+        <TabsContent value="images" className="mt-4"><ImageGenerator /></TabsContent>
       </Tabs>
     </div>
   );
