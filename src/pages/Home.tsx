@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { computeStandings, daysBetween } from "@/lib/tonoi";
+import { computeStandings, daysBetween, buildLocalByMatchMap } from "@/lib/tonoi";
 
 import logoImg from "@/assets/logo.png";
 import hero1 from "@/assets/hero/hero1.jpg";
@@ -28,11 +28,22 @@ export default function Home() {
 
   const teamById = useMemo(() => new Map((teamsQ.data ?? []).map((t) => [t.id, t])), [teamsQ.data]);
 
+  const localByMatch = useMemo(
+    () => buildLocalByMatchMap(matchesQ.data ?? [], teamById),
+    [matchesQ.data, teamById],
+  );
+
   const champion = data?.champion ? teamById.get(data.champion) : null;
   const championSince = data?.championSinceDate ?? null;
   const last = data?.lastMatch ?? null;
-  const lastWinner = last ? teamById.get(last.winner_team_id) : null;
-  const lastLoser = last ? teamById.get(last.loser_team_id) : null;
+  const lastLocalId = last ? (last.home_team_id ?? localByMatch.get(last.id) ?? last.winner_team_id) : null;
+  const lastVisitorId = last && lastLocalId
+    ? (lastLocalId === last.winner_team_id ? last.loser_team_id : last.winner_team_id)
+    : null;
+  const lastLocal = lastLocalId ? teamById.get(lastLocalId) : null;
+  const lastVisitor = lastVisitorId ? teamById.get(lastVisitorId) : null;
+  const lastLocalGoals = last && lastLocalId === last.winner_team_id ? last?.winner_goals : last?.loser_goals;
+  const lastVisitorGoals = last && lastLocalId === last.winner_team_id ? last?.loser_goals : last?.winner_goals;
 
   // Top 10 (by points)
   const top10 = useMemo(() => (data?.rows ?? []).slice(0, 10), [data]);
@@ -145,20 +156,20 @@ export default function Home() {
           </div>
           {teamsQ.isLoading || matchesQ.isLoading ? (
             <Skeleton className="mt-4 h-20 w-full" />
-          ) : last && lastWinner && lastLoser ? (
+          ) : last && lastLocal && lastVisitor ? (
             <div className="mt-4">
               <p className="text-xs text-muted-foreground">{new Date(last.match_date).toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}</p>
               <div className="mt-3 flex items-center justify-between gap-3">
                 <div className="flex flex-1 items-center gap-2">
-                  <TeamBadge team={lastWinner} size={36} />
-                  <span className="font-semibold">{lastWinner.name}</span>
+                  <TeamBadge team={lastLocal} size={36} />
+                  <span className="font-semibold">{lastLocal.name}</span>
                 </div>
                 <div className="rounded-md bg-primary px-3 py-1.5 font-mono text-lg font-bold text-primary-foreground">
-                  {last.winner_goals} – {last.loser_goals}
+                  {lastLocalGoals} – {lastVisitorGoals}
                 </div>
                 <div className="flex flex-1 items-center justify-end gap-2 text-right">
-                  <span className="font-semibold">{lastLoser.name}</span>
-                  <TeamBadge team={lastLoser} size={36} />
+                  <span className="font-semibold">{lastVisitor.name}</span>
+                  <TeamBadge team={lastVisitor} size={36} />
                 </div>
               </div>
               {last.was_draw && <p className="mt-2 text-xs text-muted-foreground">Empate.</p>}
