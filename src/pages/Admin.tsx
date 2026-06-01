@@ -12,7 +12,8 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
@@ -68,6 +69,7 @@ export default function Admin() {
             <TabsTrigger value="players" className="whitespace-nowrap">Jugadores</TabsTrigger>
             <TabsTrigger value="keepers" className="whitespace-nowrap">Porteros</TabsTrigger>
             <TabsTrigger value="seasons" className="whitespace-nowrap">Temporadas</TabsTrigger>
+            <TabsTrigger value="faqs" className="whitespace-nowrap">FAQ</TabsTrigger>
             <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
             <TabsTrigger value="images" className="whitespace-nowrap">Generar imagen</TabsTrigger>
           </TabsList>
@@ -77,6 +79,7 @@ export default function Admin() {
         <TabsContent value="players" className="mt-4"><PlayersAdmin /></TabsContent>
         <TabsContent value="keepers" className="mt-4"><KeepersAdmin /></TabsContent>
         <TabsContent value="seasons" className="mt-4"><SeasonsAdmin /></TabsContent>
+        <TabsContent value="faqs" className="mt-4"><FaqsAdmin /></TabsContent>
         <TabsContent value="messages" className="mt-4"><MessagesAdmin /></TabsContent>
         <TabsContent value="images" className="mt-4"><ImageGenerator /></TabsContent>
       </Tabs>
