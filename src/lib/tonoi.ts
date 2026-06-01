@@ -92,7 +92,7 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
       w.p += 1; l.p += 1;
     } else {
       w.v++; l.d++;
-      w.p += 3;
+      w.p += 2;
     }
 
     if (champion === null) {
