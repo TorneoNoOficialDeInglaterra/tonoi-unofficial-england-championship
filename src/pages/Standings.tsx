@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, Search, ArrowUpDown } from "lucide-react";
+import { Crown, Search, ArrowUpDown, Check, ChevronsUpDown, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings, type StandingRow } from "@/lib/tonoi";
+import { cn } from "@/lib/utils";
 
 type SortKey = "pos" | "pj" | "v" | "e" | "d" | "p" | "gf" | "gc" | "dg" | "ppp" | "pct" | "mj" | "intentos" | "destronamientos" | "id_pct" | "team";
 
@@ -34,6 +38,8 @@ export default function Standings() {
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [q, setQ] = useState("");
+  const [teamFilter, setTeamFilter] = useState<string>("");
+  const [comboOpen, setComboOpen] = useState(false);
 
   // Hidden admin access via search
   useEffect(() => {
@@ -50,9 +56,12 @@ export default function Standings() {
 
   const baseRows = computed?.rows ?? [];
   const championId = computed?.champion ?? null;
+  const teamsSorted = useMemo(() => [...(teamsQ.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [teamsQ.data]);
+  const selectedTeam = teamsSorted.find((t) => t.id === teamFilter);
 
   const rows = useMemo(() => {
     let r = baseRows.map((row, idx) => ({ ...row, _pos: idx + 1 }));
+    if (teamFilter) r = r.filter((x) => x.team.id === teamFilter);
     if (q.trim()) {
       const needle = q.trim().toLowerCase();
       r = r.filter((x) => x.team.name.toLowerCase().includes(needle));
@@ -69,7 +78,7 @@ export default function Standings() {
       });
     }
     return r;
-  }, [baseRows, q, sortKey, sortDir]);
+  }, [baseRows, q, teamFilter, sortKey, sortDir]);
 
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -100,12 +109,56 @@ export default function Standings() {
         </ul>
       </Card>
 
-      {/* Search */}
-      <div className="mt-6 flex items-center gap-2">
+      {/* Scoring system */}
+      <Card className="mt-4 border-2 border-primary/20 p-5">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-primary">Sistema de puntuación</h2>
+        <ul className="mt-3 grid gap-2 text-sm text-foreground/90 sm:grid-cols-3">
+          <li><strong className="text-primary">Victoria:</strong> 2 puntos</li>
+          <li><strong className="text-primary">Empate:</strong> 1 punto</li>
+          <li><strong className="text-primary">Derrota:</strong> 0 puntos</li>
+        </ul>
+      </Card>
+
+      {/* Filters */}
+      <div className="mt-6 flex flex-wrap items-end gap-3">
+        <div className="w-full max-w-sm">
+          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Equipo</label>
+          <Popover open={comboOpen} onOpenChange={setComboOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" role="combobox" className="mt-1 w-full justify-between font-normal">
+                <span className={cn("truncate", !selectedTeam && "text-muted-foreground")}>
+                  {selectedTeam?.name ?? "Todos los equipos"}
+                </span>
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+              <Command>
+                <CommandInput placeholder="Buscar equipo..." />
+                <CommandList>
+                  <CommandEmpty>No se encontraron equipos.</CommandEmpty>
+                  <CommandGroup>
+                    {teamsSorted.map((t) => (
+                      <CommandItem key={t.id} value={t.name} onSelect={() => { setTeamFilter(t.id); setComboOpen(false); }}>
+                        <Check className={cn("mr-2 h-4 w-4", teamFilter === t.id ? "opacity-100" : "opacity-0")} />
+                        {t.name}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+        {teamFilter && (
+          <Button variant="ghost" onClick={() => setTeamFilter("")}>
+            <X className="mr-1 h-4 w-4" /> Limpiar
+          </Button>
+        )}
         <div className="relative max-w-sm flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Buscar equipo..."
+            placeholder="Buscar por texto..."
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="pl-9"
