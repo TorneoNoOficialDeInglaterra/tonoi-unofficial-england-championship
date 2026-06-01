@@ -274,19 +274,23 @@ export default function Home() {
               ) : (
                 <ul className="mt-3 space-y-2">
                   {last5.map((m) => {
-                    const w = teamById.get(m.winner_team_id);
-                    const l = teamById.get(m.loser_team_id);
+                    const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
+                    const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
+                    const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
+                    const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                    const local = teamById.get(localId);
+                    const visitor = teamById.get(visitorId);
                     return (
                       <li key={m.id} className="rounded-md border border-border p-2 text-xs">
                         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                           {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
                         </div>
                         <div className="mt-1 flex items-center gap-2">
-                          <TeamBadge team={w} size={18} />
-                          <span className="min-w-0 flex-1 truncate font-medium">{w?.name ?? "—"}</span>
-                          <span className="font-mono font-bold tabular-nums">{m.winner_goals}–{m.loser_goals}</span>
-                          <span className="min-w-0 flex-1 truncate text-right font-medium">{l?.name ?? "—"}</span>
-                          <TeamBadge team={l} size={18} />
+                          <TeamBadge team={local} size={18} />
+                          <span className="min-w-0 flex-1 truncate font-medium">{local?.name ?? "—"}</span>
+                          <span className="font-mono font-bold tabular-nums">{localGoals}–{visitorGoals}</span>
+                          <span className="min-w-0 flex-1 truncate text-right font-medium">{visitor?.name ?? "—"}</span>
+                          <TeamBadge team={visitor} size={18} />
                         </div>
                       </li>
                     );
