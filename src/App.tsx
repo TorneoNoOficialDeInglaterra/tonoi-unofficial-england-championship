@@ -13,6 +13,7 @@ import History from "./pages/History";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Contact from "./pages/Contact";
+import Faq from "./pages/Faq";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/historial" element={<MatchHistory />} />
             <Route path="/estadisticas" element={<Stats />} />
             <Route path="/historia" element={<History />} />
+            <Route path="/faq" element={<Faq />} />
             <Route path="/contacto" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
