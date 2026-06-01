@@ -56,6 +56,45 @@ export function daysBetween(fromIso: string, to = new Date()): number {
 }
 
 /**
+ * Determines the home (local) team id for every match by alternating venues per team chronologically.
+ * If a match already has `home_team_id` set, it is respected.
+ */
+export function buildLocalByMatchMap(matches: Match[], teamById?: Map<string, Team>): Map<string, string> {
+  const map = new Map<string, string>();
+  const lastVenue = new Map<string, "home" | "away">();
+  const ordered = [...matches].sort(
+    (a, b) => a.match_date.localeCompare(b.match_date) || a.id.localeCompare(b.id),
+  );
+  const tieBreak = (a: string, b: string) => {
+    const ta = teamById?.get(a)?.name ?? a;
+    const tb = teamById?.get(b)?.name ?? b;
+    return ta.localeCompare(tb) <= 0 ? a : b;
+  };
+  for (const m of ordered) {
+    const a = m.winner_team_id;
+    const b = m.loser_team_id;
+    let localId: string;
+    if (m.home_team_id && (m.home_team_id === a || m.home_team_id === b)) {
+      localId = m.home_team_id;
+    } else {
+      const va = lastVenue.get(a);
+      const vb = lastVenue.get(b);
+      if (va && vb) {
+        if (va === "away" && vb === "home") localId = a;
+        else if (vb === "away" && va === "home") localId = b;
+        else localId = tieBreak(a, b);
+      } else if (va && !vb) localId = va === "home" ? b : a;
+      else if (!va && vb) localId = vb === "home" ? a : b;
+      else localId = tieBreak(a, b);
+    }
+    map.set(m.id, localId);
+    lastVenue.set(localId, "home");
+    lastVenue.set(localId === a ? b : a, "away");
+  }
+  return map;
+}
+
+/**
  * Compute the standings & current champion from the chronological list of matches.
  * Champion logic: first match defines first champion as the winner. On every subsequent
  * match, the champion (going in) is challenged. If the challenger wins (or wins on penalties
