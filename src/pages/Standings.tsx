@@ -52,10 +52,10 @@ export default function Standings() {
   const championId = computed?.champion ?? null;
 
   const rows = useMemo(() => {
-    let r = baseRows.map((row, idx) => ({ ...row, _pos: idx + 1 }));
+    let r = baseRows.map((row: any, idx: number) => ({ ...row, _pos: idx + 1 }));
     if (q.trim()) {
       const needle = q.trim().toLowerCase();
-      r = r.filter((x) => x.team.name.toLowerCase().includes(needle));
+      r = r.filter((x: { team: { name: string; }; }) => x.team.name.toLowerCase().includes(needle));
     }
     if (sortKey !== "pos") {
       r = [...r].sort((a, b) => {
@@ -107,7 +107,7 @@ export default function Standings() {
           <Input
             placeholder="Buscar equipo..."
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e: { target: { value: any; }; }) => setQ(e.target.value)}
             className="pl-9"
           />
         </div>
@@ -139,7 +139,7 @@ export default function Standings() {
               ) : rows.length === 0 ? (
                 <tr><td colSpan={COLS.length + 2} className="p-8 text-center text-muted-foreground">Sin datos todavía.</td></tr>
               ) : (
-                rows.map((r) => (
+                rows.map((r: { team: any; _pos?: any; pj?: number; v?: number; e?: number; d?: number; p?: number; gf?: number; gc?: number; dg?: number; ppp?: number; pct?: number; mj?: number; intentos?: number; destronamientos?: number; id_pct?: number; }) => (
                   <Row key={r.team.id} row={r} pos={r._pos} isChampion={r.team.id === championId} />
                 ))
               )}
