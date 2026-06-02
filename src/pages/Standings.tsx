@@ -64,10 +64,6 @@ export default function Standings() {
   const rows = useMemo(() => {
     let r = baseRows.map((row, idx) => ({ ...row, _pos: idx + 1 }));
     if (teamFilter) r = r.filter((x) => x.team.id === teamFilter);
-    if (q.trim()) {
-      const needle = q.trim().toLowerCase();
-      r = r.filter((x) => x.team.name.toLowerCase().includes(needle));
-    }
     if (sortKey !== "pos") {
       r = [...r].sort((a, b) => {
         if (sortKey === "team") {
