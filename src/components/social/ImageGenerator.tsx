@@ -18,7 +18,8 @@ export function ImageGenerator() {
   const teams = useMemo(() => [...(teamsQ.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [teamsQ.data]);
 
   const [type, setType] = useState<ImageType>("resultado");
-  const [competition, setCompetition] = useState<Competition>("laliga");
+  const [competition, setCompetition] = useState<Competition>("liga");
+  const [domesticLeague, setDomesticLeague] = useState<DomesticLeague>("premier");
   const [homeId, setHomeId] = useState<string>("");
   const [awayId, setAwayId] = useState<string>("");
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -32,7 +33,7 @@ export function ImageGenerator() {
   const awayTeam = teams.find((t) => t.id === awayId) ?? null;
 
   const data: TemplateData = {
-    type, competition, homeTeam, awayTeam, date, time, stadium,
+    type, competition, domesticLeague, homeTeam, awayTeam, date, time, stadium,
     homeGoals, awayGoals, scorers,
   };
 
