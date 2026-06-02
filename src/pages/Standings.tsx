@@ -109,17 +109,56 @@ export default function Standings() {
         </ul>
       </Card>
 
-      {/* Search */}
+      {/* Team combobox filter */}
       <div className="mt-6 flex items-center gap-2">
-        <div className="relative max-w-sm flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar equipo..."
-            value={q}
-            onChange={(e: { target: { value: any; }; }) => setQ(e.target.value)}
-            className="pl-9"
-          />
-        </div>
+        <Popover open={comboOpen} onOpenChange={setComboOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={comboOpen}
+              className="w-[280px] justify-between"
+            >
+              {selectedTeam ? (
+                <span className="flex items-center gap-2">
+                  <TeamBadge team={selectedTeam} size={20} />
+                  {selectedTeam.name}
+                </span>
+              ) : (
+                <span className="text-muted-foreground">Filtrar por equipo…</span>
+              )}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[280px] p-0">
+            <Command>
+              <CommandInput
+                placeholder="Buscar equipo..."
+                value={comboQuery}
+                onValueChange={setComboQuery}
+              />
+              <CommandList>
+                <CommandEmpty>Sin resultados.</CommandEmpty>
+                <CommandGroup>
+                  {teamsSorted.map((t) => (
+                    <CommandItem
+                      key={t.id}
+                      value={t.name}
+                      onSelect={() => {
+                        setTeamFilter(t.id === teamFilter ? "" : t.id);
+                        setComboOpen(false);
+                      }}
+                    >
+                      <Check className={cn("mr-2 h-4 w-4", teamFilter === t.id ? "opacity-100" : "opacity-0")} />
+                      <TeamBadge team={t} size={20} />
+                      <span className="ml-2">{t.name}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
         {teamFilter && (
           <Button variant="ghost" onClick={() => setTeamFilter("")}>
             <X className="mr-1 h-4 w-4" /> Limpiar
