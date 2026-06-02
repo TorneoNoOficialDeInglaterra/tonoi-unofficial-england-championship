@@ -37,17 +37,19 @@ export default function Standings() {
   const navigate = useNavigate();
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-  const [q, setQ] = useState("");
   const [teamFilter, setTeamFilter] = useState<string>("");
   const [comboOpen, setComboOpen] = useState(false);
+  const [comboQuery, setComboQuery] = useState("");
 
-  // Hidden admin access via search
+  // Hidden admin access via combobox search
   useEffect(() => {
-    if (q.trim().toLowerCase() === "croquetasdejamón" || q.trim().toLowerCase() === "croquetasdejamon") {
-      setQ("");
+    const v = comboQuery.trim().toLowerCase();
+    if (v === "croquetasdejamón" || v === "croquetasdejamon") {
+      setComboQuery("");
+      setComboOpen(false);
       navigate("/admin");
     }
-  }, [q, navigate]);
+  }, [comboQuery, navigate]);
 
   const computed = useMemo(() => {
     if (!teamsQ.data || !matchesQ.data) return null;
@@ -62,10 +64,6 @@ export default function Standings() {
   const rows = useMemo(() => {
     let r = baseRows.map((row, idx) => ({ ...row, _pos: idx + 1 }));
     if (teamFilter) r = r.filter((x) => x.team.id === teamFilter);
-    if (q.trim()) {
-      const needle = q.trim().toLowerCase();
-      r = r.filter((x) => x.team.name.toLowerCase().includes(needle));
-    }
     if (sortKey !== "pos") {
       r = [...r].sort((a, b) => {
         if (sortKey === "team") {
@@ -78,7 +76,7 @@ export default function Standings() {
       });
     }
     return r;
-  }, [baseRows, q, teamFilter, sortKey, sortDir]);
+  }, [baseRows, teamFilter, sortKey, sortDir]);
 
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -134,7 +132,7 @@ export default function Standings() {
             </PopoverTrigger>
             <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
               <Command>
-                <CommandInput placeholder="Buscar equipo..." />
+                <CommandInput placeholder="Buscar equipo..." value={comboQuery} onValueChange={setComboQuery} />
                 <CommandList>
                   <CommandEmpty>No se encontraron equipos.</CommandEmpty>
                   <CommandGroup>
@@ -155,15 +153,6 @@ export default function Standings() {
             <X className="mr-1 h-4 w-4" /> Limpiar
           </Button>
         )}
-        <div className="relative max-w-sm flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por texto..."
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="pl-9"
-          />
-        </div>
         <span className="text-xs text-muted-foreground">{rows.length} equipos</span>
       </div>
 

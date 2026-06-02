@@ -128,7 +128,14 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
     l.gf += m.loser_goals; l.gc += m.winner_goals;
     if (m.was_draw) {
       w.e++; l.e++;
-      w.p += 1; l.p += 1;
+      // En empate: el campeón retiene 1 punto; el retador (que optaba al título) recibe 0.
+      // Si ningún equipo era campeón antes del partido, ambos reciben 1.
+      if (champion !== null && (m.winner_team_id === champion || m.loser_team_id === champion)) {
+        if (m.winner_team_id === champion) { w.p += 1; }
+        else { l.p += 1; }
+      } else {
+        w.p += 1; l.p += 1;
+      }
     } else {
       w.v++; l.d++;
       w.p += 2;
