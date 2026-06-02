@@ -25,32 +25,22 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
     }}>
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(31,74,79,0.4) 0%, rgba(31,74,79,0.7) 100%)" }} />
 
-      {/* Top header */}
-      <div style={{ position: "absolute", top: 40, left: 60, right: 60, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 130, height: 130, objectFit: "contain" }} alt="" />
-        <div style={{ fontSize: 82, fontWeight: 800, letterSpacing: 14, fontFamily: "'Inter', sans-serif" }}>RESULTADO</div>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 130, height: 130, objectFit: "contain" }} alt="" />
-      </div>
-
       {/* Champions logo */}
       <div style={{ position: "absolute", top: 240, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
         <img src={ASSETS.competitions.champions} crossOrigin="anonymous" style={{ height: 200, objectFit: "contain" }} alt="" />
       </div>
 
       {/* Teams */}
-      <div style={{ position: "absolute", top: 480, left: 0, right: 0, display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-        <TLogo team={data.homeTeam} size={230} />
+      <div style={{ position: "absolute", top: 380, left: 20, right: 20, display: "flex", justifyContent: "space-around", alignItems: "center" }}>
+        <TLogo team={data.homeTeam} size={330} />
         <div style={{ fontSize: 90, fontWeight: 900 }}>V</div>
-        <TLogo team={data.awayTeam} size={230} />
+        <TLogo team={data.awayTeam} size={330} />
       </div>
 
       {/* Score */}
       <div style={{
         position: "absolute", bottom: 180, left: 60, right: 60,
-        background: "rgba(40,90,95,0.85)", borderTop: "3px solid #c9a44c", borderBottom: "3px solid #c9a44c",
-        padding: "30px 40px",
-        display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 20,
-      }}>
+        }}>
         <ScorersList scorers={data.scorers} side="home" align="left" />
         <div style={{ fontSize: 130, fontWeight: 900, textAlign: "center", color: "#fff" }}>
           {data.homeGoals}-{data.awayGoals}
@@ -59,14 +49,11 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
       </div>
 
       {/* Footer */}
-      <div style={{ position: "absolute", bottom: 70, left: 0, right: 0, textAlign: "center" }}>
-        <div style={{ fontSize: 30, fontWeight: 600 }}>{formatDateEn(data.date)}{data.time ? `, ${data.time}h` : ""}</div>
-        <div style={{ fontSize: 28, marginTop: 6, opacity: 0.9 }}>{data.stadium}</div>
+      <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, textAlign: "center" }}>
+        <div style={{ fontSize: 20, fontWeight: 500 }}>{formatDateEn(data.date)}{data.time ? `, ${data.time}h` : ""}</div>
+        <div style={{ fontSize: 18, marginTop: 6, opacity: 0.9 }}>{data.stadium}</div>
       </div>
 
-      <div style={{ position: "absolute", bottom: 20, left: 0, right: 0, textAlign: "center", fontSize: 20, letterSpacing: 4, opacity: 0.8 }}>
-        @ToNOI_oficial
-      </div>
     </div>
   );
 }

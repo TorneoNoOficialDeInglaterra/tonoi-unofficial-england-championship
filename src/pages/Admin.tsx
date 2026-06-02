@@ -12,7 +12,8 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
@@ -68,6 +69,7 @@ export default function Admin() {
             <TabsTrigger value="players" className="whitespace-nowrap">Jugadores</TabsTrigger>
             <TabsTrigger value="keepers" className="whitespace-nowrap">Porteros</TabsTrigger>
             <TabsTrigger value="seasons" className="whitespace-nowrap">Temporadas</TabsTrigger>
+            <TabsTrigger value="faqs" className="whitespace-nowrap">FAQ</TabsTrigger>
             <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
             <TabsTrigger value="images" className="whitespace-nowrap">Generar imagen</TabsTrigger>
           </TabsList>
@@ -77,6 +79,7 @@ export default function Admin() {
         <TabsContent value="players" className="mt-4"><PlayersAdmin /></TabsContent>
         <TabsContent value="keepers" className="mt-4"><KeepersAdmin /></TabsContent>
         <TabsContent value="seasons" className="mt-4"><SeasonsAdmin /></TabsContent>
+        <TabsContent value="faqs" className="mt-4"><FaqsAdmin /></TabsContent>
         <TabsContent value="messages" className="mt-4"><MessagesAdmin /></TabsContent>
         <TabsContent value="images" className="mt-4"><ImageGenerator /></TabsContent>
       </Tabs>
@@ -787,3 +790,123 @@ function MessagesAdmin() {
     </div>
   );
 }
+
+/* ================== FAQs ================== */
+function FaqsAdmin() {
+  const qc = useQueryClient();
+  const q = useQuery({
+    queryKey: ["faqs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("faqs")
+        .select("*")
+        .order("display_order", { ascending: true })
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [order, setOrder] = useState<number>(0);
+
+  async function add() {
+    if (!question.trim() || !answer.trim()) return toast.error("Rellena la pregunta y la respuesta");
+    const { error } = await supabase.from("faqs").insert({
+      question: question.trim(),
+      answer: answer.trim(),
+      display_order: Number.isFinite(order) ? order : 0,
+    });
+    if (error) return toast.error(error.message);
+    setQuestion(""); setAnswer(""); setOrder(0);
+    toast.success("Pregunta añadida");
+    qc.invalidateQueries({ queryKey: ["faqs"] });
+  }
+
+  async function updateField(id: string, patch: Record<string, unknown>) {
+    const { error } = await supabase.from("faqs").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+    if (error) toast.error(error.message);
+    else qc.invalidateQueries({ queryKey: ["faqs"] });
+  }
+
+  async function remove(id: string) {
+    if (!confirm("¿Eliminar pregunta?")) return;
+    const { error } = await supabase.from("faqs").delete().eq("id", id);
+    if (error) toast.error(error.message);
+    else qc.invalidateQueries({ queryKey: ["faqs"] });
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card className="p-4 border-primary/20 border-2">
+        <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary">
+          <HelpCircle className="h-4 w-4" /> Preguntas frecuentes
+        </h3>
+        <p className="mt-2 text-sm text-foreground/80">
+          Estas preguntas se mostrarán en la página pública de Preguntas Frecuentes. Usa el orden para ordenarlas (menor primero).
+        </p>
+      </Card>
+
+      <Card className="p-4">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Añadir pregunta</h3>
+        <div className="mt-3 grid gap-3">
+          <div>
+            <Label>Pregunta</Label>
+            <Input value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="¿Cómo funciona el ToNOI?" />
+          </div>
+          <div>
+            <Label>Respuesta</Label>
+            <Textarea value={answer} onChange={(e) => setAnswer(e.target.value)} rows={4} placeholder="Explicación detallada..." />
+          </div>
+          <div className="grid gap-2 sm:grid-cols-[120px_auto]">
+            <div>
+              <Label>Orden</Label>
+              <Input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} />
+            </div>
+            <div className="flex items-end"><Button onClick={add}>Añadir</Button></div>
+          </div>
+        </div>
+      </Card>
+
+      {(q.data ?? []).length === 0 ? (
+        <Card className="p-8 text-center text-sm text-muted-foreground">No hay preguntas todavía.</Card>
+      ) : (
+        <div className="space-y-3">
+          {(q.data ?? []).map((f) => (
+            <Card key={f.id} className="p-4">
+              <div className="grid gap-3">
+                <div className="flex items-start gap-2">
+                  <div className="flex-1">
+                    <Label>Pregunta</Label>
+                    <Input defaultValue={f.question} onBlur={(e) => e.target.value !== f.question && updateField(f.id, { question: e.target.value })} />
+                  </div>
+                  <div className="w-24">
+                    <Label>Orden</Label>
+                    <Input
+                      type="number"
+                      defaultValue={f.display_order}
+                      onBlur={(e) => Number(e.target.value) !== f.display_order && updateField(f.id, { display_order: Number(e.target.value) })}
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="mt-6" onClick={() => remove(f.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
+                <div>
+                  <Label>Respuesta</Label>
+                  <Textarea
+                    defaultValue={f.answer}
+                    rows={3}
+                    onBlur={(e) => e.target.value !== f.answer && updateField(f.id, { answer: e.target.value })}
+                  />
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+

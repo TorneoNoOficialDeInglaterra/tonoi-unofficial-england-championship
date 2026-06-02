@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, Search, ArrowUpDown } from "lucide-react";
+import { Crown, Search, ArrowUpDown, Check, ChevronsUpDown, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings, type StandingRow } from "@/lib/tonoi";
+import { cn } from "@/lib/utils";
 
 type SortKey = "pos" | "pj" | "v" | "e" | "d" | "p" | "gf" | "gc" | "dg" | "ppp" | "pct" | "mj" | "intentos" | "destronamientos" | "id_pct" | "team";
 
@@ -33,15 +37,19 @@ export default function Standings() {
   const navigate = useNavigate();
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-  const [q, setQ] = useState("");
+  const [teamFilter, setTeamFilter] = useState<string>("");
+  const [comboOpen, setComboOpen] = useState(false);
+  const [comboQuery, setComboQuery] = useState("");
 
-  // Hidden admin access via search
+  // Hidden admin access via combobox search
   useEffect(() => {
-    if (q.trim().toLowerCase() === "croquetasdejamón" || q.trim().toLowerCase() === "croquetasdejamon") {
-      setQ("");
+    const v = comboQuery.trim().toLowerCase();
+    if (v === "croquetasdejamón" || v === "croquetasdejamon") {
+      setComboQuery("");
+      setComboOpen(false);
       navigate("/admin");
     }
-  }, [q, navigate]);
+  }, [comboQuery, navigate]);
 
   const computed = useMemo(() => {
     if (!teamsQ.data || !matchesQ.data) return null;
@@ -50,6 +58,8 @@ export default function Standings() {
 
   const baseRows = computed?.rows ?? [];
   const championId = computed?.champion ?? null;
+  const teamsSorted = useMemo(() => [...(teamsQ.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [teamsQ.data]);
+  const selectedTeam = teamsSorted.find((t) => t.id === teamFilter);
 
   const rows = useMemo(() => {
     let r = baseRows.map((row: any, idx: number) => ({ ...row, _pos: idx + 1 }));
@@ -69,7 +79,7 @@ export default function Standings() {
       });
     }
     return r;
-  }, [baseRows, q, sortKey, sortDir]);
+  }, [baseRows, teamFilter, sortKey, sortDir]);
 
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -111,6 +121,11 @@ export default function Standings() {
             className="pl-9"
           />
         </div>
+        {teamFilter && (
+          <Button variant="ghost" onClick={() => setTeamFilter("")}>
+            <X className="mr-1 h-4 w-4" /> Limpiar
+          </Button>
+        )}
         <span className="text-xs text-muted-foreground">{rows.length} equipos</span>
       </div>
 

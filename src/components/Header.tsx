@@ -13,6 +13,7 @@ const NAV = [
   { to: "/historial", label: "Historial de partidos" },
   { to: "/estadisticas", label: "Estadísticas" },
   { to: "/historia", label: "Historia del torneo" },
+  { to: "/faq", label: "Preguntas frecuentes" },
   { to: "/contacto", label: "Contacto" },
 ];
 

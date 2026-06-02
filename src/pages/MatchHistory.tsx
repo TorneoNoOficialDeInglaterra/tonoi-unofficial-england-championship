@@ -8,8 +8,43 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { decadeOf, type Match } from "@/lib/tonoi";
+import { buildLocalByMatchMap, decadeOf, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
+
+function TeamCombo({
+  teams, value, onChange, placeholder,
+}: { teams: Team[]; value: string; onChange: (v: string) => void; placeholder: string }) {
+  const [open, setOpen] = useState(false);
+  const selected = teams.find((t) => t.id === value);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" role="combobox" className="mt-1 w-full justify-between font-normal">
+          <span className={cn("truncate", !selected && "text-muted-foreground")}>
+            {selected?.name ?? placeholder}
+          </span>
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Buscar equipo..." />
+          <CommandList>
+            <CommandEmpty>No se encontraron equipos.</CommandEmpty>
+            <CommandGroup>
+              {teams.map((t) => (
+                <CommandItem key={t.id} value={t.name} onSelect={() => { onChange(t.id); setOpen(false); }}>
+                  <Check className={cn("mr-2 h-4 w-4", value === t.id ? "opacity-100" : "opacity-0")} />
+                  {t.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export default function MatchHistory() {
   const teamsQ = useTeams();
@@ -18,57 +53,15 @@ export default function MatchHistory() {
   const teamById = useMemo(() => new Map((teamsQ.data ?? []).map((t) => [t.id, t])), [teamsQ.data]);
   const teamsSorted = useMemo(() => [...(teamsQ.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [teamsQ.data]);
 
-  // Compute local team for every match by alternating venue per team chronologically.
-  // Rule: if a team played at home in its previous match, it now plays away (and vice versa).
-  // For a team's first ever match, we assign local to whichever team has the alphabetically earlier name (stable).
-  const localByMatch = useMemo(() => {
-    const map = new Map<string, string>(); // matchId -> localTeamId
-    const lastVenue = new Map<string, "home" | "away">();
-    const ordered = [...(matchesQ.data ?? [])].sort(
-      (a, b) => a.match_date.localeCompare(b.match_date) || a.id.localeCompare(b.id),
-    );
-    for (const m of ordered) {
-      const a = m.winner_team_id;
-      const b = m.loser_team_id;
-      const va = lastVenue.get(a);
-      const vb = lastVenue.get(b);
-      let localId: string;
-      if (va && vb) {
-        // both have history: prefer team whose last venue was away
-        if (va === "away" && vb === "home") localId = a;
-        else if (vb === "away" && va === "home") localId = b;
-        else if (va === "away" && vb === "away") {
-          // both away last → tiebreak alphabetically
-          const ta = teamById.get(a)?.name ?? a;
-          const tb = teamById.get(b)?.name ?? b;
-          localId = ta.localeCompare(tb) <= 0 ? a : b;
-        } else {
-          // both home last → same tiebreak
-          const ta = teamById.get(a)?.name ?? a;
-          const tb = teamById.get(b)?.name ?? b;
-          localId = ta.localeCompare(tb) <= 0 ? a : b;
-        }
-      } else if (va && !vb) {
-        // a has history, b doesn't → b plays at home if a played home; else a is home
-        localId = va === "home" ? b : a;
-      } else if (!va && vb) {
-        localId = vb === "home" ? a : b;
-      } else {
-        // neither has history (first match for both) → alphabetical local
-        const ta = teamById.get(a)?.name ?? a;
-        const tb = teamById.get(b)?.name ?? b;
-        localId = ta.localeCompare(tb) <= 0 ? a : b;
-      }
-      map.set(m.id, localId);
-      lastVenue.set(localId, "home");
-      lastVenue.set(localId === a ? b : a, "away");
-    }
-    return map;
-  }, [matchesQ.data, teamById]);
+  const localByMatch = useMemo(
+    () => buildLocalByMatchMap(matchesQ.data ?? [], teamById),
+    [matchesQ.data, teamById],
+  );
 
-  // Team filter
+  // Filters
   const [teamFilter, setTeamFilter] = useState<string>("");
-  const [comboOpen, setComboOpen] = useState(false);
+  const [h2hA, setH2hA] = useState<string>("");
+  const [h2hB, setH2hB] = useState<string>("");
 
   const grouped = useMemo(() => {
     const m = new Map<number, Match[]>();
@@ -95,13 +88,27 @@ export default function MatchHistory() {
     if (decades.length && !decades.includes(decade)) setDecade(decades[0]);
   }, [decades, decade]);
 
-  const filteredMatches = useMemo(() => {
-    if (!teamFilter) return null;
-    return [...(matchesQ.data ?? [])]
-      .filter((m) => m.winner_team_id === teamFilter || m.loser_team_id === teamFilter)
-      .sort((a, b) => b.match_date.localeCompare(a.match_date));
-  }, [teamFilter, matchesQ.data]);
+  const h2hActive = !!h2hA && !!h2hB && h2hA !== h2hB;
 
+  const filteredMatches = useMemo(() => {
+    if (h2hActive) {
+      return [...(matchesQ.data ?? [])]
+        .filter(
+          (m) =>
+            (m.winner_team_id === h2hA && m.loser_team_id === h2hB) ||
+            (m.winner_team_id === h2hB && m.loser_team_id === h2hA),
+        )
+        .sort((a, b) => b.match_date.localeCompare(a.match_date));
+    }
+    if (teamFilter) {
+      return [...(matchesQ.data ?? [])]
+        .filter((m) => m.winner_team_id === teamFilter || m.loser_team_id === teamFilter)
+        .sort((a, b) => b.match_date.localeCompare(a.match_date));
+    }
+    return null;
+  }, [teamFilter, h2hA, h2hB, h2hActive, matchesQ.data]);
+
+  const filtering = h2hActive || !!teamFilter;
   const matches = filteredMatches ?? grouped.get(decade) ?? [];
   const idx = decades.indexOf(decade);
   const prevDecade = idx >= 0 && idx + 1 < decades.length ? decades[idx + 1] : null;
@@ -109,61 +116,72 @@ export default function MatchHistory() {
 
   const loading = teamsQ.isLoading || matchesQ.isLoading;
   const selectedTeam = teamsSorted.find((t) => t.id === teamFilter);
+  const teamA = teamsSorted.find((t) => t.id === h2hA);
+  const teamB = teamsSorted.find((t) => t.id === h2hB);
 
   return (
     <div className="container py-10">
       <h1 className="text-4xl font-black sm:text-5xl">Historial de partidos</h1>
       <p className="mt-2 text-muted-foreground">Cada partido por el título, agrupados por décadas.</p>
 
-      {/* Team search */}
-      <div className="mt-6 flex flex-wrap items-end gap-3">
-        <div className="w-full max-w-sm">
-          <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Buscar equipo</label>
-          <Popover open={comboOpen} onOpenChange={setComboOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="outline" role="combobox" className="mt-1 w-full justify-between font-normal">
-                <span className={cn("truncate", !selectedTeam && "text-muted-foreground")}>
-                  {selectedTeam?.name ?? "Todos los equipos"}
-                </span>
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      {/* Filters */}
+      <Card className="mt-6 p-5">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Equipo</label>
+            <TeamCombo
+              teams={teamsSorted}
+              value={teamFilter}
+              onChange={(v) => { setTeamFilter(v); setH2hA(""); setH2hB(""); }}
+              placeholder="Todos los equipos"
+            />
+            {teamFilter && (
+              <Button size="sm" variant="ghost" className="mt-2" onClick={() => setTeamFilter("")}>
+                <X className="mr-1 h-3 w-3" /> Limpiar
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-              <Command>
-                <CommandInput placeholder="Buscar equipo..." />
-                <CommandList>
-                  <CommandEmpty>No se encontraron equipos.</CommandEmpty>
-                  <CommandGroup>
-                    {teamsSorted.map((t) => (
-                      <CommandItem key={t.id} value={t.name} onSelect={() => { setTeamFilter(t.id); setComboOpen(false); }}>
-                        <Check className={cn("mr-2 h-4 w-4", teamFilter === t.id ? "opacity-100" : "opacity-0")} />
-                        {t.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
+            )}
+          </div>
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Enfrentamiento — Club 1</label>
+            <TeamCombo
+              teams={teamsSorted}
+              value={h2hA}
+              onChange={(v) => { setH2hA(v); setTeamFilter(""); }}
+              placeholder="Selecciona club"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Enfrentamiento — Club 2</label>
+            <TeamCombo
+              teams={teamsSorted}
+              value={h2hB}
+              onChange={(v) => { setH2hB(v); setTeamFilter(""); }}
+              placeholder="Selecciona club"
+            />
+          </div>
         </div>
-        {teamFilter && (
-          <Button variant="ghost" onClick={() => setTeamFilter("")}>
-            <X className="mr-1 h-4 w-4" /> Limpiar
+        {(h2hA || h2hB) && (
+          <Button size="sm" variant="ghost" className="mt-3" onClick={() => { setH2hA(""); setH2hB(""); }}>
+            <X className="mr-1 h-3 w-3" /> Limpiar enfrentamiento
           </Button>
         )}
-      </div>
+      </Card>
 
       <div className="mt-6 flex items-center justify-between gap-3">
         <h2 className="text-2xl font-bold">
-          {teamFilter ? `Partidos de ${selectedTeam?.name}` : `Década ${decade}s`}
+          {h2hActive
+            ? `${teamA?.name} vs ${teamB?.name}`
+            : teamFilter
+              ? `Partidos de ${selectedTeam?.name}`
+              : `Década ${decade}s`}
         </h2>
         <span className="text-xs text-muted-foreground">{matches.length} partidos</span>
       </div>
 
       <Card className="mt-3 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="max-h-[80vh] overflow-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase tracking-wider text-muted-foreground">
+            <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
                 <th className="px-3 py-3 text-left">Fecha</th>
                 <th className="px-3 py-3 text-right">Local</th>
@@ -177,7 +195,13 @@ export default function MatchHistory() {
                   <tr key={i} className="border-t border-border"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
                 ))
               ) : matches.length === 0 ? (
-                <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">Sin partidos.</td></tr>
+                <tr>
+                  <td colSpan={4} className="p-8 text-center text-muted-foreground">
+                    {h2hActive
+                      ? "No existen partidos entre esos dos clubes."
+                      : "Sin partidos."}
+                  </td>
+                </tr>
               ) : (
                 matches.map((m) => {
                   const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
@@ -217,8 +241,8 @@ export default function MatchHistory() {
         </div>
       </Card>
 
-      {/* Decade navigation (only when not filtering by team) */}
-      {!teamFilter && (
+      {/* Decade navigation (only when not filtering) */}
+      {!filtering && (
         <div className="mt-6 flex flex-col items-center gap-4">
           <div className="flex items-center gap-3">
             <Button variant="outline" disabled={!prevDecade} onClick={() => prevDecade && changeDecade(prevDecade)}>
