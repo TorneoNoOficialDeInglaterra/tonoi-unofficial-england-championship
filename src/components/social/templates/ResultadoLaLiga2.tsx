@@ -1,7 +1,7 @@
 import { competitionLogo, formatDateEs, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
-function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
+function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" | "center" }) {
   const list = scorers.filter((s) => s.side === side);
   return (
     <div style={{ textAlign: align, fontSize: 26, lineHeight: 1.45, color: "#2a2a2a", fontFamily: "'Lora', Georgia, serif" }}>
