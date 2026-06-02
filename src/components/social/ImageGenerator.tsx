@@ -130,6 +130,20 @@ export function ImageGenerator() {
             </Select>
           </div>
 
+          {competition === "liga" && (
+            <div className="sm:col-span-2">
+              <Label>Liga</Label>
+              <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
+                    <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <div>
             <Label>Equipo local</Label>
             <Select value={homeId} onValueChange={setHomeId}>
