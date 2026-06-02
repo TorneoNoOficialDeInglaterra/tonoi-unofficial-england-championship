@@ -1,16 +1,15 @@
-import { ASSETS, COMPETITION_LABELS, formatDateEs, type TemplateData } from "./shared";
+import { competitionLogo, COMPETITION_LABELS, formatDateEs, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
 // Generic announcement template — used for all "Anuncio del partido"
 export function AnuncioPartido({ data }: { data: TemplateData }) {
-  const compLogo = ASSETS.competitions[data.competition];
   return (
     <div
       style={{
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(${ASSETS.templates.anuncio})`,
+        backgroundImage: `url(/social/templates/anuncio-bg.jpg)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#0a1628",
@@ -19,19 +18,16 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         overflow: "hidden",
       }}
     >
-      {/* Dark overlay for readability */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(10,22,40,0.55) 0%, rgba(10,22,40,0.35) 50%, rgba(10,22,40,0.75) 100%)" }} />
 
-      {/* Top bar */}
-      <div style={{ position: "absolute", top: 40, left: 0, right: 0, display: "flex", justifyContent: "center", alignItems: "center", gap: 24 }}>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 90, height: 90, objectFit: "contain" }} alt="" />
-        <div style={{ fontSize: 80, fontWeight: 900, letterSpacing: 8, fontFamily: "'Cinzel', serif" }}>PRÓXIMO PARTIDO</div>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 90, height: 90, objectFit: "contain" }} alt="" />
+      {/* Title */}
+      <div style={{ position: "absolute", top: 60, left: 0, right: 0, textAlign: "center", fontSize: 78, fontWeight: 900, letterSpacing: 8, fontFamily: "'Cinzel', serif" }}>
+        PRÓXIMO PARTIDO
       </div>
 
       {/* Competition logo */}
       <div style={{ position: "absolute", top: 200, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={compLogo} crossOrigin="anonymous" style={{ height: 130, objectFit: "contain" }} alt="" />
+        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 130, objectFit: "contain" }} alt="" />
       </div>
 
       {/* Teams */}

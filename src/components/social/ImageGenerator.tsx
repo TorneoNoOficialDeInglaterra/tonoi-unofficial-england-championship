@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
-import { COMPETITION_LABELS, type Competition, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
+import { COMPETITION_LABELS, LEAGUE_LABELS, type Competition, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
 
@@ -18,7 +18,8 @@ export function ImageGenerator() {
   const teams = useMemo(() => [...(teamsQ.data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [teamsQ.data]);
 
   const [type, setType] = useState<ImageType>("resultado");
-  const [competition, setCompetition] = useState<Competition>("laliga");
+  const [competition, setCompetition] = useState<Competition>("liga");
+  const [domesticLeague, setDomesticLeague] = useState<DomesticLeague>("premier");
   const [homeId, setHomeId] = useState<string>("");
   const [awayId, setAwayId] = useState<string>("");
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -32,7 +33,7 @@ export function ImageGenerator() {
   const awayTeam = teams.find((t) => t.id === awayId) ?? null;
 
   const data: TemplateData = {
-    type, competition, homeTeam, awayTeam, date, time, stadium,
+    type, competition, domesticLeague, homeTeam, awayTeam, date, time, stadium,
     homeGoals, awayGoals, scorers,
   };
 
@@ -128,6 +129,20 @@ export function ImageGenerator() {
               </SelectContent>
             </Select>
           </div>
+
+          {competition === "liga" && (
+            <div className="sm:col-span-2">
+              <Label>Liga</Label>
+              <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
+                    <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div>
             <Label>Equipo local</Label>

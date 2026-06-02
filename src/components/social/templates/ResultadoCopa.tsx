@@ -1,10 +1,10 @@
-import { ASSETS, formatDateEn, type Scorer, type TemplateData } from "./shared";
+import { competitionLogo, formatDateEn, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
-function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
+function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" | "center" }) {
   const list = scorers.filter((s) => s.side === side);
   return (
-    <div style={{ textAlign: align, fontSize: 28, lineHeight: 1.5, color: "#1a1a1a", fontStyle: "italic" }}>
+    <div style={{ textAlign: align, fontSize: 28, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
       {list.map((s, i) => (
         <div key={i}>{s.minute}' {s.player}</div>
       ))}
@@ -12,56 +12,82 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
   );
 }
 
-// Copa — vintage navy + cream paper
+/**
+ * Copa template — el fondo trae marco crema, "RESULTADO", escudos ToNOI y caja crema inferior con
+ * "SHEFFIELD STEELWORKS" + "@ToNOI_oficial". Solo superponemos: fecha/hora/estadio arriba, logo Copa,
+ * escudos equipos, "V", marcador y goleadores en la caja inferior.
+ */
 export function ResultadoCopa({ data }: { data: TemplateData }) {
   return (
-    <div style={{
-      width: 1080, height: 1080, position: "relative",
-      background: "#e8dcc0",
-      backgroundImage: `url(${ASSETS.templates.copa})`,
-      backgroundSize: "cover", backgroundPosition: "center",
-      color: "#1c2942", fontFamily: "'Playfair Display', Georgia, serif", overflow: "hidden",
-    }}>
-      {/* Top header */}
-      <div style={{ position: "absolute", top: 40, left: 60, right: 60, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 130, height: 130, objectFit: "contain" }} alt="" />
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 84, fontWeight: 900, letterSpacing: 10, fontFamily: "'Cinzel', serif", color: "#1c2942" }}>RESULTADO</div>
-          <div style={{ fontSize: 24, marginTop: 12, fontStyle: "italic" }}>{formatDateEn(data.date)}</div>
-          {data.time && <div style={{ fontSize: 24, fontStyle: "italic" }}>{data.time}h</div>}
-          <div style={{ fontSize: 24, fontStyle: "italic" }}>{data.stadium}</div>
-        </div>
-        <img src={ASSETS.tonoiLogo} crossOrigin="anonymous" style={{ width: 130, height: 130, objectFit: "contain" }} alt="" />
+    <div
+      style={{
+        width: 1080,
+        height: 1080,
+        position: "relative",
+        backgroundImage: `url(/social/templates/resultado-copa.jpg)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundColor: "#1c2942",
+        color: "#f5ebd5",
+        fontFamily: "'Cormorant Garamond', Georgia, serif",
+        overflow: "hidden",
+      }}
+    >
+      {/* Fecha + hora + estadio arriba (centro) */}
+      <div style={{ position: "absolute", top: 180, left: 0, right: 0, textAlign: "center", color: "#f5ebd5", fontFamily: "'Cormorant Garamond', serif" }}>
+        <div style={{ fontSize: 30, fontWeight: 600 }}>{formatDateEn(data.date)}</div>
+        {data.time && <div style={{ fontSize: 28, marginTop: 4 }}>{data.time}h</div>}
+        <div style={{ fontSize: 26, marginTop: 4, fontStyle: "italic" }}>{data.stadium}</div>
       </div>
 
-      {/* Copa logo */}
-      <div style={{ position: "absolute", top: 380, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={ASSETS.competitions.copa} crossOrigin="anonymous" style={{ height: 130, objectFit: "contain" }} alt="" />
+      {/* Logo Copa */}
+      <div style={{ position: "absolute", top: 360, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 170, objectFit: "contain" }} alt="" />
       </div>
 
-      {/* Teams */}
-      <div style={{ position: "absolute", top: 540, left: 0, right: 0, display: "flex", justifyContent: "space-around", alignItems: "center" }}>
-        <TLogo team={data.homeTeam} size={230} />
-        <div style={{ fontSize: 90, fontWeight: 900, fontFamily: "'Cinzel', serif", color: "#1c2942" }}>V</div>
-        <TLogo team={data.awayTeam} size={230} />
+      {/* Escudos */}
+      <div style={{ position: "absolute", top: 540, left: 90, width: 280, display: "flex", justifyContent: "center" }}>
+        <TLogo team={data.homeTeam} size={280} />
+      </div>
+      <div style={{ position: "absolute", top: 540, right: 90, width: 280, display: "flex", justifyContent: "center" }}>
+        <TLogo team={data.awayTeam} size={280} />
       </div>
 
-      {/* Cream result block */}
-      <div style={{
-        position: "absolute", bottom: 100, left: 60, right: 60,
-        background: "#f5ecd9", border: "2px solid rgba(28,41,66,0.3)",
-        padding: "25px 40px",
-        display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 20,
-      }}>
-        <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ fontSize: 120, fontWeight: 900, textAlign: "center", color: "#1c2942" }}>
+      {/* "V" central */}
+      <div
+        style={{
+          position: "absolute",
+          top: 620,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontSize: 100,
+          fontWeight: 900,
+          color: "#f5ebd5",
+          fontFamily: "'Cinzel', serif",
+        }}
+      >
+        V
+      </div>
+
+      {/* Marcador + goleadores en la caja crema inferior */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 150,
+          left: 60,
+          right: 60,
+          display: "grid",
+          gridTemplateColumns: "1fr 240px 1fr",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <ScorersList scorers={data.scorers} side="home" align="center" />
+        <div style={{ fontSize: 120, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
-        <ScorersList scorers={data.scorers} side="away" align="right" />
-      </div>
-
-      <div style={{ position: "absolute", bottom: 50, left: 0, right: 0, textAlign: "center", fontSize: 22, letterSpacing: 4, color: "#1c2942", opacity: 0.7 }}>
-        @ToNOI_oficial
+        <ScorersList scorers={data.scorers} side="away" align="center" />
       </div>
     </div>
   );
