@@ -76,7 +76,7 @@ export default function Standings() {
       });
     }
     return r;
-  }, [baseRows, q, teamFilter, sortKey, sortDir]);
+  }, [baseRows, teamFilter, sortKey, sortDir]);
 
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
