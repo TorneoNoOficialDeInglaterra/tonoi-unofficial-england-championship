@@ -63,9 +63,8 @@ export default function Standings() {
 
   const rows = useMemo(() => {
     let r = baseRows.map((row: any, idx: number) => ({ ...row, _pos: idx + 1 }));
-    if (q.trim()) {
-      const needle = q.trim().toLowerCase();
-      r = r.filter((x: { team: { name: string; }; }) => x.team.name.toLowerCase().includes(needle));
+    if (teamFilter) {
+      r = r.filter((x: { team: { id: string } }) => x.team.id === teamFilter);
     }
     if (sortKey !== "pos") {
       r = [...r].sort((a, b) => {
