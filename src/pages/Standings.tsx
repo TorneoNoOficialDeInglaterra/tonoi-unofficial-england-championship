@@ -40,14 +40,17 @@ export default function Standings() {
   const [q, setQ] = useState("");
   const [teamFilter, setTeamFilter] = useState<string>("");
   const [comboOpen, setComboOpen] = useState(false);
+  const [comboQuery, setComboQuery] = useState("");
 
-  // Hidden admin access via search
+  // Hidden admin access via combobox search
   useEffect(() => {
-    if (q.trim().toLowerCase() === "croquetasdejamón" || q.trim().toLowerCase() === "croquetasdejamon") {
-      setQ("");
+    const v = comboQuery.trim().toLowerCase();
+    if (v === "croquetasdejamón" || v === "croquetasdejamon") {
+      setComboQuery("");
+      setComboOpen(false);
       navigate("/admin");
     }
-  }, [q, navigate]);
+  }, [comboQuery, navigate]);
 
   const computed = useMemo(() => {
     if (!teamsQ.data || !matchesQ.data) return null;
