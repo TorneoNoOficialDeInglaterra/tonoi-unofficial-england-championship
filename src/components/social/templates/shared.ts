@@ -1,7 +1,16 @@
 import type { Team } from "@/lib/tonoi";
 
-export type Competition = "laliga" | "champions" | "europa" | "copa" | "conference";
+export type Competition = "liga" | "champions" | "europa" | "copa" | "conference";
 export type ImageType = "anuncio" | "resultado";
+
+export type DomesticLeague =
+  | "premier"
+  | "laliga"
+  | "bundesliga"
+  | "serie-a"
+  | "ligue-1"
+  | "eredivisie"
+  | "primeira-liga";
 
 export type Scorer = {
   side: "home" | "away";
@@ -12,6 +21,7 @@ export type Scorer = {
 export type TemplateData = {
   type: ImageType;
   competition: Competition;
+  domesticLeague: DomesticLeague;
   homeTeam: Team | null;
   awayTeam: Team | null;
   date: string; // ISO
@@ -23,11 +33,21 @@ export type TemplateData = {
 };
 
 export const COMPETITION_LABELS: Record<Competition, string> = {
-  laliga: "LaLiga",
+  liga: "Liga doméstica",
   champions: "Champions League",
   europa: "Europa League",
   copa: "Copa",
   conference: "Conference League",
+};
+
+export const LEAGUE_LABELS: Record<DomesticLeague, string> = {
+  premier: "Premier League",
+  laliga: "LaLiga",
+  bundesliga: "Bundesliga",
+  "serie-a": "Serie A",
+  "ligue-1": "Ligue 1",
+  eredivisie: "Eredivisie",
+  "primeira-liga": "Primeira Liga",
 };
 
 export function formatDateEs(iso: string): string {
@@ -59,7 +79,7 @@ export function pickLaLigaVariant(data: TemplateData): 1 | 2 {
 export const ASSETS = {
   tonoiLogo: "/social/logo-tonoi.png",
   competitions: {
-    laliga: "/social/competitions/laliga.png",
+    liga: "/social/competitions/laliga.png", // fallback genérico (no se usa: se usa LEAGUE_ASSETS)
     champions: "/social/competitions/champions.png",
     europa: "/social/competitions/europa-league.png",
     copa: "/social/competitions/copa.png",
@@ -67,10 +87,25 @@ export const ASSETS = {
   } as Record<Competition, string>,
   templates: {
     anuncio: "/social/templates/anuncio-bg.jpg",
-    "laliga-1": "/social/templates/resultado-laliga-1.jpg",
-    "laliga-2": "/social/templates/resultado-laliga-2.jpg",
+    "liga-1": "/social/templates/resultado-laliga-1.jpg",
+    "liga-2": "/social/templates/resultado-laliga-2.jpg",
     champions: "/social/templates/resultado-champions.jpg",
     europa: "/social/templates/resultado-europa.jpg",
     copa: "/social/templates/resultado-copa.jpg",
   },
 };
+
+export const LEAGUE_ASSETS: Record<DomesticLeague, string> = {
+  premier: "/social/competitions/leagues/premier.png",
+  laliga: "/social/competitions/leagues/laliga.png",
+  bundesliga: "/social/competitions/leagues/bundesliga.png",
+  "serie-a": "/social/competitions/leagues/serie-a.png",
+  "ligue-1": "/social/competitions/leagues/ligue-1.png",
+  eredivisie: "/social/competitions/leagues/eredivisie.png",
+  "primeira-liga": "/social/competitions/leagues/primeira-liga.png",
+};
+
+export function competitionLogo(data: TemplateData): string {
+  if (data.competition === "liga") return LEAGUE_ASSETS[data.domesticLeague];
+  return ASSETS.competitions[data.competition];
+}
