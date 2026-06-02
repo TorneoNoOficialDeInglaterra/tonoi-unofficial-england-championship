@@ -37,7 +37,6 @@ export default function Standings() {
   const navigate = useNavigate();
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-  const [q, setQ] = useState("");
   const [teamFilter, setTeamFilter] = useState<string>("");
   const [comboOpen, setComboOpen] = useState(false);
   const [comboQuery, setComboQuery] = useState("");
