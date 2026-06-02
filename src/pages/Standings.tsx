@@ -192,7 +192,7 @@ export default function Standings() {
               ) : rows.length === 0 ? (
                 <tr><td colSpan={COLS.length + 2} className="p-8 text-center text-muted-foreground">Sin datos todavía.</td></tr>
               ) : (
-                rows.map((r: { team: any; _pos?: any; pj?: number; v?: number; e?: number; d?: number; p?: number; gf?: number; gc?: number; dg?: number; ppp?: number; pct?: number; mj?: number; intentos?: number; destronamientos?: number; id_pct?: number; }) => (
+                rows.map((r: StandingRow & { _pos: number }) => (
                   <Row key={r.team.id} row={r} pos={r._pos} isChampion={r.team.id === championId} />
                 ))
               )}
