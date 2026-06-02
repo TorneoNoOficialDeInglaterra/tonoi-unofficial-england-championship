@@ -153,15 +153,6 @@ export default function Standings() {
             <X className="mr-1 h-4 w-4" /> Limpiar
           </Button>
         )}
-        <div className="relative max-w-sm flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por texto..."
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="pl-9"
-          />
-        </div>
         <span className="text-xs text-muted-foreground">{rows.length} equipos</span>
       </div>
 
