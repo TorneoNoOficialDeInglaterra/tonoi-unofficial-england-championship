@@ -132,7 +132,7 @@ export default function Standings() {
             </PopoverTrigger>
             <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
               <Command>
-                <CommandInput placeholder="Buscar equipo..." />
+                <CommandInput placeholder="Buscar equipo..." value={comboQuery} onValueChange={setComboQuery} />
                 <CommandList>
                   <CommandEmpty>No se encontraron equipos.</CommandEmpty>
                   <CommandGroup>
