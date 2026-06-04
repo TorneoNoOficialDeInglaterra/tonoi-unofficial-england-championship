@@ -23,7 +23,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(/social/templates/resultado-champions.jpg)`,
+        backgroundImage: `url(/social/templates/resultado-champions.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#1f4a4f",

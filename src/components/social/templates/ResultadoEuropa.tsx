@@ -24,7 +24,7 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(/social/templates/resultado-europa.jpg)`,
+        backgroundImage: `url(/social/templates/resultado-europaleague.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#2a1a10",

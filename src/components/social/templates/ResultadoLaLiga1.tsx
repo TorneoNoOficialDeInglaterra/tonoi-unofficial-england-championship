@@ -24,7 +24,7 @@ export function ResultadoLiga1({ data }: { data: TemplateData }) {
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(/social/templates/resultado-laliga-1.jpg)`,
+        backgroundImage: `url(/social/templates/resultado-liga-1.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#1c2942",
