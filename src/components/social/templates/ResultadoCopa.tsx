@@ -24,7 +24,7 @@ export function ResultadoCopa({ data }: { data: TemplateData }) {
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(/social/templates/resultado-copa.jpg)`,
+        backgroundImage: `url(/social/templates/resultado-copa.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#1c2942",

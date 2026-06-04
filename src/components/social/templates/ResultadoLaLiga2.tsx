@@ -24,7 +24,7 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
         width: 1080,
         height: 1080,
         position: "relative",
-        backgroundImage: `url(/social/templates/resultado-laliga-2.jpg)`,
+        backgroundImage: `url(/social/templates/resultado-liga-2.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundColor: "#e8dcc3",

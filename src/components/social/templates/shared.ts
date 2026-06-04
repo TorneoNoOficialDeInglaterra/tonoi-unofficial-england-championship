@@ -87,11 +87,11 @@ export const ASSETS = {
   } as Record<Competition, string>,
   templates: {
     anuncio: "/social/templates/anuncio-bg.jpg",
-    "liga-1": "/social/templates/resultado-laliga-1.jpg",
-    "liga-2": "/social/templates/resultado-laliga-2.jpg",
-    champions: "/social/templates/resultado-champions.jpg",
-    europa: "/social/templates/resultado-europa.jpg",
-    copa: "/social/templates/resultado-copa.jpg",
+    "liga-1": "/social/templates/resultado-liga-1.png",
+    "liga-2": "/social/templates/resultado-liga-2.png",
+    champions: "/social/templates/resultado-champions.png",
+    europa: "/social/templates/resultado-europaleague.png",
+    copa: "/social/templates/resultado-copa.png",
   },
 };
 
