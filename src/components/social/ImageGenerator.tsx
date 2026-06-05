@@ -133,37 +133,41 @@ export function ImageGenerator() {
           </div>
 
           {competition === "liga" && (
-            <div className="sm:col-span-2">
-              <Label>Liga</Label>
-              <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
-                    <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <>
+              <div>
+                <Label>Liga</Label>
+                <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
+                      <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Diseño</Label>
+                <Select value={String(ligaVariant)} onValueChange={(v) => setLigaVariant(v === "auto" ? "auto" : (Number(v) as 1 | 2))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="auto">Automático</SelectItem>
+                    <SelectItem value="1">Diseño 1 (sepia)</SelectItem>
+                    <SelectItem value="2">Diseño 2 (crema)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
           )}
 
           <div>
             <Label>Equipo local</Label>
-            <Select value={homeId} onValueChange={setHomeId}>
-              <SelectTrigger><SelectValue placeholder="Selecciona equipo" /></SelectTrigger>
-              <SelectContent className="max-h-72">
-                {teams.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <TeamCombobox teams={teams} value={homeId} onChange={setHomeId} />
           </div>
           <div>
             <Label>Equipo visitante</Label>
-            <Select value={awayId} onValueChange={setAwayId}>
-              <SelectTrigger><SelectValue placeholder="Selecciona equipo" /></SelectTrigger>
-              <SelectContent className="max-h-72">
-                {teams.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <TeamCombobox teams={teams} value={awayId} onChange={setAwayId} />
           </div>
+
 
           <div>
             <Label>Fecha</Label>
