@@ -1,4 +1,4 @@
-import { competitionLogo, formatDateEn, type Scorer, type TemplateData } from "./shared";
+import { formatDateEn, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
@@ -33,12 +33,7 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         overflow: "hidden",
       }}
     >
-      {/* Logo Europa */}
-      <div style={{ position: "absolute", top: 470, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 150, objectFit: "contain" }} alt="" />
-      </div>
-
-      {/* Escudos */}
+      {/* Escudos (logo Europa y "V" ya van en el fondo) */}
       <div style={{ position: "absolute", top: 600, left: 80, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={280} />
       </div>
@@ -46,22 +41,6 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         <TLogo team={data.awayTeam} size={280} />
       </div>
 
-      {/* "V" central */}
-      <div
-        style={{
-          position: "absolute",
-          top: 690,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontSize: 100,
-          fontWeight: 900,
-          color: "#1a1a1a",
-          fontFamily: "'Cinzel', serif",
-        }}
-      >
-        V
-      </div>
 
       {/* Tablón inferior */}
       <div style={{ position: "absolute", top: 950, left: 0, right: 0, textAlign: "center", color: "#1a1a1a" }}>

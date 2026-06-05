@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
+import { TeamCombobox } from "./TeamCombobox";
 import { COMPETITION_LABELS, LEAGUE_LABELS, type Competition, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
@@ -20,6 +21,7 @@ export function ImageGenerator() {
   const [type, setType] = useState<ImageType>("resultado");
   const [competition, setCompetition] = useState<Competition>("liga");
   const [domesticLeague, setDomesticLeague] = useState<DomesticLeague>("premier");
+  const [ligaVariant, setLigaVariant] = useState<"auto" | 1 | 2>("auto");
   const [homeId, setHomeId] = useState<string>("");
   const [awayId, setAwayId] = useState<string>("");
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -33,7 +35,7 @@ export function ImageGenerator() {
   const awayTeam = teams.find((t) => t.id === awayId) ?? null;
 
   const data: TemplateData = {
-    type, competition, domesticLeague, homeTeam, awayTeam, date, time, stadium,
+    type, competition, domesticLeague, ligaVariant, homeTeam, awayTeam, date, time, stadium,
     homeGoals, awayGoals, scorers,
   };
 
@@ -131,37 +133,41 @@ export function ImageGenerator() {
           </div>
 
           {competition === "liga" && (
-            <div className="sm:col-span-2">
-              <Label>Liga</Label>
-              <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
-                    <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <>
+              <div>
+                <Label>Liga</Label>
+                <Select value={domesticLeague} onValueChange={(v) => setDomesticLeague(v as DomesticLeague)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(LEAGUE_LABELS) as DomesticLeague[]).map((l) => (
+                      <SelectItem key={l} value={l}>{LEAGUE_LABELS[l]}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Diseño</Label>
+                <Select value={String(ligaVariant)} onValueChange={(v) => setLigaVariant(v === "auto" ? "auto" : (Number(v) as 1 | 2))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="auto">Automático</SelectItem>
+                    <SelectItem value="1">Diseño 1 (sepia)</SelectItem>
+                    <SelectItem value="2">Diseño 2 (crema)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
           )}
 
           <div>
             <Label>Equipo local</Label>
-            <Select value={homeId} onValueChange={setHomeId}>
-              <SelectTrigger><SelectValue placeholder="Selecciona equipo" /></SelectTrigger>
-              <SelectContent className="max-h-72">
-                {teams.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <TeamCombobox teams={teams} value={homeId} onChange={setHomeId} />
           </div>
           <div>
             <Label>Equipo visitante</Label>
-            <Select value={awayId} onValueChange={setAwayId}>
-              <SelectTrigger><SelectValue placeholder="Selecciona equipo" /></SelectTrigger>
-              <SelectContent className="max-h-72">
-                {teams.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
-              </SelectContent>
-            </Select>
+            <TeamCombobox teams={teams} value={awayId} onChange={setAwayId} />
           </div>
+
 
           <div>
             <Label>Fecha</Label>

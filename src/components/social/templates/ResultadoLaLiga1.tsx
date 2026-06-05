@@ -34,9 +34,10 @@ export function ResultadoLiga1({ data }: { data: TemplateData }) {
       }}
     >
       {/* Logo liga centrado */}
-      <div style={{ position: "absolute", top: 200, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 110, objectFit: "contain" }} alt="" />
+      <div style={{ position: "absolute", top: 170, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 180, objectFit: "contain" }} alt="" />
       </div>
+
 
       {/* Escudos */}
       <div style={{ position: "absolute", top: 470, left: 110, width: 260, display: "flex", justifyContent: "center" }}>

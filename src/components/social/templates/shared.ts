@@ -22,6 +22,7 @@ export type TemplateData = {
   type: ImageType;
   competition: Competition;
   domesticLeague: DomesticLeague;
+  ligaVariant?: "auto" | 1 | 2;
   homeTeam: Team | null;
   awayTeam: Team | null;
   date: string; // ISO
@@ -69,6 +70,7 @@ export function formatDateEn(iso: string): string {
 }
 
 export function pickLaLigaVariant(data: TemplateData): 1 | 2 {
+  if (data.ligaVariant === 1 || data.ligaVariant === 2) return data.ligaVariant;
   const seed = `${data.date}-${data.homeTeam?.id ?? ""}-${data.awayTeam?.id ?? ""}`;
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;

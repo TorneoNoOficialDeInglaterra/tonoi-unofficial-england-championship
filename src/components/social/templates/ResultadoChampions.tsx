@@ -1,4 +1,4 @@
-import { competitionLogo, formatDateEn, type Scorer, type TemplateData } from "./shared";
+import { formatDateEn, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
@@ -32,12 +32,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         overflow: "hidden",
       }}
     >
-      {/* Logo Champions */}
-      <div style={{ position: "absolute", top: 230, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 200, objectFit: "contain" }} alt="" />
-      </div>
-
-      {/* Escudos */}
+      {/* Escudos (logo Champions y "V" ya van en el fondo) */}
       <div style={{ position: "absolute", top: 470, left: 110, width: 260, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={260} />
       </div>
@@ -45,22 +40,6 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         <TLogo team={data.awayTeam} size={260} />
       </div>
 
-      {/* "V" central */}
-      <div
-        style={{
-          position: "absolute",
-          top: 540,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontSize: 100,
-          fontWeight: 900,
-          color: "#fff",
-          fontFamily: "'Montserrat', sans-serif",
-        }}
-      >
-        V
-      </div>
 
       {/* Barra de marcador (ya pintada en el fondo) */}
       <div
