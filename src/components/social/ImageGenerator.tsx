@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
+import { TeamCombobox } from "./TeamCombobox";
 import { COMPETITION_LABELS, LEAGUE_LABELS, type Competition, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
@@ -20,6 +21,7 @@ export function ImageGenerator() {
   const [type, setType] = useState<ImageType>("resultado");
   const [competition, setCompetition] = useState<Competition>("liga");
   const [domesticLeague, setDomesticLeague] = useState<DomesticLeague>("premier");
+  const [ligaVariant, setLigaVariant] = useState<"auto" | 1 | 2>("auto");
   const [homeId, setHomeId] = useState<string>("");
   const [awayId, setAwayId] = useState<string>("");
   const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
@@ -33,7 +35,7 @@ export function ImageGenerator() {
   const awayTeam = teams.find((t) => t.id === awayId) ?? null;
 
   const data: TemplateData = {
-    type, competition, domesticLeague, homeTeam, awayTeam, date, time, stadium,
+    type, competition, domesticLeague, ligaVariant, homeTeam, awayTeam, date, time, stadium,
     homeGoals, awayGoals, scorers,
   };
 
