@@ -38,6 +38,22 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
         <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 120, objectFit: "contain" }} alt="" />
       </div>
 
+      {/* "V" central */}
+      <div
+        style={{
+          position: "absolute",
+          top: 520,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontSize: 110,
+          fontWeight: 900,
+          fontFamily: "'PT Serif', serif",
+          color: "#1a2540",
+        }}
+      >
+        V
+      </div>
 
       {/* Escudos */}
       <div style={{ position: "absolute", top: 450, left: 100, width: 280, display: "flex", justifyContent: "center" }}>
