@@ -34,47 +34,30 @@ export function ResultadoCopa({ data }: { data: TemplateData }) {
       }}
     >
       {/* Fecha + hora + estadio arriba (centro) */}
-      <div style={{ position: "absolute", top: 180, left: 0, right: 0, textAlign: "center", color: "#f5ebd5", fontFamily: "'Cormorant Garamond', serif" }}>
-        <div style={{ fontSize: 30, fontWeight: 600 }}>{formatDateEn(data.date)}</div>
-        {data.time && <div style={{ fontSize: 28, marginTop: 4 }}>{data.time}h</div>}
-        <div style={{ fontSize: 26, marginTop: 4, fontStyle: "italic" }}>{data.stadium}</div>
+      <div style={{ position: "absolute", top: 650, left: 0, right: 0, textAlign: "center", color: "#ffffff", fontFamily: "'Cormorant Garamond', serif" }}>
+        <div style={{ fontSize: 35, fontWeight: 700 }}>{formatDateEn(data.date)}</div>
+        {data.time && <div style={{ fontSize: 35, marginTop: -18 }}>{data.time}h</div>}
+        <div style={{ fontSize: 34, marginTop: -15, fontStyle: "italic" }}>{data.stadium}</div>
       </div>
 
       {/* Logo Copa */}
-      <div style={{ position: "absolute", top: 360, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
-        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 170, objectFit: "contain" }} alt="" />
+      <div style={{ position: "absolute", top: 250, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+        <img src={competitionLogo(data)} crossOrigin="anonymous" style={{ height: 150, objectFit: "contain" }} alt="" />
       </div>
 
       {/* Escudos */}
-      <div style={{ position: "absolute", top: 540, left: 90, width: 280, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 350, left: 140, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={280} />
       </div>
-      <div style={{ position: "absolute", top: 540, right: 90, width: 280, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 370, right: 130, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.awayTeam} size={280} />
-      </div>
-
-      {/* "V" central */}
-      <div
-        style={{
-          position: "absolute",
-          top: 620,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          fontSize: 100,
-          fontWeight: 900,
-          color: "#f5ebd5",
-          fontFamily: "'Cinzel', serif",
-        }}
-      >
-        V
       </div>
 
       {/* Marcador + goleadores en la caja crema inferior */}
       <div
         style={{
           position: "absolute",
-          bottom: 150,
+          bottom: 140,
           left: 60,
           right: 60,
           display: "grid",
@@ -84,7 +67,7 @@ export function ResultadoCopa({ data }: { data: TemplateData }) {
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="center" />
-        <div style={{ fontSize: 120, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
+        <div style={{ position: "relative", top: -5, fontSize: 120, fontWeight: 700, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="center" />

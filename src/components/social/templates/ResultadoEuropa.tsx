@@ -4,7 +4,7 @@ import { TLogo } from "./TeamLogo";
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
   const list = scorers.filter((s) => s.side === side);
   return (
-    <div style={{ textAlign: align, fontSize: 28, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+    <div style={{ textAlign: align, fontSize: 32, lineHeight: 1.45, color: "#000000", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 1000 }}>
       {list.map((s, i) => (
         <div key={i}>{s.minute}' {s.player}</div>
       ))}
@@ -34,25 +34,41 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
       }}
     >
       {/* Escudos (logo Europa y "V" ya van en el fondo) */}
-      <div style={{ position: "absolute", top: 600, left: 80, width: 280, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 360, left: 140, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={280} />
       </div>
-      <div style={{ position: "absolute", top: 600, right: 80, width: 280, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 370, right: 130, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.awayTeam} size={280} />
       </div>
 
+      {/* "V" central */}
+      <div
+        style={{
+          position: "absolute",
+          top: 450,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontSize: 130,
+          fontWeight: 1000,
+          fontFamily: "'Lora', serif",
+          color: "#000000"
+        }}
+      >
+        V
+      </div>
 
       {/* Tablón inferior */}
-      <div style={{ position: "absolute", top: 950, left: 0, right: 0, textAlign: "center", color: "#1a1a1a" }}>
-        <div style={{ fontSize: 32, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif" }}>{data.stadium}</div>
+      <div style={{ position: "absolute", top: 735, left: 0, right: 0, textAlign: "center", color: "#000000" }}>
+        <div style={{ fontSize: 40, fontWeight: 1000, fontFamily: "'Pirata One', serif" }}>{data.stadium}</div>
       </div>
 
       <div
         style={{
           position: "absolute",
-          top: 1020,
-          left: 60,
-          right: 60,
+          top: 800,
+          left: 200,
+          right: 200,
           display: "grid",
           gridTemplateColumns: "1fr 240px 1fr",
           alignItems: "center",
@@ -60,13 +76,13 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ fontSize: 120, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
+        <div style={{ fontSize: 120, fontWeight: 700, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="right" />
       </div>
 
-      <div style={{ position: "absolute", bottom: 70, left: 0, right: 0, textAlign: "center", color: "#1a1a1a", fontSize: 28, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif" }}>
+      <div style={{ position: "absolute", bottom: 95, left: 0, right: 0, textAlign: "center", color: "#1a1a1a", fontSize: 35, fontWeight: 700, fontFamily: "'Cormorant Garamond', serif" }}>
         {formatDateEn(data.date)}{data.time ? `,   ${data.time}h` : ""}
       </div>
     </div>

@@ -33,40 +33,56 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
       }}
     >
       {/* Escudos (logo Champions y "V" ya van en el fondo) */}
-      <div style={{ position: "absolute", top: 470, left: 110, width: 260, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 440, left: 160, width: 260, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={260} />
       </div>
-      <div style={{ position: "absolute", top: 470, right: 110, width: 260, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 450, right: 150, width: 260, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.awayTeam} size={260} />
       </div>
 
+            {/* "V" central */}
+      <div
+        style={{
+          position: "absolute",
+          top: 520,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontSize: 110,
+          fontWeight: 900,
+          fontFamily: "'PT Serif', serif",
+          color: "#ffffff",
+        }}
+      >
+        V
+      </div>
 
       {/* Barra de marcador (ya pintada en el fondo) */}
       <div
         style={{
           position: "absolute",
-          top: 770,
-          left: 60,
-          right: 60,
+          top: 780,
+          left: 200,
+          right: 200,
           display: "grid",
           gridTemplateColumns: "1fr 220px 1fr",
           alignItems: "center",
           gap: 20,
         }}
       >
-        <ScorersList scorers={data.scorers} side="home" align="right" />
-        <div style={{ fontSize: 130, fontWeight: 700, textAlign: "center", color: "#fff", lineHeight: 1, fontFamily: "'Montserrat', sans-serif" }}>
+        <ScorersList scorers={data.scorers} side="home" align="left" />
+        <div style={{ position: "relative", top: 0, left: 10 , fontSize: 130, fontWeight: 700, textAlign: "center", color: "#fff", lineHeight: 1, fontFamily: "'Montserrat', sans-serif" }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
-        <ScorersList scorers={data.scorers} side="away" align="left" />
+        <ScorersList scorers={data.scorers} side="away" align="right" />
       </div>
 
       {/* Fecha + estadio */}
-      <div style={{ position: "absolute", bottom: 110, left: 0, right: 0, textAlign: "center", color: "#fff" }}>
+      <div style={{ position: "absolute", bottom: 50, left: 0, right: 0, textAlign: "center", color: "#fff" }}>
         <div style={{ fontSize: 28, fontWeight: 600 }}>
           {formatDateEn(data.date)}{data.time ? `, ${data.time}h` : ""}
         </div>
-        <div style={{ fontSize: 26, marginTop: 6, opacity: 0.95 }}>{data.stadium}</div>
+        <div style={{ fontSize: 28, fontWeight: 500, marginTop: 3 }}>{data.stadium}</div>
       </div>
     </div>
   );

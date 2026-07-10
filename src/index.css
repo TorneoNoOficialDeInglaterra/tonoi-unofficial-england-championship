@@ -22,6 +22,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Pirata One';
+  src: url('/fonts/PirataOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
