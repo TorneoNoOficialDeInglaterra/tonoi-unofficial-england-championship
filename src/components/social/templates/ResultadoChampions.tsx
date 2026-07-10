@@ -4,10 +4,10 @@ import { TLogo } from "./TeamLogo";
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
   const cols = splitIntoColumns(groupScorers(scorers, side), 3);
   return (
-    <div style={{ display: "flex", gap: 20, justifyContent: align === "right" ? "flex-end" : "flex-start", fontSize: 24, lineHeight: 1.45, color: "#ffffff", fontFamily: "'Montserrat', sans-serif" }}>
+    <div style={{ display: "flex", gap: 12, justifyContent: align === "right" ? "flex-end" : "flex-start", width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 24, lineHeight: 1.45, color: "#ffffff", fontFamily: "'Montserrat', sans-serif" }}>
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align }}>
-          {col.map((line, i) => <div key={i}>{line}</div>)}
+        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
+          {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
         </div>
       ))}
     </div>
