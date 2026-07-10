@@ -18,6 +18,34 @@ export type Scorer = {
   player: string;
 };
 
+/** Agrupa goleadores por jugador (mismo lado) manteniendo el orden de aparición,
+ *  y devuelve entradas del tipo "5', 14' Kane". */
+export function groupScorers(scorers: Scorer[], side: "home" | "away"): string[] {
+  const order: string[] = [];
+  const map = new Map<string, string[]>();
+  for (const s of scorers) {
+    if (s.side !== side) continue;
+    const key = (s.player ?? "").trim();
+    if (!key) continue;
+    if (!map.has(key)) {
+      map.set(key, []);
+      order.push(key);
+    }
+    map.get(key)!.push(`${s.minute}'`);
+  }
+  return order.map((name) => `${map.get(name)!.join(", ")} ${name}`);
+}
+
+/** Divide las entradas en columnas de un máximo de `perColumn` filas. */
+export function splitIntoColumns<T>(items: T[], perColumn = 3): T[][] {
+  if (items.length <= perColumn) return [items];
+  const cols: T[][] = [];
+  for (let i = 0; i < items.length; i += perColumn) {
+    cols.push(items.slice(i, i + perColumn));
+  }
+  return cols;
+}
+
 export type TemplateData = {
   type: ImageType;
   competition: Competition;
