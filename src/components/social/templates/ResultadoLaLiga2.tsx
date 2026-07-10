@@ -1,12 +1,15 @@
-import { competitionLogo, formatDateEs, type Scorer, type TemplateData } from "./shared";
+import { competitionLogo, formatDateEs, groupScorers, splitIntoColumns, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" | "center" }) {
-  const list = scorers.filter((s) => s.side === side);
+  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const justify = align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start";
   return (
-    <div style={{ textAlign: align, fontSize: 26, lineHeight: 1.45, color: "#1a253a", fontFamily: "'Lora', Georgia, serif", fontWeight: 600 }}>
-      {list.map((s, i) => (
-        <div key={i}>{s.minute}' {s.player}</div>
+    <div style={{ display: "flex", gap: 20, justifyContent: justify, fontSize: 26, lineHeight: 1.45, color: "#1a253a", fontFamily: "'Lora', Georgia, serif", fontWeight: 600 }}>
+      {cols.map((col, ci) => (
+        <div key={ci} style={{ textAlign: align }}>
+          {col.map((line, i) => <div key={i}>{line}</div>)}
+        </div>
       ))}
     </div>
   );
