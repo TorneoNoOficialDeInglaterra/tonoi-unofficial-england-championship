@@ -163,6 +163,44 @@ export type Database = {
           },
         ]
       }
+      logo_fetch_attempts: {
+        Row: {
+          attempts: number
+          last_attempt_at: string | null
+          last_error: string | null
+          last_status: string | null
+          next_retry_at: string
+          team_id: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_status?: string | null
+          next_retry_at?: string
+          team_id: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_status?: string | null
+          next_retry_at?: string
+          team_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logo_fetch_attempts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       matches: {
         Row: {
           created_at: string
