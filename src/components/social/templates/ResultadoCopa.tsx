@@ -5,10 +5,10 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
   const cols = splitIntoColumns(groupScorers(scorers, side), 3);
   const justify = align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start";
   return (
-    <div style={{ display: "flex", gap: 20, justifyContent: justify, fontSize: 28, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+    <div style={{ display: "flex", gap: 12, justifyContent: justify, width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 28, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align }}>
-          {col.map((line, i) => <div key={i}>{line}</div>)}
+        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
+          {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
         </div>
       ))}
     </div>
