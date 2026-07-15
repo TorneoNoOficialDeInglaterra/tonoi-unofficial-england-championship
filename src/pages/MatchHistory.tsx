@@ -102,7 +102,7 @@ export default function MatchHistory() {
     }
     if (teamFilter) {
       return [...(matchesQ.data ?? [])]
-        .filter((m) => m.winner_team_id === teamFilter || m.loser_team_id === teamFilter)
+        .filter((m) => m.winner_team_id === teamFilter || m.loser_team_id === teamFilter || m.home_team_id === teamFilter)
         .sort((a, b) => b.match_date.localeCompare(a.match_date));
     }
     return null;
