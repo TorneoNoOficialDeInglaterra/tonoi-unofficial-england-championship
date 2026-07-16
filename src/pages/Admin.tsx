@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
+import { AuditAdmin } from "@/components/admin/AuditAdmin";
 import { cn } from "@/lib/utils";
 import type { Match, Team } from "@/lib/tonoi";
 
