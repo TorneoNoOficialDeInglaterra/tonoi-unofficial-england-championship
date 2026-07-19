@@ -103,11 +103,11 @@ export function buildLocalByMatchMap(matches: Match[], teamById?: Map<string, Te
 export function computeStandings(teams: Team[], matchesAsc: Match[]) {
   const byId = new Map(teams.map((t) => [t.id, t]));
   const stats = new Map<string, StandingRow>();
-  const ensure = (tid: string): StandingRow => {
+  const ensure = (tid: string): StandingRow | null => {
     let s = stats.get(tid);
     if (!s) {
       const team = byId.get(tid);
-      if (!team) throw new Error("Unknown team " + tid);
+      if (!team) return null;
       s = { team, pj: 0, v: 0, e: 0, d: 0, p: 0, gf: 0, gc: 0, dg: 0, ppp: 0, pct: 0, mj: 0, intentos: 0, destronamientos: 0, id_pct: 0 };
       stats.set(tid, s);
     }
