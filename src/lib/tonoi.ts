@@ -123,13 +123,12 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
   matchesAsc.forEach((m, idx) => {
     const w = ensure(m.winner_team_id);
     const l = ensure(m.loser_team_id);
+    if (!w || !l) return; // skip matches with unknown team references
     w.pj++; l.pj++;
     w.gf += m.winner_goals; w.gc += m.loser_goals;
     l.gf += m.loser_goals; l.gc += m.winner_goals;
     if (m.was_draw) {
       w.e++; l.e++;
-      // En empate: el campeón retiene 1 punto; el retador (que optaba al título) recibe 0.
-      // Si ningún equipo era campeón antes del partido, ambos reciben 1.
       if (champion !== null && (m.winner_team_id === champion || m.loser_team_id === champion)) {
         if (m.winner_team_id === champion) { w.p += 1; }
         else { l.p += 1; }
@@ -142,36 +141,31 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
     }
 
     if (champion === null) {
-      // First match -> winner becomes first champion
       champion = m.winner_team_id;
       championSinceMatchIndex = idx;
       championSinceDate = m.match_date;
       currentStreak.set(champion, 1);
-      ensure(champion).pct += 1;
-      ensure(champion).mj = Math.max(ensure(champion).mj, 1);
+      const c = ensure(champion);
+      if (c) { c.pct += 1; c.mj = Math.max(c.mj, 1); }
     } else {
       const challengerId = m.winner_team_id === champion ? m.loser_team_id : (m.loser_team_id === champion ? m.winner_team_id : null);
       if (challengerId) {
-        // The match involves the champion
-        ensure(challengerId).intentos += 1;
+        const ch = ensure(challengerId);
+        if (ch) ch.intentos += 1;
         const newWinner = m.winner_team_id;
         if (newWinner !== champion) {
-          // Title changes
-          ensure(challengerId).destronamientos += 1;
+          if (ch) ch.destronamientos += 1;
           champion = newWinner;
           championSinceMatchIndex = idx;
           championSinceDate = m.match_date;
           currentStreak.set(champion, 1);
-          // reset old champion's streak
           for (const [k] of currentStreak) if (k !== champion) currentStreak.set(k, 0);
         } else {
-          // Champion retained
           currentStreak.set(champion, (currentStreak.get(champion) ?? 0) + 1);
         }
-        ensure(champion).pct += 1;
-        ensure(champion).mj = Math.max(ensure(champion).mj, currentStreak.get(champion) ?? 0);
+        const c = ensure(champion);
+        if (c) { c.pct += 1; c.mj = Math.max(c.mj, currentStreak.get(champion) ?? 0); }
       }
-      // If neither team is the champion, title doesn't change (rare in ToNOI, but safe).
     }
   });
 
