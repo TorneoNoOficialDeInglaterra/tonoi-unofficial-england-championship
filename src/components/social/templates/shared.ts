@@ -61,6 +61,7 @@ export type TemplateData = {
   type: ImageType;
   competition: Competition;
   domesticLeague: DomesticLeague;
+  domesticCup?: DomesticCup;
   ligaVariant?: "auto" | 1 | 2;
   homeTeam: Team | null;
   awayTeam: Team | null;
