@@ -160,6 +160,21 @@ export function ImageGenerator() {
             </>
           )}
 
+          {competition === "copa" && (
+            <div className="sm:col-span-2">
+              <Label>Copa</Label>
+              <Select value={domesticCup} onValueChange={(v) => setDomesticCup(v as DomesticCup)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CUP_LABELS) as DomesticCup[]).map((c) => (
+                    <SelectItem key={c} value={c}>{CUP_LABELS[c]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+
           <div>
             <Label>Equipo local</Label>
             <TeamCombobox teams={teams} value={homeId} onChange={setHomeId} />
