@@ -12,6 +12,17 @@ export type DomesticLeague =
   | "eredivisie"
   | "primeira-liga";
 
+export type DomesticCup =
+  | "copa-del-rey"
+  | "fa-cup"
+  | "carabao-cup"
+  | "dfb-pokal"
+  | "coppa-italia"
+  | "coupe-de-france"
+  | "knvb-beker"
+  | "taca-de-portugal"
+  | "otra";
+
 export type Scorer = {
   side: "home" | "away";
   minute: string;
@@ -50,6 +61,7 @@ export type TemplateData = {
   type: ImageType;
   competition: Competition;
   domesticLeague: DomesticLeague;
+  domesticCup?: DomesticCup;
   ligaVariant?: "auto" | 1 | 2;
   homeTeam: Team | null;
   awayTeam: Team | null;
@@ -135,7 +147,33 @@ export const LEAGUE_ASSETS: Record<DomesticLeague, string> = {
   "primeira-liga": "/social/competitions/leagues/primeira-liga.png",
 };
 
+export const CUP_LABELS: Record<DomesticCup, string> = {
+  "copa-del-rey": "Copa del Rey",
+  "fa-cup": "FA Cup",
+  "carabao-cup": "Carabao Cup (EFL Cup)",
+  "dfb-pokal": "DFB-Pokal",
+  "coppa-italia": "Coppa Italia",
+  "coupe-de-france": "Coupe de France",
+  "knvb-beker": "KNVB Beker",
+  "taca-de-portugal": "Taça de Portugal",
+  otra: "Otra copa",
+};
+
+export const CUP_ASSETS: Record<DomesticCup, string> = {
+  "copa-del-rey": "/social/competitions/copa.png",
+  "fa-cup": "/social/competitions/fa-cup.png",
+  "carabao-cup": "/social/competitions/carabao-cup.png",
+  "dfb-pokal": "/social/competitions/cups/dfb-pokal.png",
+  "coppa-italia": "/social/competitions/cups/coppa-italia.png",
+  "coupe-de-france": "/social/competitions/cups/coupe-de-france.png",
+  "knvb-beker": "/social/competitions/cups/knvb-beker.png",
+  "taca-de-portugal": "/social/competitions/cups/taca-de-portugal.png",
+  otra: "/social/competitions/copa.png",
+};
+
 export function competitionLogo(data: TemplateData): string {
   if (data.competition === "liga") return LEAGUE_ASSETS[data.domesticLeague];
+  if (data.competition === "copa") return CUP_ASSETS[data.domesticCup ?? "copa-del-rey"];
   return ASSETS.competitions[data.competition];
 }
+

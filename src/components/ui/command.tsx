@@ -38,19 +38,33 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-    <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-    <CommandPrimitive.Input
-      ref={ref}
-      className={cn(
-        "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-      )}
-      {...props}
-    />
-  </div>
-));
+>(({ className, onValueChange, ...props }, ref) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const handleValueChange = React.useCallback(
+    (v: string) => {
+      onValueChange?.(v);
+      // Reset scroll of the sibling [cmdk-list] so the first match is visible.
+      const root = wrapperRef.current?.closest("[cmdk-root]");
+      const list = root?.querySelector<HTMLElement>("[cmdk-list]");
+      if (list) list.scrollTop = 0;
+    },
+    [onValueChange],
+  );
+  return (
+    <div ref={wrapperRef} className="flex items-center border-b px-3" cmdk-input-wrapper="">
+      <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+      <CommandPrimitive.Input
+        ref={ref}
+        onValueChange={handleValueChange}
+        className={cn(
+          "flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+          className,
+        )}
+        {...props}
+      />
+    </div>
+  );
+});
 
 CommandInput.displayName = CommandPrimitive.Input.displayName;
 
