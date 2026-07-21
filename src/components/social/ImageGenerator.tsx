@@ -10,7 +10,7 @@ import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
 import { TeamCombobox } from "./TeamCombobox";
-import { COMPETITION_LABELS, LEAGUE_LABELS, type Competition, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
+import { COMPETITION_LABELS, CUP_LABELS, LEAGUE_LABELS, type Competition, type DomesticCup, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
 
