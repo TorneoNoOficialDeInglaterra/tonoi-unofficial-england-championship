@@ -21,6 +21,7 @@ export function ImageGenerator() {
   const [type, setType] = useState<ImageType>("resultado");
   const [competition, setCompetition] = useState<Competition>("liga");
   const [domesticLeague, setDomesticLeague] = useState<DomesticLeague>("premier");
+  const [domesticCup, setDomesticCup] = useState<DomesticCup>("copa-del-rey");
   const [ligaVariant, setLigaVariant] = useState<"auto" | 1 | 2>("auto");
   const [homeId, setHomeId] = useState<string>("");
   const [awayId, setAwayId] = useState<string>("");
