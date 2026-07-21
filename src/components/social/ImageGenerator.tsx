@@ -36,7 +36,7 @@ export function ImageGenerator() {
   const awayTeam = teams.find((t) => t.id === awayId) ?? null;
 
   const data: TemplateData = {
-    type, competition, domesticLeague, ligaVariant, homeTeam, awayTeam, date, time, stadium,
+    type, competition, domesticLeague, domesticCup, ligaVariant, homeTeam, awayTeam, date, time, stadium,
     homeGoals, awayGoals, scorers,
   };
 
