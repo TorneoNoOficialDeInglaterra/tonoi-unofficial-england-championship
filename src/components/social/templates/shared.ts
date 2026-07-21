@@ -12,6 +12,17 @@ export type DomesticLeague =
   | "eredivisie"
   | "primeira-liga";
 
+export type DomesticCup =
+  | "copa-del-rey"
+  | "fa-cup"
+  | "carabao-cup"
+  | "dfb-pokal"
+  | "coppa-italia"
+  | "coupe-de-france"
+  | "knvb-beker"
+  | "taca-de-portugal"
+  | "otra";
+
 export type Scorer = {
   side: "home" | "away";
   minute: string;
