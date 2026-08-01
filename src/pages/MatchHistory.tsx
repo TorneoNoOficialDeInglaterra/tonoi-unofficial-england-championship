@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef, Fragment } from "react";
 import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -251,10 +251,10 @@ export default function MatchHistory() {
                       (!prev || prev.match_date >= b.before),
                   );
                   const breakBelow = BREAKS.find(
-                    (b) => !next && m.match_date >= b.before && m.match_date <= b.before,
+                    (b) => !next && m.match_date === b.before,
                   );
                   return (
-                    <>
+                    <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={breakAbove.text} />}
                       <tr key={m.id} className="border-t border-border hover:bg-accent/40">
                         <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
@@ -279,7 +279,7 @@ export default function MatchHistory() {
                         </td>
                       </tr>
                       {breakBelow && <BreakRow key={`${m.id}-a`} text={breakBelow.text} />}
-                    </>
+                    </Fragment>
                   );
                 })
               )}
