@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,6 +10,36 @@ import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, decadeOf, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
+
+/** Interrupciones históricas de la competición (fechas en formato ISO). */
+const BREAKS = [
+  {
+    after: "1915-04-24",
+    before: "1919-08-30",
+    text: "La competición se detuvo entre 1915 y 1919 debido a la I Guerra Mundial",
+  },
+  {
+    after: "1939-09-02",
+    before: "1945-11-17",
+    text: "La competición se detuvo entre 1939 y 1945 debido a la II Guerra Mundial",
+  },
+  {
+    after: "2020-03-08",
+    before: "2020-07-24",
+    text: "La competición se suspendió debido a la pandemia del COVID-19",
+  },
+];
+
+function BreakRow({ text }: { text: string }) {
+  return (
+    <tr className="border-t border-border bg-muted/60">
+      <td colSpan={4} className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        {text}
+      </td>
+    </tr>
+  );
+}
+
 
 function TeamCombo({
   teams, value, onChange, placeholder,
