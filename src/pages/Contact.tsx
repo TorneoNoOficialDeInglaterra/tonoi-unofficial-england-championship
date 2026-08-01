@@ -67,9 +67,6 @@ export default function Contact() {
           </Button>
         </div>
       </Card>
-      <p className="mt-4 text-xs text-muted-foreground">
-        Los mensajes se reciben directamente en la cuenta del torneo: torneonooficialdeinglaterra@gmail.com
-      </p>
     </div>
   );
 }
