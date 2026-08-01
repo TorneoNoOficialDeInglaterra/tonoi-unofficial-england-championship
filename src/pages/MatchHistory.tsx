@@ -211,7 +211,7 @@ export default function MatchHistory() {
       </div>
 
       <Card className="mt-3 overflow-hidden">
-        <div className="max-h-[80vh] overflow-auto">
+        <div ref={scrollBoxRef} className="max-h-[80vh] overflow-auto">
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
