@@ -235,39 +235,55 @@ export default function MatchHistory() {
                   </td>
                 </tr>
               ) : (
-                matches.map((m) => {
+                matches.map((m, i) => {
                   const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
                   const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
                   const local = teamById.get(localId);
                   const visitor = teamById.get(visitorId);
                   const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
                   const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                  const prev = matches[i - 1];
+                  const next = matches[i + 1];
+                  // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
+                  const breakAbove = BREAKS.find(
+                    (b) =>
+                      m.match_date <= b.after &&
+                      (!prev || prev.match_date >= b.before),
+                  );
+                  const breakBelow = BREAKS.find(
+                    (b) => !next && m.match_date >= b.before && m.match_date <= b.before,
+                  );
                   return (
-                    <tr key={m.id} className="border-t border-border hover:bg-accent/40">
-                      <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
-                        {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <div className="flex items-center justify-end gap-2">
-                          <span className="font-medium">{local?.name ?? "—"}</span>
-                          <TeamBadge team={local} size={24} />
-                        </div>
-                      </td>
-                      <td className="px-3 py-2.5 text-center">
-                        <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
-                          {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <div className="flex items-center gap-2">
-                          <TeamBadge team={visitor} size={24} />
-                          <span className="font-medium">{visitor?.name ?? "—"}</span>
-                        </div>
-                      </td>
-                    </tr>
+                    <>
+                      {breakAbove && <BreakRow key={`${m.id}-b`} text={breakAbove.text} />}
+                      <tr key={m.id} className="border-t border-border hover:bg-accent/40">
+                        <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
+                          {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <div className="flex items-center justify-end gap-2">
+                            <span className="font-medium">{local?.name ?? "—"}</span>
+                            <TeamBadge team={local} size={24} />
+                          </div>
+                        </td>
+                        <td className="px-3 py-2.5 text-center">
+                          <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
+                            {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <TeamBadge team={visitor} size={24} />
+                            <span className="font-medium">{visitor?.name ?? "—"}</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {breakBelow && <BreakRow key={`${m.id}-a`} text={breakBelow.text} />}
+                    </>
                   );
                 })
               )}
+
             </tbody>
           </table>
         </div>
