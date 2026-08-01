@@ -50,6 +50,7 @@ export default function FaqPage() {
               className="overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-card)]"
             >
               <AccordionTrigger
+                icon="plus-minus"
                 className="px-5 py-5 text-left text-lg font-semibold uppercase tracking-wide leading-snug hover:no-underline sm:text-xl"
                 style={{ fontFamily: "'Bebas Neue', 'Oswald', Impact, sans-serif" }}
               >
