@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, Fragment } from "react";
 import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,6 +10,36 @@ import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, decadeOf, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
+
+/** Interrupciones históricas de la competición (fechas en formato ISO). */
+const BREAKS = [
+  {
+    after: "1915-04-24",
+    before: "1919-08-30",
+    text: "La competición se detuvo entre 1915 y 1919 debido a la I Guerra Mundial",
+  },
+  {
+    after: "1939-09-02",
+    before: "1945-11-17",
+    text: "La competición se detuvo entre 1939 y 1945 debido a la II Guerra Mundial",
+  },
+  {
+    after: "2020-03-08",
+    before: "2020-07-24",
+    text: "La competición se suspendió debido a la pandemia del COVID-19",
+  },
+];
+
+function BreakRow({ text }: { text: string }) {
+  return (
+    <tr className="border-t border-border bg-muted/60">
+      <td colSpan={4} className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        {text}
+      </td>
+    </tr>
+  );
+}
+
 
 function TeamCombo({
   teams, value, onChange, placeholder,
@@ -79,8 +109,10 @@ export default function MatchHistory() {
   const currentDecade = Math.floor(new Date().getUTCFullYear() / 10) * 10;
   const initialDecade = decades.includes(currentDecade) ? currentDecade : (decades[0] ?? currentDecade);
   const [decade, setDecade] = useState<number>(initialDecade);
+  const scrollBoxRef = useRef<HTMLDivElement>(null);
   const changeDecade = (d: number) => {
     setDecade(d);
+    if (scrollBoxRef.current) scrollBoxRef.current.scrollTop = 0;
     window.scrollTo({ top: 0, left: 0 });
   };
 
@@ -179,7 +211,7 @@ export default function MatchHistory() {
       </div>
 
       <Card className="mt-3 overflow-hidden">
-        <div className="max-h-[80vh] overflow-auto">
+        <div ref={scrollBoxRef} className="max-h-[80vh] overflow-auto">
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
@@ -203,39 +235,55 @@ export default function MatchHistory() {
                   </td>
                 </tr>
               ) : (
-                matches.map((m) => {
+                matches.map((m, i) => {
                   const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
                   const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
                   const local = teamById.get(localId);
                   const visitor = teamById.get(visitorId);
                   const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
                   const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                  const prev = matches[i - 1];
+                  const next = matches[i + 1];
+                  // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
+                  const breakAbove = BREAKS.find(
+                    (b) =>
+                      m.match_date <= b.after &&
+                      (!prev || prev.match_date >= b.before),
+                  );
+                  const breakBelow = BREAKS.find(
+                    (b) => !next && m.match_date === b.before,
+                  );
                   return (
-                    <tr key={m.id} className="border-t border-border hover:bg-accent/40">
-                      <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
-                        {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <div className="flex items-center justify-end gap-2">
-                          <span className="font-medium">{local?.name ?? "—"}</span>
-                          <TeamBadge team={local} size={24} />
-                        </div>
-                      </td>
-                      <td className="px-3 py-2.5 text-center">
-                        <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
-                          {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <div className="flex items-center gap-2">
-                          <TeamBadge team={visitor} size={24} />
-                          <span className="font-medium">{visitor?.name ?? "—"}</span>
-                        </div>
-                      </td>
-                    </tr>
+                    <Fragment key={m.id}>
+                      {breakAbove && <BreakRow key={`${m.id}-b`} text={breakAbove.text} />}
+                      <tr key={m.id} className="border-t border-border hover:bg-accent/40">
+                        <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
+                          {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <div className="flex items-center justify-end gap-2">
+                            <span className="font-medium">{local?.name ?? "—"}</span>
+                            <TeamBadge team={local} size={24} />
+                          </div>
+                        </td>
+                        <td className="px-3 py-2.5 text-center">
+                          <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
+                            {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <TeamBadge team={visitor} size={24} />
+                            <span className="font-medium">{visitor?.name ?? "—"}</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {breakBelow && <BreakRow key={`${m.id}-a`} text={breakBelow.text} />}
+                    </Fragment>
                   );
                 })
               )}
+
             </tbody>
           </table>
         </div>
