@@ -75,6 +75,11 @@ export default function Header() {
               <Twitter className="h-5 w-5" />
             </a>
           </Button>
+          <Button variant="ghost" size="icon" asChild aria-label="TikTok del torneo">
+            <a href="https://www.tiktok.com/@tonoi_oficial?_r=1&_t=ZN-98YEdmgaik2" target="_blank" rel="noreferrer">
+              <TikTokIcon className="h-5 w-5" />
+            </a>
+          </Button>
           <Button variant="ghost" size="icon" asChild aria-label="Contacto">
             <Link to="/contacto"><Mail className="h-5 w-5" /></Link>
           </Button>
