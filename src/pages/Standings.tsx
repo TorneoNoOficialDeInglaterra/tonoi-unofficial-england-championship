@@ -97,7 +97,7 @@ export default function Standings() {
         <h2 className="text-sm font-bold uppercase tracking-wider text-primary">Leyenda</h2>
         <ul className="mt-3 grid gap-2 text-xs text-foreground/80 sm:grid-cols-2 lg:grid-cols-3">
           <li><strong>PJ</strong>: Partidos Jugados</li>
-          <li><strong>V/E/D</strong>: Victorias / Empates / Derrotas</li>
+          <li><strong>V/E/D</strong>: Victorias / Empates / Derrotas (el empate del retador cuenta como derrota)</li>
           <li><strong>P</strong>: Puntos Totales</li>
           <li><strong>PPP</strong>: Puntos por Partido</li>
           <li><strong>GF/GC/DG</strong>: Goles Favor / Contra / Diferencia</li>

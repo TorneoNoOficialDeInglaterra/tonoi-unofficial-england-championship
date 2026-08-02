@@ -128,14 +128,17 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
     w.gf += m.winner_goals; w.gc += m.loser_goals;
     l.gf += m.loser_goals; l.gc += m.winner_goals;
     if (m.was_draw) {
-      w.e++; l.e++;
-      if (champion !== null && (m.winner_team_id === champion || m.loser_team_id === champion)) {
-        if (m.winner_team_id === champion) { w.p += 1; }
-        else { l.p += 1; }
+      const championInvolved = champion !== null && (m.winner_team_id === champion || m.loser_team_id === champion);
+      if (championInvolved) {
+        // El campeón empata: +1 empate y +1 punto. El retador: +1 derrota y 0 puntos.
+        if (m.winner_team_id === champion) { w.e++; w.p += 1; l.d++; }
+        else { l.e++; l.p += 1; w.d++; }
       } else {
+        w.e++; l.e++;
         w.p += 1; l.p += 1;
       }
     } else {
+
       w.v++; l.d++;
       w.p += 2;
     }
