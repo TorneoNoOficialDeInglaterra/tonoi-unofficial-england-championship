@@ -120,9 +120,11 @@ export function ImageGenerator() {
               <SelectContent>
                 <SelectItem value="anuncio">Anuncio del partido</SelectItem>
                 <SelectItem value="resultado">Resultado</SelectItem>
+                <SelectItem value="campeon">Nuevo campeón</SelectItem>
               </SelectContent>
             </Select>
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Competición</Label>
             <Select value={competition} onValueChange={(v) => setCompetition(v as Competition)}>
@@ -136,8 +138,9 @@ export function ImageGenerator() {
               </SelectContent>
             </Select>
           </div>
+          )}
 
-          {competition === "liga" && (
+          {type !== "campeon" && competition === "liga" && (
             <>
               <div>
                 <Label>Liga</Label>
