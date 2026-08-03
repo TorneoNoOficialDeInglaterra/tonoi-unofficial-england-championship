@@ -39,9 +39,9 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           left: 440,
-          top: 300,
+          top: 330,
           width: 200,
-          height: 160,
+          height: 100,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -69,7 +69,7 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
           justifyContent: "center",
         }}
       >
-        <TLogo team={data.homeTeam} size={200} />
+        <TLogo team={data.homeTeam} size={220} />
       </div>
 
       {/* Escudo visitante */}
@@ -79,13 +79,13 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
           left: 647,
           top: 443,
           width: 210,
-          height: 210,
+          height: 230,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <TLogo team={data.awayTeam} size={200} />
+        <TLogo team={data.awayTeam} size={220} />
       </div>
 
       {/* Fecha */}
@@ -93,7 +93,7 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           left: 215,
-          top: 806,
+          top: 799,
           width: 660,
           height: 56,
           display: "flex",
@@ -113,7 +113,7 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           left: 215,
-          top: 872,
+          top: 865,
           width: 660,
           height: 56,
           display: "flex",
