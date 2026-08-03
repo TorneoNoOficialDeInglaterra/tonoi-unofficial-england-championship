@@ -82,7 +82,7 @@ export function ImageGenerator() {
   }
 
   async function handleCopy() {
-    if (!homeTeam || !awayTeam) return toast.error("Selecciona los dos equipos");
+    if (!homeTeam || (type !== "campeon" && !awayTeam)) return toast.error(type === "campeon" ? "Selecciona el nuevo campeón" : "Selecciona los dos equipos");
     setBusy(true);
     try {
       const blob = await generatePng();
