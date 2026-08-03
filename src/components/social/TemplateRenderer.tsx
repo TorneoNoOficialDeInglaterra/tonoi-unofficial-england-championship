@@ -4,9 +4,11 @@ import { ResultadoChampions } from "./templates/ResultadoChampions";
 import { ResultadoEuropa } from "./templates/ResultadoEuropa";
 import { ResultadoCopa } from "./templates/ResultadoCopa";
 import { AnuncioPartido } from "./templates/AnuncioPartido";
+import { CampeonNuevo } from "./templates/CampeonNuevo";
 import { pickLaLigaVariant, type TemplateData } from "./templates/shared";
 
 export function TemplateRenderer({ data }: { data: TemplateData }) {
+  if (data.type === "campeon") return <CampeonNuevo data={data} />;
   if (data.type === "anuncio") return <AnuncioPartido data={data} />;
   switch (data.competition) {
     case "liga":

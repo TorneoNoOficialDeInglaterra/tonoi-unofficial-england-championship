@@ -10,7 +10,7 @@ import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
 import { TeamCombobox } from "./TeamCombobox";
-import { COMPETITION_LABELS, CUP_LABELS, LEAGUE_LABELS, type Competition, type DomesticCup, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
+import { COMPETITION_LABELS, CUP_LABELS, LEAGUE_LABELS, canvasSize, type Competition, type DomesticCup, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
 
@@ -42,12 +42,13 @@ export function ImageGenerator() {
 
   const renderRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
+  const size = canvasSize(type);
 
   async function generatePng(): Promise<Blob | null> {
     if (!renderRef.current) return null;
     const dataUrl = await toPng(renderRef.current, {
-      width: 1080,
-      height: 1080,
+      width: size.width,
+      height: size.height,
       pixelRatio: 1,
       cacheBust: true,
       backgroundColor: "#000",
@@ -57,7 +58,8 @@ export function ImageGenerator() {
   }
 
   async function handleDownload() {
-    if (!homeTeam || !awayTeam) return toast.error("Selecciona los dos equipos");
+    if (!homeTeam) return toast.error(type === "campeon" ? "Selecciona el nuevo campeón" : "Selecciona los dos equipos");
+    if (type !== "campeon" && !awayTeam) return toast.error("Selecciona los dos equipos");
     setBusy(true);
     try {
       const blob = await generatePng();
@@ -66,7 +68,9 @@ export function ImageGenerator() {
       const a = document.createElement("a");
       const slug = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-");
       a.href = url;
-      a.download = `tonoi-${type}-${date}-${slug(homeTeam.name)}-vs-${slug(awayTeam.name)}.png`;
+      a.download = type === "campeon"
+        ? `tonoi-campeon-${date}-${slug(homeTeam.name)}.png`
+        : `tonoi-${type}-${date}-${slug(homeTeam.name)}-vs-${slug(awayTeam!.name)}.png`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success("Imagen descargada");
@@ -78,7 +82,7 @@ export function ImageGenerator() {
   }
 
   async function handleCopy() {
-    if (!homeTeam || !awayTeam) return toast.error("Selecciona los dos equipos");
+    if (!homeTeam || (type !== "campeon" && !awayTeam)) return toast.error(type === "campeon" ? "Selecciona el nuevo campeón" : "Selecciona los dos equipos");
     setBusy(true);
     try {
       const blob = await generatePng();
@@ -116,9 +120,11 @@ export function ImageGenerator() {
               <SelectContent>
                 <SelectItem value="anuncio">Anuncio del partido</SelectItem>
                 <SelectItem value="resultado">Resultado</SelectItem>
+                <SelectItem value="campeon">Nuevo campeón</SelectItem>
               </SelectContent>
             </Select>
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Competición</Label>
             <Select value={competition} onValueChange={(v) => setCompetition(v as Competition)}>
@@ -132,8 +138,9 @@ export function ImageGenerator() {
               </SelectContent>
             </Select>
           </div>
+          )}
 
-          {competition === "liga" && (
+          {type !== "campeon" && competition === "liga" && (
             <>
               <div>
                 <Label>Liga</Label>
@@ -160,7 +167,7 @@ export function ImageGenerator() {
             </>
           )}
 
-          {competition === "copa" && (
+          {type !== "campeon" && competition === "copa" && (
             <div className="sm:col-span-2">
               <Label>Copa</Label>
               <Select value={domesticCup} onValueChange={(v) => setDomesticCup(v as DomesticCup)}>
@@ -175,29 +182,35 @@ export function ImageGenerator() {
           )}
 
 
-          <div>
-            <Label>Equipo local</Label>
+          <div className={type === "campeon" ? "sm:col-span-2" : undefined}>
+            <Label>{type === "campeon" ? "Nuevo campeón" : "Equipo local"}</Label>
             <TeamCombobox teams={teams} value={homeId} onChange={setHomeId} />
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Equipo visitante</Label>
             <TeamCombobox teams={teams} value={awayId} onChange={setAwayId} />
           </div>
+          )}
 
 
           <div>
             <Label>Fecha</Label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Hora</Label>
             <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </div>
+          )}
 
+          {type !== "campeon" && (
           <div className="sm:col-span-2">
             <Label>Estadio</Label>
             <Input placeholder="Ej: Etihad Stadium" value={stadium} onChange={(e) => setStadium(e.target.value)} />
           </div>
+          )}
 
           {type === "resultado" && (
             <>
@@ -251,12 +264,12 @@ export function ImageGenerator() {
 
       {/* Preview */}
       <div>
-        <Label className="mb-2 block">Vista previa (1080×1080)</Label>
+        <Label className="mb-2 block">Vista previa ({size.width}×{size.height})</Label>
         <div
           className="relative overflow-hidden rounded-md border bg-black"
-          style={{ width: 1080 * PREVIEW_SCALE, height: 1080 * PREVIEW_SCALE }}
+          style={{ width: size.width * PREVIEW_SCALE, height: size.height * PREVIEW_SCALE }}
         >
-          <div style={{ transform: `scale(${PREVIEW_SCALE})`, transformOrigin: "top left", width: 1080, height: 1080 }}>
+          <div style={{ transform: `scale(${PREVIEW_SCALE})`, transformOrigin: "top left", width: size.width, height: size.height }}>
             <div ref={renderRef}>
               <TemplateRenderer data={data} />
             </div>
