@@ -1,5 +1,6 @@
-import { formatDateEs, type TemplateData } from "./shared";
+import { competitionLogo, formatDateEs, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
+
 
 // Plantilla "ToNOI DAY" (periódico vintage). El fondo ya contiene el titular,
 // el "VS", los logos del ToNOI y los recuadros de fecha/estadio.
