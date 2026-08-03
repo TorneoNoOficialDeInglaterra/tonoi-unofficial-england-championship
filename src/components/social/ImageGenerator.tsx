@@ -167,7 +167,7 @@ export function ImageGenerator() {
             </>
           )}
 
-          {competition === "copa" && (
+          {type !== "campeon" && competition === "copa" && (
             <div className="sm:col-span-2">
               <Label>Copa</Label>
               <Select value={domesticCup} onValueChange={(v) => setDomesticCup(v as DomesticCup)}>
@@ -182,29 +182,35 @@ export function ImageGenerator() {
           )}
 
 
-          <div>
-            <Label>Equipo local</Label>
+          <div className={type === "campeon" ? "sm:col-span-2" : undefined}>
+            <Label>{type === "campeon" ? "Nuevo campeón" : "Equipo local"}</Label>
             <TeamCombobox teams={teams} value={homeId} onChange={setHomeId} />
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Equipo visitante</Label>
             <TeamCombobox teams={teams} value={awayId} onChange={setAwayId} />
           </div>
+          )}
 
 
           <div>
             <Label>Fecha</Label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
+          {type !== "campeon" && (
           <div>
             <Label>Hora</Label>
             <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
           </div>
+          )}
 
+          {type !== "campeon" && (
           <div className="sm:col-span-2">
             <Label>Estadio</Label>
             <Input placeholder="Ej: Etihad Stadium" value={stadium} onChange={(e) => setStadium(e.target.value)} />
           </div>
+          )}
 
           {type === "resultado" && (
             <>
