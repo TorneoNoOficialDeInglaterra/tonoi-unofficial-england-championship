@@ -1,7 +1,12 @@
 import type { Team } from "@/lib/tonoi";
 
 export type Competition = "liga" | "champions" | "europa" | "copa" | "conference";
-export type ImageType = "anuncio" | "resultado";
+export type ImageType = "anuncio" | "resultado" | "campeon";
+
+/** Dimensiones del lienzo según el tipo de imagen. */
+export function canvasSize(type: ImageType): { width: number; height: number } {
+  return type === "campeon" ? { width: 1080, height: 1608 } : { width: 1080, height: 1080 };
+}
 
 export type DomesticLeague =
   | "premier"
