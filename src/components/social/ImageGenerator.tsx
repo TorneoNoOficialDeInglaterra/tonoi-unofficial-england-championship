@@ -10,7 +10,7 @@ import { Download, Plus, Trash2, Copy } from "lucide-react";
 import { useTeams } from "@/hooks/useTonoiData";
 import { TemplateRenderer } from "./TemplateRenderer";
 import { TeamCombobox } from "./TeamCombobox";
-import { COMPETITION_LABELS, CUP_LABELS, LEAGUE_LABELS, type Competition, type DomesticCup, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
+import { COMPETITION_LABELS, CUP_LABELS, LEAGUE_LABELS, canvasSize, type Competition, type DomesticCup, type DomesticLeague, type ImageType, type Scorer, type TemplateData } from "./templates/shared";
 
 const PREVIEW_SCALE = 0.45; // 1080 -> 486px
 
@@ -42,12 +42,13 @@ export function ImageGenerator() {
 
   const renderRef = useRef<HTMLDivElement>(null);
   const [busy, setBusy] = useState(false);
+  const size = canvasSize(type);
 
   async function generatePng(): Promise<Blob | null> {
     if (!renderRef.current) return null;
     const dataUrl = await toPng(renderRef.current, {
-      width: 1080,
-      height: 1080,
+      width: size.width,
+      height: size.height,
       pixelRatio: 1,
       cacheBust: true,
       backgroundColor: "#000",
@@ -57,7 +58,8 @@ export function ImageGenerator() {
   }
 
   async function handleDownload() {
-    if (!homeTeam || !awayTeam) return toast.error("Selecciona los dos equipos");
+    if (!homeTeam) return toast.error(type === "campeon" ? "Selecciona el nuevo campeón" : "Selecciona los dos equipos");
+    if (type !== "campeon" && !awayTeam) return toast.error("Selecciona los dos equipos");
     setBusy(true);
     try {
       const blob = await generatePng();
@@ -66,7 +68,9 @@ export function ImageGenerator() {
       const a = document.createElement("a");
       const slug = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-");
       a.href = url;
-      a.download = `tonoi-${type}-${date}-${slug(homeTeam.name)}-vs-${slug(awayTeam.name)}.png`;
+      a.download = type === "campeon"
+        ? `tonoi-campeon-${date}-${slug(homeTeam.name)}.png`
+        : `tonoi-${type}-${date}-${slug(homeTeam.name)}-vs-${slug(awayTeam!.name)}.png`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success("Imagen descargada");
