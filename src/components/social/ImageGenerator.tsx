@@ -264,12 +264,12 @@ export function ImageGenerator() {
 
       {/* Preview */}
       <div>
-        <Label className="mb-2 block">Vista previa (1080×1080)</Label>
+        <Label className="mb-2 block">Vista previa ({size.width}×{size.height})</Label>
         <div
           className="relative overflow-hidden rounded-md border bg-black"
-          style={{ width: 1080 * PREVIEW_SCALE, height: 1080 * PREVIEW_SCALE }}
+          style={{ width: size.width * PREVIEW_SCALE, height: size.height * PREVIEW_SCALE }}
         >
-          <div style={{ transform: `scale(${PREVIEW_SCALE})`, transformOrigin: "top left", width: 1080, height: 1080 }}>
+          <div style={{ transform: `scale(${PREVIEW_SCALE})`, transformOrigin: "top left", width: size.width, height: size.height }}>
             <div ref={renderRef}>
               <TemplateRenderer data={data} />
             </div>
