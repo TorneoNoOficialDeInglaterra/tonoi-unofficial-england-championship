@@ -20,7 +20,43 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         overflow: "hidden",
       }}
     >
+      {/* Parche que tapa el tramo de línea vertical sobre el "VS" */}
+      <div
+        style={{
+          position: "absolute",
+          left: 524,
+          top: 288,
+          width: 34,
+          height: 180,
+          backgroundImage: `url(/social/templates/anuncio-bg.jpg)`,
+          backgroundSize: "1080px 1080px",
+          backgroundPosition: "-420px -288px",
+        }}
+      />
+
+      {/* Logo de la competición */}
+      <div
+        style={{
+          position: "absolute",
+          left: 440,
+          top: 300,
+          width: 200,
+          height: 160,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src={competitionLogo(data)}
+          crossOrigin="anonymous"
+          alt=""
+          style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+        />
+      </div>
+
       {/* Escudo local */}
+
       <div
         style={{
           position: "absolute",
