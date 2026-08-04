@@ -240,8 +240,9 @@ export default function MatchHistory() {
                   const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
                   const local = teamById.get(localId);
                   const visitor = teamById.get(visitorId);
-                  const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
-                  const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                  const localGoals = sideScore(m, localId);
+                  const visitorGoals = sideScore(m, visitorId);
+
                   const prev = matches[i - 1];
                   const next = matches[i + 1];
                   // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
