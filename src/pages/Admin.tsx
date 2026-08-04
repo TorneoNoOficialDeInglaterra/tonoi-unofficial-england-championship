@@ -345,6 +345,9 @@ function MatchesAdmin() {
   const [editHome, setEditHome] = useState("");
   const [editAway, setEditAway] = useState("");
   const [editScore, setEditScore] = useState("");
+  const [editPens, setEditPens] = useState(false);
+  const [editHomePens, setEditHomePens] = useState("");
+  const [editAwayPens, setEditAwayPens] = useState("");
 
   function openEdit(m: Match) {
     setEditId(m.id);
@@ -356,40 +359,46 @@ function MatchesAdmin() {
     setEditHome(homeId);
     setEditAway(awayId);
     setEditScore(`${homeGoals}-${awayGoals}`);
+    const hasPens = isPenaltyMatch(m);
+    setEditPens(hasPens);
+    if (hasPens) {
+      const homeIsWinner = homeId === m.winner_team_id;
+      setEditHomePens(String(homeIsWinner ? m.winner_pens : m.loser_pens));
+      setEditAwayPens(String(homeIsWinner ? m.loser_pens : m.winner_pens));
+    } else {
+      setEditHomePens("");
+      setEditAwayPens("");
+    }
   }
 
   async function saveEdit() {
     if (!editId) return;
     if (!editHome || !editAway || editHome === editAway) return toast.error("Selecciona dos equipos distintos");
-    const mm = editScore.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!mm) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
-    const hg = Number(mm[1]);
-    const ag = Number(mm[2]);
-    const draw = hg === ag;
-    const winner = draw ? editHome : (hg > ag ? editHome : editAway);
-    const loser = draw ? editAway : (hg > ag ? editAway : editHome);
-    const wg = draw ? hg : Math.max(hg, ag);
-    const lg = draw ? ag : Math.min(hg, ag);
+    const r = resolveResult(editHome, editAway, editScore, editPens, editHomePens, editAwayPens);
+    if (!r) return;
 
     const currentChamp = championAt(editDate);
-    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
-    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+    const champInvolved = currentChamp !== null && (currentChamp === r.winner || currentChamp === r.loser);
+    const computedTitleChanged = champInvolved && currentChamp !== r.winner && !r.draw;
 
     const { error } = await supabase.from("matches").update({
       match_date: editDate,
-      winner_team_id: winner,
-      loser_team_id: loser,
-      winner_goals: wg,
-      loser_goals: lg,
-      was_draw: draw,
+      winner_team_id: r.winner,
+      loser_team_id: r.loser,
+      winner_goals: r.wg,
+      loser_goals: r.lg,
+      was_draw: r.draw,
       title_changed: computedTitleChanged,
       home_team_id: editHome,
+      winner_pens: r.winner_pens,
+      loser_pens: r.loser_pens,
     }).eq("id", editId);
     if (error) return toast.error(error.message);
     toast.success("Partido actualizado");
     setEditId(null);
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
+
 
   return (
     <div className="space-y-4">
