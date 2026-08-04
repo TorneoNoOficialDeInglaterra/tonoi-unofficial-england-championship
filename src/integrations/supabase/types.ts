@@ -207,12 +207,14 @@ export type Database = {
           home_team_id: string | null
           id: string
           loser_goals: number
+          loser_pens: number | null
           loser_team_id: string
           match_date: string
           notes: string | null
           title_changed: boolean
           was_draw: boolean
           winner_goals: number
+          winner_pens: number | null
           winner_team_id: string
         }
         Insert: {
@@ -220,12 +222,14 @@ export type Database = {
           home_team_id?: string | null
           id?: string
           loser_goals?: number
+          loser_pens?: number | null
           loser_team_id: string
           match_date: string
           notes?: string | null
           title_changed?: boolean
           was_draw?: boolean
           winner_goals?: number
+          winner_pens?: number | null
           winner_team_id: string
         }
         Update: {
@@ -233,12 +237,14 @@ export type Database = {
           home_team_id?: string | null
           id?: string
           loser_goals?: number
+          loser_pens?: number | null
           loser_team_id?: string
           match_date?: string
           notes?: string | null
           title_changed?: boolean
           was_draw?: boolean
           winner_goals?: number
+          winner_pens?: number | null
           winner_team_id?: string
         }
         Relationships: [
