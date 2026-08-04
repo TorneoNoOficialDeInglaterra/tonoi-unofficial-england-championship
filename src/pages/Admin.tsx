@@ -500,7 +500,26 @@ function MatchesAdmin() {
               <Label>Equipo visitante</Label>
               <TeamCombobox teams={sortedTeams} value={editAway} onChange={setEditAway} placeholder="Buscar equipo..." />
             </div>
+            <div className="sm:col-span-2 rounded-md border border-border p-3">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Checkbox checked={editPens} onCheckedChange={(v) => setEditPens(v === true)} />
+                Se decidió en los penaltis
+              </label>
+              {editPens && (
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Penaltis local</Label>
+                    <Input type="number" min={0} value={editHomePens} onChange={(e) => setEditHomePens(e.target.value)} />
+                  </div>
+                  <div>
+                    <Label>Penaltis visitante</Label>
+                    <Input type="number" min={0} value={editAwayPens} onChange={(e) => setEditAwayPens(e.target.value)} />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditId(null)}>Cancelar</Button>
             <Button onClick={saveEdit}>Guardar cambios</Button>
