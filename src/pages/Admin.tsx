@@ -421,9 +421,28 @@ function MatchesAdmin() {
             <Label>Equipo visitante</Label>
             <TeamCombobox teams={sortedTeams} value={away} onChange={setAway} placeholder="Buscar equipo..." />
           </div>
+          <div className="sm:col-span-2 rounded-md border border-border p-3">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <Checkbox checked={pens} onCheckedChange={(v) => setPens(v === true)} />
+              Se decidió en los penaltis
+            </label>
+            {pens && (
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <Label>Penaltis local</Label>
+                  <Input type="number" min={0} placeholder="Ej: 5" value={homePens} onChange={(e) => setHomePens(e.target.value)} />
+                </div>
+                <div>
+                  <Label>Penaltis visitante</Label>
+                  <Input type="number" min={0} placeholder="Ej: 4" value={awayPens} onChange={(e) => setAwayPens(e.target.value)} />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="sm:col-span-2"><Button onClick={add}>Añadir partido</Button></div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. El cambio de campeón se calcula automáticamente.</p>
+        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. Si hay penaltis, el resultado debe ser empate y gana quien marque más penaltis (2 puntos). El cambio de campeón se calcula automáticamente.</p>
+
       </Card>
 
       <Card className="overflow-hidden">
