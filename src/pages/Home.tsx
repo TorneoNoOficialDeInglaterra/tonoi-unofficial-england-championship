@@ -42,8 +42,9 @@ export default function Home() {
     : null;
   const lastLocal = lastLocalId ? teamById.get(lastLocalId) : null;
   const lastVisitor = lastVisitorId ? teamById.get(lastVisitorId) : null;
-  const lastLocalGoals = last && lastLocalId === last.winner_team_id ? last?.winner_goals : last?.loser_goals;
-  const lastVisitorGoals = last && lastLocalId === last.winner_team_id ? last?.loser_goals : last?.winner_goals;
+  const lastLocalGoals = last && lastLocalId ? sideScore(last, lastLocalId) : "";
+  const lastVisitorGoals = last && lastVisitorId ? sideScore(last, lastVisitorId) : "";
+
 
   // Top 10 (by points)
   const top10 = useMemo(() => (data?.rows ?? []).slice(0, 10), [data]);
