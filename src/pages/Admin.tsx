@@ -259,40 +259,79 @@ function MatchesAdmin() {
     return champion;
   }
 
-  async function add() {
-    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
-    const m = score.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!m) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+  /** Resuelve ganador/perdedor/goles/penaltis desde el marcador (local-visitante). */
+  function resolveResult(
+    homeId: string, awayId: string, scoreStr: string,
+    penaltis: boolean, hpStr: string, apStr: string,
+  ) {
+    const m = scoreStr.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
+    if (!m) { toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)"); return null; }
     const hg = Number(m[1]);
     const ag = Number(m[2]);
 
+    if (penaltis) {
+      if (hg !== ag) { toast.error("Si se decide en penaltis, el resultado debe ser empate"); return null; }
+      const hp = Number(hpStr);
+      const ap = Number(apStr);
+      if (!Number.isFinite(hp) || !Number.isFinite(ap) || hpStr === "" || apStr === "") {
+        toast.error("Introduce los penaltis de ambos equipos"); return null;
+      }
+      if (hp === ap) { toast.error("La tanda de penaltis no puede acabar empatada"); return null; }
+      const homeWins = hp > ap;
+      return {
+        winner: homeWins ? homeId : awayId,
+        loser: homeWins ? awayId : homeId,
+        wg: hg, lg: ag,
+        draw: false,
+        winner_pens: Math.max(hp, ap),
+        loser_pens: Math.min(hp, ap),
+      };
+    }
+
     const draw = hg === ag;
-    const winner = draw ? home : (hg > ag ? home : away);
-    const loser = draw ? away : (hg > ag ? away : home);
-    const wg = draw ? hg : Math.max(hg, ag);
-    const lg = draw ? ag : Math.min(hg, ag);
+    return {
+      winner: draw ? homeId : (hg > ag ? homeId : awayId),
+      loser: draw ? awayId : (hg > ag ? awayId : homeId),
+      wg: draw ? hg : Math.max(hg, ag),
+      lg: draw ? ag : Math.min(hg, ag),
+      draw,
+      winner_pens: null as number | null,
+      loser_pens: null as number | null,
+    };
+  }
+
+  async function add() {
+    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
+    const r = resolveResult(home, away, score, pens, homePens, awayPens);
+    if (!r) return;
 
     // Auto-deduce title_changed
     const currentChamp = championAt(date);
-    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
-    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+    const champInvolved = currentChamp !== null && (currentChamp === r.winner || currentChamp === r.loser);
+    const computedTitleChanged = champInvolved && currentChamp !== r.winner && !r.draw;
 
     const { error } = await supabase.from("matches").insert({
       match_date: date,
-      winner_team_id: winner,
-      loser_team_id: loser,
-      winner_goals: wg,
-      loser_goals: lg,
-      was_draw: draw,
+      winner_team_id: r.winner,
+      loser_team_id: r.loser,
+      winner_goals: r.wg,
+      loser_goals: r.lg,
+      was_draw: r.draw,
       title_changed: computedTitleChanged,
       notes: null,
       home_team_id: home,
+      winner_pens: r.winner_pens,
+      loser_pens: r.loser_pens,
     });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
     setScore("");
+    setPens(false);
+    setHomePens("");
+    setAwayPens("");
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
+
 
   async function remove(id: string) {
     if (!confirm("¿Eliminar partido?")) return;
