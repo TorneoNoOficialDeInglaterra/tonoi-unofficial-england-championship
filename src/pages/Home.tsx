@@ -282,8 +282,9 @@ export default function Home() {
                   {last5.map((m) => {
                     const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
                     const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
-                    const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
-                    const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                    const localGoals = sideScore(m, localId);
+                    const visitorGoals = sideScore(m, visitorId);
+
                     const local = teamById.get(localId);
                     const visitor = teamById.get(visitorId);
                     return (
