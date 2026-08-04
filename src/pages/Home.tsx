@@ -173,7 +173,12 @@ export default function Home() {
                   <TeamBadge team={lastVisitor} size={36} />
                 </div>
               </div>
-              {last.was_draw && <p className="mt-2 text-xs text-muted-foreground">Empate.</p>}
+              {isPenaltyMatch(last) ? (
+                <p className="mt-2 text-xs text-muted-foreground">Decidido en los penaltis.</p>
+              ) : last.was_draw ? (
+                <p className="mt-2 text-xs text-muted-foreground">Empate.</p>
+              ) : null}
+
               {last.title_changed && <p className="mt-1 text-xs font-semibold text-primary">¡Cambio de campeón!</p>}
             </div>
           ) : (
