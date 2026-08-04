@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { computeStandings, daysBetween, buildLocalByMatchMap } from "@/lib/tonoi";
+import { computeStandings, daysBetween, buildLocalByMatchMap, sideScore, isPenaltyMatch } from "@/lib/tonoi";
 
 import logoImg from "@/assets/logo.png";
 import hero1 from "@/assets/hero/hero1.jpg";
