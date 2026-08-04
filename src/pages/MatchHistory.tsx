@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { buildLocalByMatchMap, decadeOf, type Match, type Team } from "@/lib/tonoi";
+import { buildLocalByMatchMap, decadeOf, sideScore, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
 
 /** Interrupciones históricas de la competición (fechas en formato ISO). */
