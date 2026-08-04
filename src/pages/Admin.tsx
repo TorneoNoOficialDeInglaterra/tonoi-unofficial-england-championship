@@ -19,7 +19,7 @@ import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
 import { AuditAdmin } from "@/components/admin/AuditAdmin";
 import { cn } from "@/lib/utils";
-import type { Match, Team } from "@/lib/tonoi";
+import { isPenaltyMatch, sideScore, type Match, type Team } from "@/lib/tonoi";
 
 export default function Admin() {
   const nav = useNavigate();
