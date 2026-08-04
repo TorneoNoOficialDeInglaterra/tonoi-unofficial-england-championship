@@ -235,6 +235,10 @@ function MatchesAdmin() {
   const [home, setHome] = useState("");
   const [away, setAway] = useState("");
   const [score, setScore] = useState("");
+  const [pens, setPens] = useState(false);
+  const [homePens, setHomePens] = useState("");
+  const [awayPens, setAwayPens] = useState("");
+
 
   const teams = useMemo(() => teamsQ.data ?? [], [teamsQ.data]);
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
