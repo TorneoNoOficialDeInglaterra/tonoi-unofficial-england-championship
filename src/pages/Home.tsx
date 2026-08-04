@@ -165,7 +165,7 @@ export default function Home() {
                   <TeamBadge team={lastLocal} size={36} />
                   <span className="font-semibold">{lastLocal.name}</span>
                 </div>
-                <div className="rounded-md bg-primary px-3 py-1.5 font-mono text-lg font-bold text-primary-foreground">
+                <div className="shrink-0 whitespace-nowrap rounded-md bg-primary px-2 py-1 font-mono text-sm font-bold text-primary-foreground sm:px-3 sm:py-1.5 sm:text-lg">
                   {lastLocalGoals} – {lastVisitorGoals}
                 </div>
                 <div className="flex flex-1 items-center justify-end gap-2 text-right">
