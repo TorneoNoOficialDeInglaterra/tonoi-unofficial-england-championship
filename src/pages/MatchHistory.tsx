@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { buildLocalByMatchMap, decadeOf, type Match, type Team } from "@/lib/tonoi";
+import { buildLocalByMatchMap, decadeOf, sideScore, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
 
 /** Interrupciones históricas de la competición (fechas en formato ISO). */
@@ -240,8 +240,9 @@ export default function MatchHistory() {
                   const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
                   const local = teamById.get(localId);
                   const visitor = teamById.get(visitorId);
-                  const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
-                  const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                  const localGoals = sideScore(m, localId);
+                  const visitorGoals = sideScore(m, visitorId);
+
                   const prev = matches[i - 1];
                   const next = matches[i + 1];
                   // Lista en orden descendente: el banner va justo encima del partido anterior al parón.

@@ -18,7 +18,26 @@ export type Match = {
   title_changed: boolean;
   notes: string | null;
   home_team_id?: string | null;
+  winner_pens?: number | null;
+  loser_pens?: number | null;
 };
+
+/** Devuelve true si el partido se decidió en la tanda de penaltis. */
+export function isPenaltyMatch(m: Match): boolean {
+  return m.winner_pens != null && m.loser_pens != null;
+}
+
+/**
+ * Marcador de un lado del partido: "0" o, si hubo penaltis, "0(5)".
+ */
+export function sideScore(m: Match, teamId: string): string {
+  const isWinner = teamId === m.winner_team_id;
+  const goals = isWinner ? m.winner_goals : m.loser_goals;
+  if (!isPenaltyMatch(m)) return String(goals);
+  const pens = isWinner ? m.winner_pens : m.loser_pens;
+  return `${goals}(${pens})`;
+}
+
 
 export type StandingRow = {
   team: Team;

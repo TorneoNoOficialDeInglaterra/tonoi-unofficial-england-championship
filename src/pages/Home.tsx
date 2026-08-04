@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { computeStandings, daysBetween, buildLocalByMatchMap } from "@/lib/tonoi";
+import { computeStandings, daysBetween, buildLocalByMatchMap, sideScore, isPenaltyMatch } from "@/lib/tonoi";
 
 import logoImg from "@/assets/logo.png";
 import hero1 from "@/assets/hero/hero1.jpg";
@@ -42,8 +42,9 @@ export default function Home() {
     : null;
   const lastLocal = lastLocalId ? teamById.get(lastLocalId) : null;
   const lastVisitor = lastVisitorId ? teamById.get(lastVisitorId) : null;
-  const lastLocalGoals = last && lastLocalId === last.winner_team_id ? last?.winner_goals : last?.loser_goals;
-  const lastVisitorGoals = last && lastLocalId === last.winner_team_id ? last?.loser_goals : last?.winner_goals;
+  const lastLocalGoals = last && lastLocalId ? sideScore(last, lastLocalId) : "";
+  const lastVisitorGoals = last && lastVisitorId ? sideScore(last, lastVisitorId) : "";
+
 
   // Top 10 (by points)
   const top10 = useMemo(() => (data?.rows ?? []).slice(0, 10), [data]);
@@ -172,7 +173,12 @@ export default function Home() {
                   <TeamBadge team={lastVisitor} size={36} />
                 </div>
               </div>
-              {last.was_draw && <p className="mt-2 text-xs text-muted-foreground">Empate.</p>}
+              {isPenaltyMatch(last) ? (
+                <p className="mt-2 text-xs text-muted-foreground">Decidido en los penaltis.</p>
+              ) : last.was_draw ? (
+                <p className="mt-2 text-xs text-muted-foreground">Empate.</p>
+              ) : null}
+
               {last.title_changed && <p className="mt-1 text-xs font-semibold text-primary">¡Cambio de campeón!</p>}
             </div>
           ) : (
@@ -276,8 +282,9 @@ export default function Home() {
                   {last5.map((m) => {
                     const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
                     const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
-                    const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
-                    const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                    const localGoals = sideScore(m, localId);
+                    const visitorGoals = sideScore(m, visitorId);
+
                     const local = teamById.get(localId);
                     const visitor = teamById.get(visitorId);
                     return (

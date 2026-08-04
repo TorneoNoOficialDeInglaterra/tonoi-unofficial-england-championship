@@ -19,7 +19,9 @@ import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
 import { AuditAdmin } from "@/components/admin/AuditAdmin";
 import { cn } from "@/lib/utils";
-import type { Match, Team } from "@/lib/tonoi";
+import { Checkbox } from "@/components/ui/checkbox";
+import { isPenaltyMatch, sideScore, type Match, type Team } from "@/lib/tonoi";
+
 
 export default function Admin() {
   const nav = useNavigate();
@@ -235,6 +237,10 @@ function MatchesAdmin() {
   const [home, setHome] = useState("");
   const [away, setAway] = useState("");
   const [score, setScore] = useState("");
+  const [pens, setPens] = useState(false);
+  const [homePens, setHomePens] = useState("");
+  const [awayPens, setAwayPens] = useState("");
+
 
   const teams = useMemo(() => teamsQ.data ?? [], [teamsQ.data]);
   const teamById = useMemo(() => new Map(teams.map((t) => [t.id, t])), [teams]);
@@ -255,40 +261,79 @@ function MatchesAdmin() {
     return champion;
   }
 
-  async function add() {
-    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
-    const m = score.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!m) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
+  /** Resuelve ganador/perdedor/goles/penaltis desde el marcador (local-visitante). */
+  function resolveResult(
+    homeId: string, awayId: string, scoreStr: string,
+    penaltis: boolean, hpStr: string, apStr: string,
+  ) {
+    const m = scoreStr.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
+    if (!m) { toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)"); return null; }
     const hg = Number(m[1]);
     const ag = Number(m[2]);
 
+    if (penaltis) {
+      if (hg !== ag) { toast.error("Si se decide en penaltis, el resultado debe ser empate"); return null; }
+      const hp = Number(hpStr);
+      const ap = Number(apStr);
+      if (!Number.isFinite(hp) || !Number.isFinite(ap) || hpStr === "" || apStr === "") {
+        toast.error("Introduce los penaltis de ambos equipos"); return null;
+      }
+      if (hp === ap) { toast.error("La tanda de penaltis no puede acabar empatada"); return null; }
+      const homeWins = hp > ap;
+      return {
+        winner: homeWins ? homeId : awayId,
+        loser: homeWins ? awayId : homeId,
+        wg: hg, lg: ag,
+        draw: false,
+        winner_pens: Math.max(hp, ap),
+        loser_pens: Math.min(hp, ap),
+      };
+    }
+
     const draw = hg === ag;
-    const winner = draw ? home : (hg > ag ? home : away);
-    const loser = draw ? away : (hg > ag ? away : home);
-    const wg = draw ? hg : Math.max(hg, ag);
-    const lg = draw ? ag : Math.min(hg, ag);
+    return {
+      winner: draw ? homeId : (hg > ag ? homeId : awayId),
+      loser: draw ? awayId : (hg > ag ? awayId : homeId),
+      wg: draw ? hg : Math.max(hg, ag),
+      lg: draw ? ag : Math.min(hg, ag),
+      draw,
+      winner_pens: null as number | null,
+      loser_pens: null as number | null,
+    };
+  }
+
+  async function add() {
+    if (!home || !away || home === away) return toast.error("Selecciona dos equipos distintos");
+    const r = resolveResult(home, away, score, pens, homePens, awayPens);
+    if (!r) return;
 
     // Auto-deduce title_changed
     const currentChamp = championAt(date);
-    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
-    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+    const champInvolved = currentChamp !== null && (currentChamp === r.winner || currentChamp === r.loser);
+    const computedTitleChanged = champInvolved && currentChamp !== r.winner && !r.draw;
 
     const { error } = await supabase.from("matches").insert({
       match_date: date,
-      winner_team_id: winner,
-      loser_team_id: loser,
-      winner_goals: wg,
-      loser_goals: lg,
-      was_draw: draw,
+      winner_team_id: r.winner,
+      loser_team_id: r.loser,
+      winner_goals: r.wg,
+      loser_goals: r.lg,
+      was_draw: r.draw,
       title_changed: computedTitleChanged,
       notes: null,
       home_team_id: home,
+      winner_pens: r.winner_pens,
+      loser_pens: r.loser_pens,
     });
     if (error) return toast.error(error.message);
     toast.success("Partido añadido");
     setScore("");
+    setPens(false);
+    setHomePens("");
+    setAwayPens("");
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
+
 
   async function remove(id: string) {
     if (!confirm("¿Eliminar partido?")) return;
@@ -302,6 +347,9 @@ function MatchesAdmin() {
   const [editHome, setEditHome] = useState("");
   const [editAway, setEditAway] = useState("");
   const [editScore, setEditScore] = useState("");
+  const [editPens, setEditPens] = useState(false);
+  const [editHomePens, setEditHomePens] = useState("");
+  const [editAwayPens, setEditAwayPens] = useState("");
 
   function openEdit(m: Match) {
     setEditId(m.id);
@@ -313,40 +361,46 @@ function MatchesAdmin() {
     setEditHome(homeId);
     setEditAway(awayId);
     setEditScore(`${homeGoals}-${awayGoals}`);
+    const hasPens = isPenaltyMatch(m);
+    setEditPens(hasPens);
+    if (hasPens) {
+      const homeIsWinner = homeId === m.winner_team_id;
+      setEditHomePens(String(homeIsWinner ? m.winner_pens : m.loser_pens));
+      setEditAwayPens(String(homeIsWinner ? m.loser_pens : m.winner_pens));
+    } else {
+      setEditHomePens("");
+      setEditAwayPens("");
+    }
   }
 
   async function saveEdit() {
     if (!editId) return;
     if (!editHome || !editAway || editHome === editAway) return toast.error("Selecciona dos equipos distintos");
-    const mm = editScore.trim().match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!mm) return toast.error("Resultado inválido. Usa formato 2-1 (local-visitante)");
-    const hg = Number(mm[1]);
-    const ag = Number(mm[2]);
-    const draw = hg === ag;
-    const winner = draw ? editHome : (hg > ag ? editHome : editAway);
-    const loser = draw ? editAway : (hg > ag ? editAway : editHome);
-    const wg = draw ? hg : Math.max(hg, ag);
-    const lg = draw ? ag : Math.min(hg, ag);
+    const r = resolveResult(editHome, editAway, editScore, editPens, editHomePens, editAwayPens);
+    if (!r) return;
 
     const currentChamp = championAt(editDate);
-    const champInvolved = currentChamp !== null && (currentChamp === winner || currentChamp === loser);
-    const computedTitleChanged = champInvolved && currentChamp !== winner && !draw;
+    const champInvolved = currentChamp !== null && (currentChamp === r.winner || currentChamp === r.loser);
+    const computedTitleChanged = champInvolved && currentChamp !== r.winner && !r.draw;
 
     const { error } = await supabase.from("matches").update({
       match_date: editDate,
-      winner_team_id: winner,
-      loser_team_id: loser,
-      winner_goals: wg,
-      loser_goals: lg,
-      was_draw: draw,
+      winner_team_id: r.winner,
+      loser_team_id: r.loser,
+      winner_goals: r.wg,
+      loser_goals: r.lg,
+      was_draw: r.draw,
       title_changed: computedTitleChanged,
       home_team_id: editHome,
+      winner_pens: r.winner_pens,
+      loser_pens: r.loser_pens,
     }).eq("id", editId);
     if (error) return toast.error(error.message);
     toast.success("Partido actualizado");
     setEditId(null);
     qc.invalidateQueries({ queryKey: ["matches"] });
   }
+
 
   return (
     <div className="space-y-4">
@@ -369,9 +423,28 @@ function MatchesAdmin() {
             <Label>Equipo visitante</Label>
             <TeamCombobox teams={sortedTeams} value={away} onChange={setAway} placeholder="Buscar equipo..." />
           </div>
+          <div className="sm:col-span-2 rounded-md border border-border p-3">
+            <label className="flex items-center gap-2 text-sm font-medium">
+              <Checkbox checked={pens} onCheckedChange={(v) => setPens(v === true)} />
+              Se decidió en los penaltis
+            </label>
+            {pens && (
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <Label>Penaltis local</Label>
+                  <Input type="number" min={0} placeholder="Ej: 5" value={homePens} onChange={(e) => setHomePens(e.target.value)} />
+                </div>
+                <div>
+                  <Label>Penaltis visitante</Label>
+                  <Input type="number" min={0} placeholder="Ej: 4" value={awayPens} onChange={(e) => setAwayPens(e.target.value)} />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="sm:col-span-2"><Button onClick={add}>Añadir partido</Button></div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. El cambio de campeón se calcula automáticamente.</p>
+        <p className="mt-2 text-xs text-muted-foreground">El ganador y el empate se deducen automáticamente del marcador. Si hay penaltis, el resultado debe ser empate y gana quien marque más penaltis (2 puntos). El cambio de campeón se calcula automáticamente.</p>
+
       </Card>
 
       <Card className="overflow-hidden">
@@ -384,8 +457,9 @@ function MatchesAdmin() {
               {[...(matchesQ.data ?? [])].reverse().slice(0, 50).map((m) => {
                 const localId = m.home_team_id ?? m.winner_team_id;
                 const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
-                const localGoals = localId === m.winner_team_id ? m.winner_goals : m.loser_goals;
-                const visitorGoals = localId === m.winner_team_id ? m.loser_goals : m.winner_goals;
+                const localGoals = sideScore(m, localId);
+                const visitorGoals = sideScore(m, visitorId);
+
 
                 return (
                   <tr key={m.id} className="border-t border-border">
@@ -426,7 +500,26 @@ function MatchesAdmin() {
               <Label>Equipo visitante</Label>
               <TeamCombobox teams={sortedTeams} value={editAway} onChange={setEditAway} placeholder="Buscar equipo..." />
             </div>
+            <div className="sm:col-span-2 rounded-md border border-border p-3">
+              <label className="flex items-center gap-2 text-sm font-medium">
+                <Checkbox checked={editPens} onCheckedChange={(v) => setEditPens(v === true)} />
+                Se decidió en los penaltis
+              </label>
+              {editPens && (
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Penaltis local</Label>
+                    <Input type="number" min={0} value={editHomePens} onChange={(e) => setEditHomePens(e.target.value)} />
+                  </div>
+                  <div>
+                    <Label>Penaltis visitante</Label>
+                    <Input type="number" min={0} value={editAwayPens} onChange={(e) => setEditAwayPens(e.target.value)} />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditId(null)}>Cancelar</Button>
             <Button onClick={saveEdit}>Guardar cambios</Button>
