@@ -75,7 +75,7 @@ export default function Admin() {
             <TabsTrigger value="faqs" className="whitespace-nowrap">FAQ</TabsTrigger>
             <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
             <TabsTrigger value="images" className="whitespace-nowrap">Generar imagen</TabsTrigger>
-            <TabsTrigger value="audit" className="whitespace-nowrap">Auditoría</TabsTrigger>
+            
           </TabsList>
         </div>
         <TabsContent value="teams" className="mt-4"><TeamsAdmin /></TabsContent>
