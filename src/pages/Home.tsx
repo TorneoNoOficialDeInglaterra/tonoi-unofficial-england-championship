@@ -221,7 +221,7 @@ export default function Home() {
                   "Solo valen partidos oficiales.",
                   "Si en una liga no hay registros oficiales se contará el siguiente partido oficial.",
                   "En caso de desaparición del club campeón, el título vuelve al anterior campeón.",
-                  "Todas las prórrogas cuentan.",
+                  "Las prórrogas cuentan únicamente si el partido en lo 90 minutos ha quedado empate.",
                   "Los penaltis cuentan: si el partido acaba en empate global o requiere desempate, el ganador se lleva el título.",
                 ].map((r, i) => (
                   <li key={i} className="flex gap-3">
