@@ -35,7 +35,11 @@ function auditMatches(matches: Match[], teamsById: Map<string, Team>): MatchIssu
       if (m.winner_goals !== m.loser_goals) reasons.push("Empate con goles distintos");
     } else {
       if (m.winner_goals < m.loser_goals) reasons.push("Ganador tiene menos goles que el perdedor");
-      if (m.winner_goals === m.loser_goals) reasons.push("Marcador igualado marcado como no-empate");
+      const decidedOffPitch = !!m.notes?.trim();
+      const decidedOnPens = m.winner_pens != null && m.loser_pens != null;
+      if (m.winner_goals === m.loser_goals && !decidedOffPitch && !decidedOnPens) {
+        reasons.push("Marcador igualado marcado como no-empate");
+      }
     }
     if (m.winner_goals < 0 || m.loser_goals < 0) reasons.push("Goles negativos");
     if (reasons.length) issues.push({ match: m, reasons });
