@@ -45,10 +45,11 @@ i18n
     defaultNS: "common",
     ns: ["common", "home", "standings", "matches", "stats", "pages"],
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage"],
       lookupLocalStorage: "tonoi-lang",
       caches: ["localStorage"],
     },
+    lng: localStorage.getItem("tonoi-lang") ?? "es",
     interpolation: { escapeValue: false },
   });
 
