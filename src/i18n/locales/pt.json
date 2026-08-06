@@ -173,6 +173,7 @@
       "seasonPlaceholder": "Selecionar...",
       "seasonCurrentSuffix": " · atual",
       "historic": "Histórico (todas as temporadas)",
+      "note": "Os registos de estatísticas individuais só estão disponíveis a partir da época 2025/2026.",
       "tabs": { "players": "Marcadores e assistências", "keepers": "Baliza a zero" },
       "searchPlayerPlaceholder": "Procurar jogador...",
       "playersCount": "{{count}} jogador",
