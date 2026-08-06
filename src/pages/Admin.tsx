@@ -1207,8 +1207,22 @@ function FaqsAdmin() {
                       rows={3}
                       onBlur={(e) => e.target.value !== (f.answer_it ?? "") && updateField(f.id, { answer_it: e.target.value.trim() || null })}
                     />
-                  </div>
                 </div>
+                <div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={translating === f.id}
+                    onClick={() => retranslate(f.id, f.question, f.answer)}
+                  >
+                    {translating === f.id ? (
+                      <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Traduciendo…</>
+                    ) : (
+                      <><Languages className="mr-2 h-4 w-4" /> Regenerar traducciones</>
+                    )}
+                  </Button>
+                </div>
+
               </div>
             </Card>
           ))}
