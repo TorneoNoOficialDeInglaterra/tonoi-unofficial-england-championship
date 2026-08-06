@@ -980,6 +980,7 @@ const FAQ_LANGS = [
   { code: "ca", label: "catalán" },
   { code: "eu", label: "euskera" },
   { code: "pt", label: "portugués" },
+  { code: "gl", label: "gallego" },
 ] as const;
 
 function FaqsAdmin() {
@@ -1134,7 +1135,7 @@ function FaqsAdmin() {
           </div>
           <label className="flex items-center gap-2 text-sm">
             <Checkbox checked={autoTranslate} onCheckedChange={(v) => setAutoTranslate(Boolean(v))} />
-            Traducir automáticamente a inglés, italiano, catalán, euskera y portugués al guardar (los campos que rellenes a mano se respetan)
+            Traducir automáticamente a inglés, italiano, catalán, euskera, portugués y gallego al guardar (los campos que rellenes a mano se respetan)
           </label>
           <div className="grid gap-2 sm:grid-cols-[120px_auto]">
             <div>
