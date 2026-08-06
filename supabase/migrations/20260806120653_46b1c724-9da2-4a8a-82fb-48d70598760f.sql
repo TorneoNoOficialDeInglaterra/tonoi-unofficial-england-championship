@@ -1,0 +1,3 @@
+ALTER TABLE public.faqs
+  ADD COLUMN IF NOT EXISTS question_gl TEXT,
+  ADD COLUMN IF NOT EXISTS answer_gl TEXT;
