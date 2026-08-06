@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Contact from "./pages/Contact";
 import Faq from "./pages/Faq";
+import Unsubscribe from "./pages/Unsubscribe";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
