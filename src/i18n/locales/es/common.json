@@ -21,5 +21,9 @@
     "copyright": "© {{year}} Torneo No Oficial de Inglaterra (ToNOI)",
     "tagline": "Web oficial del torneo — creada y gestionada por sus fundadores."
   },
-  "scrollTop": "Volver al inicio de la página"
+  "scrollTop": "Volver al inicio de la página",
+  "meta": {
+    "title": "ToNOI — Torneo No Oficial de Inglaterra",
+    "description": "Sigue el ToNOI: campeón actual, clasificación histórica, historial de partidos y estadísticas del Torneo No Oficial de Inglaterra."
+  }
 }

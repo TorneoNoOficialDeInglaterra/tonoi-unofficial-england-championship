@@ -21,5 +21,9 @@
     "copyright": "© {{year}} Torneo No Oficial de Inglaterra (ToNOI)",
     "tagline": "Official tournament website — created and run by its founders."
   },
-  "scrollTop": "Back to top of page"
+  "scrollTop": "Back to top of page",
+  "meta": {
+    "title": "ToNOI — Unofficial Tournament of England",
+    "description": "Follow the ToNOI: current champion, all-time standings, full match history and statistics of the Unofficial Tournament of England."
+  }
 }
