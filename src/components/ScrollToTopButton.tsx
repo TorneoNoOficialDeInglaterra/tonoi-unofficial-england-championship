@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 200);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -14,7 +16,8 @@ export default function ScrollToTopButton() {
 
   return (
     <Button
-      aria-label="Volver al inicio de la página"
+      aria-label={t("scrollTop")}
+
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       size="icon"
       className={cn(
