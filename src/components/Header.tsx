@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { Menu, Twitter, Mail } from "lucide-react";
 import { useState, type SVGProps } from "react";
+import { useTranslation } from "react-i18next";
 
 const TikTokIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -9,28 +10,30 @@ const TikTokIcon = (props: SVGProps<SVGSVGElement>) => (
 );
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 import logoImg from "@/assets/logo.png";
 const LOGO = logoImg;
 
 const NAV = [
-  { to: "/", label: "Inicio" },
-  { to: "/clasificacion", label: "Clasificación" },
-  { to: "/historial", label: "Historial de partidos" },
-  { to: "/estadisticas", label: "Estadísticas" },
-  { to: "/historia", label: "Historia del torneo" },
-  { to: "/faq", label: "Preguntas frecuentes" },
-  { to: "/contacto", label: "Contacto" },
+  { to: "/", key: "home" },
+  { to: "/clasificacion", key: "standings" },
+  { to: "/historial", key: "matchHistory" },
+  { to: "/estadisticas", key: "stats" },
+  { to: "/historia", key: "history" },
+  { to: "/faq", key: "faq" },
+  { to: "/contacto", key: "contact" },
 ];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
       <div className="container flex h-16 items-center gap-3">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Abrir menú">
+            <Button variant="ghost" size="icon" aria-label={t("header.openMenu")}>
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
@@ -54,35 +57,39 @@ export default function Header() {
                     }`
                   }
                 >
-                  {n.label}
+                  {t(`nav.${n.key}`)}
                 </NavLink>
               ))}
             </nav>
+            <div className="mt-6 border-t border-border pt-4">
+              <LanguageSwitcher />
+            </div>
           </SheetContent>
         </Sheet>
 
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <img src={LOGO} alt="Logo ToNOI" className="h-10 w-10" />
+          <img src={LOGO} alt={t("header.logoAlt")} className="h-10 w-10" />
           <div className="hidden flex-col leading-tight sm:flex">
             <span className="text-base font-extrabold tracking-tight">ToNOI</span>
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Torneo No Oficial de Inglaterra</span>
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{t("header.tournamentName")}</span>
           </div>
         </Link>
 
         <div className="ml-auto flex items-center gap-1">
-          <Button variant="ghost" size="icon" asChild aria-label="Twitter del torneo">
+          <Button variant="ghost" size="icon" asChild aria-label={t("header.twitter")}>
             <a href="https://twitter.com/ToNOI_Oficial" target="_blank" rel="noreferrer">
               <Twitter className="h-5 w-5" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" asChild aria-label="TikTok del torneo">
+          <Button variant="ghost" size="icon" asChild aria-label={t("header.tiktok")}>
             <a href="https://www.tiktok.com/@tonoi_oficial?_r=1&_t=ZN-98YEdmgaik2" target="_blank" rel="noreferrer">
               <TikTokIcon className="h-5 w-5" />
             </a>
           </Button>
-          <Button variant="ghost" size="icon" asChild aria-label="Contacto">
+          <Button variant="ghost" size="icon" asChild aria-label={t("header.contact")}>
             <Link to="/contacto"><Mail className="h-5 w-5" /></Link>
           </Button>
+          <LanguageSwitcher />
         </div>
       </div>
     </header>
