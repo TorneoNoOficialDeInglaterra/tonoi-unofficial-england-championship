@@ -1,0 +1,241 @@
+{
+  "common": {
+    "nav": {
+      "home": "Hasiera",
+      "standings": "Sailkapena",
+      "matchHistory": "Partiden historia",
+      "stats": "Estatistikak",
+      "history": "Txapelketaren historia",
+      "faq": "Ohiko galderak",
+      "contact": "Harremana"
+    },
+    "header": {
+      "openMenu": "Menua ireki",
+      "tournamentName": "Ingalaterrako Txapelketa Ez Ofiziala",
+      "logoAlt": "ToNOI logoa",
+      "twitter": "Txapelketaren Twitterra",
+      "tiktok": "Txapelketaren TikTok",
+      "contact": "Harremana",
+      "language": "Hizkuntza aldatu"
+    },
+    "footer": {
+      "copyright": "© {{year}} Ingalaterrako Txapelketa Ez Ofiziala (ToNOI)",
+      "tagline": "Txapelketaren webgune ofiziala — sortzaileek sortu eta kudeatua."
+    },
+    "scrollTop": "Orriaren hasierara itzuli",
+    "meta": {
+      "title": "ToNOI — Ingalaterrako Txapelketa Ez Ofiziala",
+      "description": "Jarraitu ToNOI: egungo txapelduna, sailkapen historikoa, partiden historia eta estatistikak."
+    }
+  },
+  "home": {
+    "hero": {
+      "tagline": "Ingalaterrako Txapelketa Ez Ofiziala",
+      "titleLine1": "Txapeldun izateko,",
+      "titleLine2": "irabazi txapeldunari.",
+      "subtitle": "Titulu bakarra. Arau bakarra. Jarraitu ToNOIren historia bizia partiduz partidu.",
+      "viewStandings": "Sailkapena ikusi",
+      "matchHistory": "Partiden historia",
+      "logoAlt": "ToNOI logoa",
+      "imageAlt": "{{n}}. irudia"
+    },
+    "champion": {
+      "current": "Egungo txapelduna",
+      "daysAsChampion_one": "egun {{count}} txapeldun gisa",
+      "daysAsChampion_other": "{{count}} egun txapeldun gisa",
+      "noData": "—",
+      "noMatches": "Oraindik ez dago partidurik erregistratuta."
+    },
+    "lastMatch": {
+      "title": "Azken partidua",
+      "penalties": "Penaltietan erabakita.",
+      "draw": "Berdinketa.",
+      "titleChanged": "Txapeldun aldaketa!",
+      "noMatches": "Oraindik partidurik ez."
+    },
+    "about": {
+      "heading": "Zer da ToNOI?",
+      "paragraph1": "Imajinatzen duzu zer gertatuko litzatekeen futbolean txapelduna boxeoan bezala erabakiko balitz? Bada, gu hemen gaude hori kontatzeko.",
+      "paragraph2": "<strong>Ingalaterrako Txapelketa Ez Ofiziala (ToNOI)</strong> txapelketa batean txapeldun izateko egungo txapeldunari irabazi behar diozu. Ez dago talde-fase, kanporaketa edo antzekorik: <strong>finalak besterik ez</strong>. Txapeldunaren aurka jokatu eta irabazten baduzu, <strong>INGALATERRAKO TXAPELDUN EZ OFIZIAL</strong> berria izango zara, beste talde batek garaitu arte historia egiten.",
+      "paragraph3": "Titulua partiduz partidu aldatzen da eskuz esku, hamarkadak, belaunaldiak eta lehiak zeharkatuz. Hemen ligak edo kopak ez du garrantzirik: garrantzia duen bakarra talde batek uneko txapeldunari egiten dion desafioa da.",
+      "closing": "Murgildu gurekin abentura honetan eta gozatu futbolaz inoiz baino gehiago."
+    },
+    "rules": {
+      "title": "Araudi Ofiziala",
+      "items": [
+        "Egungo txapeldunari irabazten badiozu, txapeldun bihurtzen zara.",
+        "Partidu ofizialak baino ez dira baliozkoak.",
+        "Liga batean erregistro ofizialik ez badago, hurrengo partidu ofiziala zenbatuko da.",
+        "Txapeldun den kluba desagertzen bada, titulua aurreko txapeldunari itzultzen zaio.",
+        "Luzapenak 90 minutuetan berdinketa izan denean bakarrik zenbatzen dira.",
+        "Penaltiak zenbatzen dira: partidua berdinketan amaitzen bada edo desberdinketa behar bada, irabazleak titulua eramaten du."
+      ]
+    },
+    "top10": { "title": "Top 10", "viewAll": "Dena ikusi →", "noData": "Daturik ez." },
+    "last5": { "title": "Azken 5 partiduak", "viewAll": "Dena ikusi →", "noMatches": "Partidurik ez." },
+    "video": {
+      "label": "Jatorrizko bideoa",
+      "heading": "Ezagutu txapelketa bideoan",
+      "iframeTitle": "Zer da ToNOI?"
+    }
+  },
+  "standings": {
+    "title": "Sailkapen historikoa",
+    "subtitle": "Lehen ToNOItik gaur arte partiduz partidu kalkulatuta.",
+    "legend": {
+      "title": "Legenda",
+      "pj": "<strong>PJ</strong>: Jokatutako partiduak",
+      "ved": "<strong>V/E/D</strong>: Garaipenak / Berdinketak / Galdutakoak (desafiatzailearen berdinketa galtzat hartzen da)",
+      "p": "<strong>P</strong>: Puntu guztiak",
+      "ppp": "<strong>PPP</strong>: Puntuak partiduko",
+      "gfgcdg": "<strong>GF/GC/DG</strong>: Aldeko golak / Kontrakoak / Diferentzia",
+      "pct": "<strong>PcT</strong>: Garaikurrarekin jokatutako partiduak",
+      "mj": "<strong>MJ</strong>: Marka onena (garaikurrarekin jarraian)",
+      "intentos": "<strong>I</strong>: Txapelduna kentzeko saiakerak",
+      "destronamientos": "<strong>Des</strong>: Tronutik kentzeak (irabazitako tituluak)",
+      "id": "<strong>ID</strong>: Arrakasta ehunekoa (Des/I)"
+    },
+    "cols": {
+      "pj": { "label": "PJ", "desc": "Jokatutako partiduak" },
+      "v": { "label": "V", "desc": "Garaipenak" },
+      "e": { "label": "E", "desc": "Berdinketak" },
+      "d": { "label": "D", "desc": "Galdutakoak" },
+      "p": { "label": "P", "desc": "Puntuak" },
+      "gf": { "label": "GF", "desc": "Aldeko golak" },
+      "gc": { "label": "GC", "desc": "Kontrako golak" },
+      "dg": { "label": "DG", "desc": "Gol diferentzia" },
+      "ppp": { "label": "PPP", "desc": "Puntuak partiduko" },
+      "pct": { "label": "PcT", "desc": "Garaikurrarekin jokatutako partiduak" },
+      "mj": { "label": "MJ", "desc": "Marka onena" },
+      "intentos": { "label": "I", "desc": "Saiakerak" },
+      "destronamientos": { "label": "Des", "desc": "Tronutik kentzeak" },
+      "idPct": { "label": "ID", "desc": "Tronutik kentze indizea (%)" }
+    },
+    "filter": {
+      "placeholder": "Taldearen arabera filtratu…",
+      "searchPlaceholder": "Taldea bilatu...",
+      "noResults": "Emaitzarik ez.",
+      "clear": "Garbitu",
+      "teamsCount": "talde {{count}}",
+      "teamsCount_other": "{{count}} talde"
+    },
+    "table": { "pos": "#", "team": "Taldea", "empty": "Oraindik daturik ez." }
+  },
+  "matches": {
+    "history": {
+      "title": "Partiden historia",
+      "subtitle": "Tituluaren aldeko partidu guztiak, hamarkadaka multzokatuta.",
+      "filters": {
+        "teamLabel": "Taldea",
+        "teamPlaceholder": "Talde guztiak",
+        "clear": "Garbitu",
+        "h2hClub1Label": "Aurkaritza — 1. kluba",
+        "h2hClub2Label": "Aurkaritza — 2. kluba",
+        "clubPlaceholder": "Hautatu kluba",
+        "clearH2h": "Aurkaritza garbitu",
+        "searchTeam": "Taldea bilatu...",
+        "noTeamsFound": "Ez da talderik aurkitu."
+      },
+      "heading": {
+        "h2h": "{{teamA}} vs {{teamB}}",
+        "teamMatches": "{{team}}(r)en partiduak",
+        "decade": "{{decade}}eko hamarkada"
+      },
+      "matchCount": "partidu {{count}}",
+      "matchCount_other": "{{count}} partidu",
+      "table": { "date": "Data", "home": "Etxean", "result": "Emaitza", "away": "Kanpoan" },
+      "empty": {
+        "h2h": "Ez dago partidurik bi klub horien artean.",
+        "none": "Partidurik ez."
+      },
+      "status": {
+        "draw": "Berdinketa",
+        "penalties": "Penaltietan erabakita",
+        "titleChange": "Titulu aldaketa"
+      },
+      "breaks": {
+        "wwi": "Lehiaketa 1915 eta 1919 artean gelditu zen I. Mundu Gerra dela eta",
+        "wwii": "Lehiaketa 1939 eta 1945 artean gelditu zen II. Mundu Gerra dela eta",
+        "covid": "Lehiaketa COVID-19 pandemiagatik bertan behera geratu zen"
+      },
+      "decadeNav": {
+        "previous": "Aurreko hamarkada",
+        "next": "Hurrengo hamarkada",
+        "jumpTo": "Hamarkadara joan"
+      }
+    }
+  },
+  "stats": {
+    "stats": {
+      "title": "Estatistika indibidualak",
+      "subtitle": "Golegileak, asistentziak eta ateak zero — denboraldi hau edo historikoa.",
+      "season": "Denboraldia",
+      "seasonPlaceholder": "Hautatu...",
+      "seasonCurrentSuffix": " · uneko",
+      "historic": "Historikoa (denboraldi guztiak)",
+      "tabs": { "players": "Golegileak eta asistentziak", "keepers": "Ateak zero" },
+      "searchPlayerPlaceholder": "Jokalaria bilatu...",
+      "playersCount": "jokalari {{count}}",
+      "playersCount_other": "{{count}} jokalari",
+      "table": {
+        "player": "Jokalaria",
+        "goals": "Golak",
+        "assists": "Asistentziak",
+        "ga": "G+A",
+        "keeper": "Atezaina",
+        "cleanSheets": "Ateak zero"
+      },
+      "noData": "Daturik ez."
+    },
+    "history": {
+      "title": "Txapelketaren historia",
+      "subtitle": "ToNOIk urteetan bizi izan duen guztia.",
+      "comingSoon": "Laster",
+      "body": "Txapelketaren historiako bidaia oso bat prestatzen ari gara: txapeldun mitikoak, ahaztezinezko markak eta tituluaren norabidea aldatu zuten partiduak. Itzuli laster."
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Harremana",
+      "intro": "Zalantza bat, iradokizuna edo partidu bat jakinarazi nahi duzu? Idatzi eta ahalik eta lasterren erantzungo dizugu.",
+      "nameLabel": "Izena",
+      "namePlaceholder": "Zure izena",
+      "emailLabel": "Emaila",
+      "emailPlaceholder": "zu@email.com",
+      "messageLabel": "Mezua",
+      "messagePlaceholder": "Esan iezaguzu...",
+      "sendButton": "Mezua bidali",
+      "sending": "Bidaltzen...",
+      "errors": {
+        "name": "Adierazi zure izena",
+        "email": "Email baliogabea",
+        "message": "Idatzi mezu bat"
+      },
+      "success": "Mezua bidalita. Ahalik eta lasterren erantzungo dizugu."
+    },
+    "faq": {
+      "title": "Ohiko galderak",
+      "intro": "ToNOIri buruzko zalantza ohikoenak.",
+      "empty": "Oraindik ez dago ohiko galderarik argitaratuta."
+    },
+    "notFound": {
+      "title": "404",
+      "message": "Ai! Orria ez da aurkitu",
+      "backHome": "Hasierara itzuli"
+    },
+    "unsubscribe": {
+      "title": "ToNOI",
+      "subtitle": "Posta harpidetzen kudeaketa",
+      "noToken": "Ez da baja token bat eman.",
+      "invalidLink": "Baja emateko lotura ez da baliozkoa edo dagoeneko erabili da.",
+      "verifyError": "Ezin izan da lotura egiaztatu. Saiatu berriro geroago.",
+      "confirmError": "Ezin izan da baja osatu.",
+      "connectionError": "Konexio errorea. Saiatu berriro geroago.",
+      "verifying": "Lotura egiaztatzen...",
+      "confirmText": "Berresten baduzu, igorle honen mezuak jasotzeari utziko diozu.",
+      "confirmButton": "Baja berretsi",
+      "confirmed": "Behar bezala eman duzu baja.",
+      "invalidGeneric": "Lotura ez da baliozkoa."
+    }
+  }
+}
