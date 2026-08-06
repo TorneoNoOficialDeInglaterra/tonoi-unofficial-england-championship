@@ -1207,6 +1207,7 @@ function FaqsAdmin() {
                       rows={3}
                       onBlur={(e) => e.target.value !== (f.answer_it ?? "") && updateField(f.id, { answer_it: e.target.value.trim() || null })}
                     />
+                  </div>
                 </div>
                 <div>
                   <Button
