@@ -1126,13 +1126,22 @@ function FaqsAdmin() {
               <Textarea value={answerIt} onChange={(e) => setAnswerIt(e.target.value)} rows={3} placeholder="Opcional" />
             </div>
           </div>
+          <label className="flex items-center gap-2 text-sm">
+            <Checkbox checked={autoTranslate} onCheckedChange={(v) => setAutoTranslate(Boolean(v))} />
+            Traducir automáticamente al inglés e italiano al guardar (los campos que rellenes a mano se respetan)
+          </label>
           <div className="grid gap-2 sm:grid-cols-[120px_auto]">
             <div>
               <Label>Orden</Label>
               <Input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} />
             </div>
-            <div className="flex items-end"><Button onClick={add}>Añadir</Button></div>
+            <div className="flex items-end">
+              <Button onClick={add} disabled={translating === "new"}>
+                {translating === "new" ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Traduciendo…</>) : "Añadir"}
+              </Button>
+            </div>
           </div>
+
         </div>
       </Card>
 
