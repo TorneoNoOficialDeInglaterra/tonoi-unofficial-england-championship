@@ -15,7 +15,7 @@ import hero3 from "@/assets/hero/hero3.jpg";
 import hero4 from "@/assets/hero/hero4.jpg";
 import hero5 from "@/assets/hero/hero5.jpg";
 
-const HERO_IMAGES = [hero1, hero2, hero3, hero4, hero5];
+const HERO_IMAGES = [hero1, hero5, hero2, hero4, hero3];
 
 export default function Home() {
   const teamsQ = useTeams();
