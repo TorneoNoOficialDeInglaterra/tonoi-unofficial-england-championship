@@ -974,6 +974,14 @@ function MessagesAdmin() {
 
 
 /* ================== FAQs ================== */
+const FAQ_LANGS = [
+  { code: "en", label: "inglés" },
+  { code: "it", label: "italiano" },
+  { code: "ca", label: "catalán" },
+  { code: "eu", label: "euskera" },
+  { code: "pt", label: "portugués" },
+] as const;
+
 function FaqsAdmin() {
   const qc = useQueryClient();
   const q = useQuery({
@@ -991,10 +999,7 @@ function FaqsAdmin() {
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const [questionEn, setQuestionEn] = useState("");
-  const [answerEn, setAnswerEn] = useState("");
-  const [questionIt, setQuestionIt] = useState("");
-  const [answerIt, setAnswerIt] = useState("");
+  const [manualTr, setManualTr] = useState<Record<string, string>>({});
   const [order, setOrder] = useState<number>(0);
   const [autoTranslate, setAutoTranslate] = useState(true);
   const [translating, setTranslating] = useState<string | null>(null);
@@ -1005,27 +1010,26 @@ function FaqsAdmin() {
     });
     if (error) throw new Error(error.message);
     if ((data as { error?: string })?.error) throw new Error((data as { error?: string }).error);
-    return data as { question_en: string; answer_en: string; question_it: string; answer_it: string };
+    return data as Record<string, string>;
   }
 
   async function add() {
     if (!question.trim() || !answer.trim()) return toast.error("Rellena la pregunta y la respuesta");
-    let tr = {
-      question_en: questionEn.trim() || null,
-      answer_en: answerEn.trim() || null,
-      question_it: questionIt.trim() || null,
-      answer_it: answerIt.trim() || null,
-    };
+    const manual = (key: string) => (manualTr[key] ?? "").trim();
+    let tr: Record<string, string | null> = {};
+    for (const l of FAQ_LANGS) {
+      tr[`question_${l.code}`] = manual(`question_${l.code}`) || null;
+      tr[`answer_${l.code}`] = manual(`answer_${l.code}`) || null;
+    }
     if (autoTranslate) {
       setTranslating("new");
       try {
         const t = await fetchTranslations(question.trim(), answer.trim());
-        tr = {
-          question_en: questionEn.trim() || t.question_en,
-          answer_en: answerEn.trim() || t.answer_en,
-          question_it: questionIt.trim() || t.question_it,
-          answer_it: answerIt.trim() || t.answer_it,
-        };
+        tr = {};
+        for (const l of FAQ_LANGS) {
+          tr[`question_${l.code}`] = manual(`question_${l.code}`) || t[`question_${l.code}`] || null;
+          tr[`answer_${l.code}`] = manual(`answer_${l.code}`) || t[`answer_${l.code}`] || null;
+        }
       } catch (e) {
         toast.error(`No se pudo traducir automáticamente: ${e instanceof Error ? e.message : "error"}`);
       } finally {
@@ -1040,7 +1044,7 @@ function FaqsAdmin() {
     } as never);
     if (error) return toast.error(error.message);
     setQuestion(""); setAnswer(""); setOrder(0);
-    setQuestionEn(""); setAnswerEn(""); setQuestionIt(""); setAnswerIt("");
+    setManualTr({});
     toast.success("Pregunta añadida");
     qc.invalidateQueries({ queryKey: ["faqs"] });
   }
@@ -1078,10 +1082,7 @@ function FaqsAdmin() {
     question: string;
     answer: string;
     display_order: number;
-    question_en?: string | null;
-    answer_en?: string | null;
-    question_it?: string | null;
-    answer_it?: string | null;
+    [key: string]: unknown;
   };
   const faqs = (q.data ?? []) as FaqRow[];
 
@@ -1093,7 +1094,7 @@ function FaqsAdmin() {
         </h3>
         <p className="mt-2 text-sm text-foreground/80">
           Estas preguntas se mostrarán en la página pública de Preguntas Frecuentes. Usa el orden para ordenarlas (menor primero).
-          Las traducciones al inglés y al italiano son opcionales: si las dejas vacías, se mostrará el texto en español.
+          Las traducciones a los demás idiomas son opcionales: si las dejas vacías, se mostrará el texto en español.
         </p>
       </Card>
 
@@ -1109,26 +1110,31 @@ function FaqsAdmin() {
             <Textarea value={answer} onChange={(e) => setAnswer(e.target.value)} rows={4} placeholder="Explicación detallada..." />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <Label>Pregunta (inglés)</Label>
-              <Input value={questionEn} onChange={(e) => setQuestionEn(e.target.value)} placeholder="Opcional" />
-            </div>
-            <div>
-              <Label>Pregunta (italiano)</Label>
-              <Input value={questionIt} onChange={(e) => setQuestionIt(e.target.value)} placeholder="Opcional" />
-            </div>
-            <div>
-              <Label>Respuesta (inglés)</Label>
-              <Textarea value={answerEn} onChange={(e) => setAnswerEn(e.target.value)} rows={3} placeholder="Opcional" />
-            </div>
-            <div>
-              <Label>Respuesta (italiano)</Label>
-              <Textarea value={answerIt} onChange={(e) => setAnswerIt(e.target.value)} rows={3} placeholder="Opcional" />
-            </div>
+            {FAQ_LANGS.map((l) => (
+              <div key={l.code} className="grid gap-3">
+                <div>
+                  <Label>Pregunta ({l.label})</Label>
+                  <Input
+                    value={manualTr[`question_${l.code}`] ?? ""}
+                    onChange={(e) => setManualTr((m) => ({ ...m, [`question_${l.code}`]: e.target.value }))}
+                    placeholder="Opcional"
+                  />
+                </div>
+                <div>
+                  <Label>Respuesta ({l.label})</Label>
+                  <Textarea
+                    value={manualTr[`answer_${l.code}`] ?? ""}
+                    onChange={(e) => setManualTr((m) => ({ ...m, [`answer_${l.code}`]: e.target.value }))}
+                    rows={3}
+                    placeholder="Opcional"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
           <label className="flex items-center gap-2 text-sm">
             <Checkbox checked={autoTranslate} onCheckedChange={(v) => setAutoTranslate(Boolean(v))} />
-            Traducir automáticamente al inglés e italiano al guardar (los campos que rellenes a mano se respetan)
+            Traducir automáticamente a inglés, italiano, catalán, euskera y portugués al guardar (los campos que rellenes a mano se respetan)
           </label>
           <div className="grid gap-2 sm:grid-cols-[120px_auto]">
             <div>
@@ -1178,36 +1184,31 @@ function FaqsAdmin() {
                   />
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div>
-                    <Label>Pregunta (inglés)</Label>
-                    <Input
-                      defaultValue={f.question_en ?? ""}
-                      onBlur={(e) => e.target.value !== (f.question_en ?? "") && updateField(f.id, { question_en: e.target.value.trim() || null })}
-                    />
-                  </div>
-                  <div>
-                    <Label>Pregunta (italiano)</Label>
-                    <Input
-                      defaultValue={f.question_it ?? ""}
-                      onBlur={(e) => e.target.value !== (f.question_it ?? "") && updateField(f.id, { question_it: e.target.value.trim() || null })}
-                    />
-                  </div>
-                  <div>
-                    <Label>Respuesta (inglés)</Label>
-                    <Textarea
-                      defaultValue={f.answer_en ?? ""}
-                      rows={3}
-                      onBlur={(e) => e.target.value !== (f.answer_en ?? "") && updateField(f.id, { answer_en: e.target.value.trim() || null })}
-                    />
-                  </div>
-                  <div>
-                    <Label>Respuesta (italiano)</Label>
-                    <Textarea
-                      defaultValue={f.answer_it ?? ""}
-                      rows={3}
-                      onBlur={(e) => e.target.value !== (f.answer_it ?? "") && updateField(f.id, { answer_it: e.target.value.trim() || null })}
-                    />
-                  </div>
+                  {FAQ_LANGS.map((l) => {
+                    const qKey = `question_${l.code}`;
+                    const aKey = `answer_${l.code}`;
+                    const qVal = typeof f[qKey] === "string" ? (f[qKey] as string) : "";
+                    const aVal = typeof f[aKey] === "string" ? (f[aKey] as string) : "";
+                    return (
+                      <div key={l.code} className="grid gap-3">
+                        <div>
+                          <Label>Pregunta ({l.label})</Label>
+                          <Input
+                            defaultValue={qVal}
+                            onBlur={(e) => e.target.value !== qVal && updateField(f.id, { [qKey]: e.target.value.trim() || null })}
+                          />
+                        </div>
+                        <div>
+                          <Label>Respuesta ({l.label})</Label>
+                          <Textarea
+                            defaultValue={aVal}
+                            rows={3}
+                            onBlur={(e) => e.target.value !== aVal && updateField(f.id, { [aKey]: e.target.value.trim() || null })}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div>
                   <Button
