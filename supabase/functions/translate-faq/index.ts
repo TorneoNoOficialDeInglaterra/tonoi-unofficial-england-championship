@@ -21,6 +21,8 @@ const SCHEMA = {
     answer_eu: { type: "string" },
     question_pt: { type: "string" },
     answer_pt: { type: "string" },
+    question_gl: { type: "string" },
+    answer_gl: { type: "string" },
   },
   required: [
     "question_en",
@@ -33,6 +35,8 @@ const SCHEMA = {
     "answer_eu",
     "question_pt",
     "answer_pt",
+    "question_gl",
+    "answer_gl",
   ],
 };
 
@@ -141,7 +145,7 @@ Deno.serve(async (req) => {
     } catch {
       parsed = null;
     }
-    const LANGS = ["en", "it", "ca", "eu", "pt"];
+    const LANGS = ["en", "it", "ca", "eu", "pt", "gl"];
     const missing = LANGS.some((l) => !parsed?.[`question_${l}`] || !parsed?.[`answer_${l}`]);
     if (missing) {
       return json({ error: "La IA no devolvió una traducción válida. Inténtalo de nuevo." }, 502);

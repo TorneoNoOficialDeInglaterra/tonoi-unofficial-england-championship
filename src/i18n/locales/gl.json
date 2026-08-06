@@ -1,0 +1,242 @@
+{
+  "common": {
+    "nav": {
+      "home": "Inicio",
+      "standings": "Clasificación",
+      "matchHistory": "Historial de partidos",
+      "stats": "Estatísticas",
+      "history": "Historia do torneo",
+      "faq": "Preguntas frecuentes",
+      "contact": "Contacto"
+    },
+    "header": {
+      "openMenu": "Abrir menú",
+      "tournamentName": "Torneo Non Oficial de Inglaterra",
+      "logoAlt": "Logo ToNOI",
+      "twitter": "Twitter do torneo",
+      "tiktok": "TikTok do torneo",
+      "contact": "Contacto",
+      "language": "Cambiar idioma"
+    },
+    "footer": {
+      "copyright": "© {{year}} Torneo Non Oficial de Inglaterra (ToNOI)",
+      "tagline": "Sitio oficial do torneo — creado e xestionado polos seus fundadores."
+    },
+    "scrollTop": "Volver ao inicio da páxina",
+    "meta": {
+      "title": "ToNOI — Torneo Non Oficial de Inglaterra",
+      "description": "Segue o ToNOI: campión actual, clasificación histórica, historial de partidos e estatísticas do Torneo Non Oficial de Inglaterra."
+    }
+  },
+  "home": {
+    "hero": {
+      "tagline": "Torneo Non Oficial de Inglaterra",
+      "titleLine1": "Para ser campión,",
+      "titleLine2": "vence ao campión.",
+      "subtitle": "Un único título. Unha única regra. Segue a historia viva do ToNOI partido a partido.",
+      "viewStandings": "Ver clasificación",
+      "matchHistory": "Historial de partidos",
+      "logoAlt": "Logo ToNOI",
+      "imageAlt": "Imaxe {{n}}"
+    },
+    "champion": {
+      "current": "Campión actual",
+      "daysAsChampion_one": "{{count}} día como campión",
+      "daysAsChampion_other": "{{count}} días como campión",
+      "noData": "—",
+      "noMatches": "Aínda non hai partidos rexistrados."
+    },
+    "lastMatch": {
+      "title": "Último partido",
+      "penalties": "Decidido nos penaltis.",
+      "draw": "Empate.",
+      "titleChanged": "Cambio de campión!",
+      "noMatches": "Aínda non hai partidos."
+    },
+    "about": {
+      "heading": "Que é o ToNOI?",
+      "paragraph1": "Imaxinas que pasaría se no fútbol se decidise quen é o campión como se fai no boxeo? Pois nós estamos aquí para contalo.",
+      "paragraph2": "O <strong>Torneo Non Oficial de Inglaterra (ToNOI)</strong> é un campionato no que para ser campión tes que vencer ao campión actual. Non existe fase de grupos, eliminatorias nin nada semellante: <strong>só finais</strong>. Se te enfrontas ao equipo campión e saes vencedor, serás o novo<strong> CAMPIÓN NON OFICIAL DE INGLATERRA</strong> e comezarás a facer historia ata que outro equipo te derrote.",
+      "paragraph3": "O título cambia de mans partido a partido, atravesando décadas, xeracións e rivalidades. Aquí non importa a liga nin a copa: o único que conta é ese duelo concreto no que un club desafía ao campión do momento.",
+      "closing": "Mergúllate con nós nesta aventura e disfruta do fútbol coma nunca."
+    },
+    "rules": {
+      "title": "Regulamento Oficial",
+      "items": [
+        "Se vences ao campión actual, convértete en campión.",
+        "Só contan os partidos oficiais.",
+        "Se nunha liga non existen rexistros oficiais, contará o seguinte partido oficial.",
+        "En caso de extinción do club campión, o título volve ao campión anterior.",
+        "As prórrogas contan só se o partido acabou en empate nos 90 minutos.",
+        "Os penaltis contan se nos 90 minutos (ou 120 minutos no caso de que inclúa prórroga) o resultado é de empate e se requiren os penaltis para desempatar."
+      ]
+    },
+    "top10": { "title": "Top 10", "viewAll": "Ver todo →", "noData": "Sen datos." },
+    "last5": { "title": "Últimos 5 partidos", "viewAll": "Ver todo →", "noMatches": "Sen partidos." },
+    "video": {
+      "label": "Vídeo de orixe",
+      "heading": "Coñece o torneo en vídeo",
+      "iframeTitle": "Que é o ToNOI?"
+    }
+  },
+  "standings": {
+    "title": "Clasificación histórica",
+    "subtitle": "Calculada partido a partido desde o primeiro ToNOI ata hoxe.",
+    "legend": {
+      "title": "Lenda",
+      "pj": "<strong>PX</strong>: Partidos Xogados",
+      "ved": "<strong>V/E/D</strong>: Vitorias / Empates / Derrotas (o empate do desafiante conta como derrota)",
+      "p": "<strong>P</strong>: Puntos Totais",
+      "ppp": "<strong>PPP</strong>: Puntos por Partido",
+      "gfgcdg": "<strong>GF/GC/DG</strong>: Goles a Favor / En Contra / Diferenza",
+      "pct": "<strong>PcT</strong>: Partidos con Trofeo",
+      "mj": "<strong>MX</strong>: Mellor racha (partidos seguidos co trofeo)",
+      "intentos": "<strong>I</strong>: Número de intentos para destronar ao campión",
+      "destronamientos": "<strong>Des</strong>: Destronamentos (títulos conseguidos)",
+      "id": "<strong>ID</strong>: Porcentaxe de éxito (Des/I)"
+    },
+    "cols": {
+      "pj": { "label": "PX", "desc": "Partidos Xogados" },
+      "v": { "label": "V", "desc": "Vitorias" },
+      "e": { "label": "E", "desc": "Empates" },
+      "d": { "label": "D", "desc": "Derrotas" },
+      "p": { "label": "P", "desc": "Puntos" },
+      "gf": { "label": "GF", "desc": "Goles a Favor" },
+      "gc": { "label": "GC", "desc": "Goles en Contra" },
+      "dg": { "label": "DG", "desc": "Diferenza de Goles" },
+      "ppp": { "label": "PPP", "desc": "Puntos por Partido" },
+      "pct": { "label": "PcT", "desc": "Partidos con Trofeo" },
+      "mj": { "label": "MX", "desc": "Mellor racha" },
+      "intentos": { "label": "I", "desc": "Intentos" },
+      "destronamientos": { "label": "Des", "desc": "Destronamentos" },
+      "idPct": { "label": "ID", "desc": "Índice de Destronamento (%)" }
+    },
+    "filter": {
+      "placeholder": "Filtrar por equipo…",
+      "searchPlaceholder": "Buscar equipo...",
+      "noResults": "Sen resultados.",
+      "clear": "Limpar",
+      "teamsCount": "{{count}} equipo",
+      "teamsCount_other": "{{count}} equipos"
+    },
+    "table": { "pos": "#", "team": "Equipo", "empty": "Aínda non hai datos." }
+  },
+  "matches": {
+    "history": {
+      "title": "Historial de partidos",
+      "subtitle": "Cada partido polo título, agrupados por décadas.",
+      "filters": {
+        "teamLabel": "Equipo",
+        "teamPlaceholder": "Todos os equipos",
+        "clear": "Limpar",
+        "h2hClub1Label": "Enfrontamento — Club 1",
+        "h2hClub2Label": "Enfrontamento — Club 2",
+        "clubPlaceholder": "Selecciona club",
+        "clearH2h": "Limpar enfrontamento",
+        "searchTeam": "Buscar equipo...",
+        "noTeamsFound": "Non se atoparon equipos."
+      },
+      "heading": {
+        "h2h": "{{teamA}} vs {{teamB}}",
+        "teamMatches": "Partidos do {{team}}",
+        "decade": "Década de {{decade}}"
+      },
+      "matchCount": "{{count}} partido",
+      "matchCount_other": "{{count}} partidos",
+      "table": { "date": "Data", "home": "Local", "result": "Resultado", "away": "Visitante" },
+      "empty": {
+        "h2h": "Non hai partidos entre eses dous clubs.",
+        "none": "Sen partidos."
+      },
+      "status": {
+        "draw": "Empate",
+        "penalties": "Decidido nos penaltis",
+        "titleChange": "Cambio de título"
+      },
+      "breaks": {
+        "wwi": "A competición parou entre 1915 e 1919 pola I Guerra Mundial",
+        "wwii": "A competición parou entre 1939 e 1945 pola II Guerra Mundial",
+        "covid": "A competición suspendeuse pola pandemia de COVID-19"
+      },
+      "decadeNav": {
+        "previous": "Década anterior",
+        "next": "Década seguinte",
+        "jumpTo": "Ir a década"
+      }
+    }
+  },
+  "stats": {
+    "stats": {
+      "title": "Estatísticas individuais",
+      "subtitle": "Goleadores, asistencias e porterías a cero — tempada actual ou histórico.",
+      "season": "Tempada",
+      "seasonPlaceholder": "Seleccionar...",
+      "seasonCurrentSuffix": " · actual",
+      "historic": "Histórico (todas as tempadas)",
+      "note": "Os rexistros de estatísticas individuais só están dispoñibles a partir da tempada 2025/2026.",
+      "tabs": { "players": "Goleadores e asistencias", "keepers": "Porterías a cero" },
+      "searchPlayerPlaceholder": "Buscar xogador...",
+      "playersCount": "{{count}} xogador",
+      "playersCount_other": "{{count}} xogadores",
+      "table": {
+        "player": "Xogador",
+        "goals": "Goles",
+        "assists": "Asistencias",
+        "ga": "G+A",
+        "keeper": "Porteiro",
+        "cleanSheets": "Porterías a cero"
+      },
+      "noData": "Sen datos."
+    },
+    "history": {
+      "title": "Historia do torneo",
+      "subtitle": "Todo o que viviu o ToNOI ao longo dos anos.",
+      "comingSoon": "Moi pronto",
+      "body": "Estamos a preparar unha viaxe completa pola historia do torneo: campións lendarios, rachas inesquecibles e os partidos que cambiaron o rumbo do título. Volve moi pronto."
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Contacto",
+      "intro": "Tes unha dúbida, suxestión ou queres informar dun partido? Escríbenos e responderémosche o antes posible.",
+      "nameLabel": "Nome",
+      "namePlaceholder": "O teu nome",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ti@email.com",
+      "messageLabel": "Mensaxe",
+      "messagePlaceholder": "Cóntanos...",
+      "sendButton": "Enviar mensaxe",
+      "sending": "Enviando...",
+      "errors": {
+        "name": "Indica o teu nome",
+        "email": "Email non válido",
+        "message": "Escribe unha mensaxe"
+      },
+      "success": "Mensaxe enviada. Responderémosche o antes posible."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "intro": "As dúbidas máis comúns sobre o ToNOI.",
+      "empty": "Aínda non hai preguntas frecuentes publicadas."
+    },
+    "notFound": {
+      "title": "404",
+      "message": "Vaia! Páxina non encontrada",
+      "backHome": "Volver ao inicio"
+    },
+    "unsubscribe": {
+      "title": "ToNOI",
+      "subtitle": "Xestión de subscricións de email",
+      "noToken": "Non se proporcionou un token de baixa.",
+      "invalidLink": "A ligazón de baixa non é válida ou xa foi usada.",
+      "verifyError": "Non se puido verificar a ligazón. Téntao de novo máis tarde.",
+      "confirmError": "Non se puido completar a baixa.",
+      "connectionError": "Erro de conexión. Téntao de novo máis tarde.",
+      "verifying": "Verificando ligazón...",
+      "confirmText": "Se confirmas, deixarás de recibir emails deste remitente.",
+      "confirmButton": "Confirmar baixa",
+      "confirmed": "Deste de baixa correctamente.",
+      "invalidGeneric": "A ligazón non é válida."
+    }
+  }
+}
