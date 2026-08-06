@@ -10,25 +10,27 @@ import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, decadeOf, sideScore, type Match, type Team } from "@/lib/tonoi";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { localeTag } from "@/i18n";
 
 /** Interrupciones históricas de la competición (fechas en formato ISO). */
 const BREAKS = [
   {
     after: "1915-04-24",
     before: "1919-08-30",
-    text: "La competición se detuvo entre 1915 y 1919 debido a la I Guerra Mundial",
+    key: "wwi",
   },
   {
     after: "1939-09-02",
     before: "1945-11-17",
-    text: "La competición se detuvo entre 1939 y 1945 debido a la II Guerra Mundial",
+    key: "wwii",
   },
   {
     after: "2020-03-08",
     before: "2020-07-24",
-    text: "La competición se suspendió debido a la pandemia del COVID-19",
+    key: "covid",
   },
-];
+] as const;
 
 function BreakRow({ text }: { text: string }) {
   return (
