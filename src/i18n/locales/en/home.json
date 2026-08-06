@@ -38,7 +38,7 @@
       "If a league has no official records, the next official match will be counted.",
       "If the champion club ceases to exist, the title returns to the previous champion.",
       "Extra time only counts if the match was level after 90 minutes.",
-      "Penalties count: if the match ends level overall or requires a tiebreaker, the winner takes the title."
+      "Penalties count if after 90 minutes (or 120 minutes when extra time is played) the score is level and a shootout is required to decide the tie."
     ]
   },
   "top10": {

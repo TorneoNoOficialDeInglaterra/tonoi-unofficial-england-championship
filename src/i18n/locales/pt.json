@@ -68,7 +68,7 @@
         "Se numa liga não existirem registos oficiais, contará a partida oficial seguinte.",
         "Em caso de extinção do clube campeão, o título volta ao campeão anterior.",
         "Os prolongamentos contam apenas se a partida terminou empatada nos 90 minutos.",
-        "Os penáltis contam: se a partida terminar em empate global ou exigir desempate, o vencedor leva o título."
+        "Os penáltis contam se aos 90 minutos (ou 120 minutos caso inclua prolongamento) o resultado for de empate e forem necessários os penáltis para desempatar."
       ]
     },
     "top10": { "title": "Top 10", "viewAll": "Ver tudo →", "noData": "Sem dados." },
