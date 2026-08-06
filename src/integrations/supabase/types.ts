@@ -134,26 +134,38 @@ export type Database = {
       faqs: {
         Row: {
           answer: string
+          answer_en: string | null
+          answer_it: string | null
           created_at: string
           display_order: number
           id: string
           question: string
+          question_en: string | null
+          question_it: string | null
           updated_at: string
         }
         Insert: {
           answer: string
+          answer_en?: string | null
+          answer_it?: string | null
           created_at?: string
           display_order?: number
           id?: string
           question: string
+          question_en?: string | null
+          question_it?: string | null
           updated_at?: string
         }
         Update: {
           answer?: string
+          answer_en?: string | null
+          answer_it?: string | null
           created_at?: string
           display_order?: number
           id?: string
           question?: string
+          question_en?: string | null
+          question_it?: string | null
           updated_at?: string
         }
         Relationships: []
