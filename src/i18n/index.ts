@@ -54,9 +54,15 @@ i18n
 
 const applyHtmlLang = (lng: string) => {
   document.documentElement.lang = lng;
+  const title = i18n.t("meta.title", { ns: "common" });
+  if (title && title !== "meta.title") document.title = title;
+  const desc = i18n.t("meta.description", { ns: "common" });
+  const el = document.querySelector('meta[name="description"]');
+  if (el && desc && desc !== "meta.description") el.setAttribute("content", desc);
 };
 applyHtmlLang(i18n.resolvedLanguage ?? "es");
 i18n.on("languageChanged", applyHtmlLang);
+
 
 /** date-fns / Intl locale tag for the active language */
 export function localeTag(lng?: string) {
