@@ -46,6 +46,7 @@ function BreakRow({ text }: { text: string }) {
 function TeamCombo({
   teams, value, onChange, placeholder,
 }: { teams: Team[]; value: string; onChange: (v: string) => void; placeholder: string }) {
+  const { t: tr } = useTranslation("matches");
   const [open, setOpen] = useState(false);
   const selected = teams.find((t) => t.id === value);
   return (
@@ -60,9 +61,9 @@ function TeamCombo({
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
         <Command>
-          <CommandInput placeholder={t("history.filters.searchTeam")} />
+          <CommandInput placeholder={tr("history.filters.searchTeam")} />
           <CommandList>
-            <CommandEmpty>{t("history.filters.noTeamsFound")}</CommandEmpty>
+            <CommandEmpty>{tr("history.filters.noTeamsFound")}</CommandEmpty>
             <CommandGroup>
               {teams.map((t) => (
                 <CommandItem key={t.id} value={t.name} onSelect={() => { onChange(t.id); setOpen(false); }}>

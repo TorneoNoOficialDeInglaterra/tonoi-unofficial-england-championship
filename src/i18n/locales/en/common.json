@@ -1,1 +1,25 @@
-{}
+{
+  "nav": {
+    "home": "Home",
+    "standings": "Standings",
+    "matchHistory": "Match history",
+    "stats": "Statistics",
+    "history": "Tournament history",
+    "faq": "FAQ",
+    "contact": "Contact"
+  },
+  "header": {
+    "openMenu": "Open menu",
+    "tournamentName": "Unofficial Tournament of England",
+    "logoAlt": "ToNOI logo",
+    "twitter": "Tournament Twitter",
+    "tiktok": "Tournament TikTok",
+    "contact": "Contact",
+    "language": "Change language"
+  },
+  "footer": {
+    "copyright": "© {{year}} Torneo No Oficial de Inglaterra (ToNOI)",
+    "tagline": "Official tournament website — created and run by its founders."
+  },
+  "scrollTop": "Back to top of page"
+}
