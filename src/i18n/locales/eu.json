@@ -68,7 +68,7 @@
         "Liga batean erregistro ofizialik ez badago, hurrengo partidu ofiziala zenbatuko da.",
         "Txapeldun den kluba desagertzen bada, titulua aurreko txapeldunari itzultzen zaio.",
         "Luzapenak 90 minutuetan berdinketa izan denean bakarrik zenbatzen dira.",
-        "Penaltiak zenbatzen dira: partidua berdinketan amaitzen bada edo desberdinketa behar bada, irabazleak titulua eramaten du."
+        "Penaltiak zenbatzen dira 90 minutuetan (edo 120 minutuetan luzapena barne hartzen badu) emaitza berdinketa bada eta penaltiak behar badira berdinketa hausteko."
       ]
     },
     "top10": { "title": "Top 10", "viewAll": "Dena ikusi →", "noData": "Daturik ez." },

@@ -68,7 +68,7 @@
         "Si en una lliga no hi ha registres oficials es comptarà el següent partit oficial.",
         "En cas de desaparició del club campió, el títol torna a l'anterior campió.",
         "Les pròrrogues compten únicament si el partit als 90 minuts ha acabat en empat.",
-        "Els penals compten: si el partit acaba en empat global o requereix desempat, el guanyador s'emporta el títol."
+        "Els penals compten si als 90 minuts (o 120 minuts en cas que inclogui pròrroga) el resultat és d'empat i calen els penals per desempatar."
       ]
     },
     "top10": { "title": "Top 10", "viewAll": "Veure tot →", "noData": "Sense dades." },

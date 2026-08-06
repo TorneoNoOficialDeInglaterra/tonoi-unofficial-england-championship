@@ -38,7 +38,7 @@
       "Se in un campionato non ci sono registri ufficiali, verrà conteggiata la partita ufficiale successiva.",
       "In caso di scomparsa del club campione, il titolo torna al campione precedente.",
       "I tempi supplementari contano solo se la partita è terminata in parità dopo 90 minuti.",
-      "I rigori contano: se la partita finisce in parità complessiva o richiede uno spareggio, il vincitore si porta a casa il titolo."
+      "I rigori contano se dopo i 90 minuti (o 120 minuti in caso di supplementari) il risultato è di parità e servono i rigori per decidere la sfida."
     ]
   },
   "top10": {
