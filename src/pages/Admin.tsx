@@ -841,11 +841,54 @@ function MessagesAdmin() {
     },
   });
 
+  const [replyId, setReplyId] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [replying, setReplying] = useState(false);
+
+  const replyMessage = q.data?.find((m) => m.id === replyId);
+
   async function remove(id: string) {
     if (!confirm("¿Eliminar mensaje?")) return;
     const { error } = await supabase.from("contact_messages").delete().eq("id", id);
     if (error) toast.error(error.message);
     else qc.invalidateQueries({ queryKey: ["contact_messages"] });
+  }
+
+  async function sendReply() {
+    if (!replyMessage || !replyText.trim()) return;
+    setReplying(true);
+    const { error: fnError } = await supabase.functions.invoke("send-transactional-email", {
+      body: {
+        templateName: "contact-reply",
+        recipientEmail: replyMessage.email,
+        idempotencyKey: `contact-reply-${replyMessage.id}-${Date.now()}`,
+        templateData: {
+          name: replyMessage.name,
+          reply: replyText.trim(),
+          originalMessage: replyMessage.message,
+        },
+      },
+    });
+
+    if (fnError) {
+      setReplying(false);
+      return toast.error(fnError.message || "No se ha podido enviar la respuesta");
+    }
+
+    const { error: updateError } = await supabase
+      .from("contact_messages")
+      .update({ response: replyText.trim(), responded_at: new Date().toISOString() })
+      .eq("id", replyMessage.id);
+
+    setReplying(false);
+    setReplyId(null);
+    setReplyText("");
+
+    if (updateError) toast.error(updateError.message);
+    else {
+      toast.success("Respuesta enviada y guardada");
+      qc.invalidateQueries({ queryKey: ["contact_messages"] });
+    }
   }
 
   const messages = q.data ?? [];
@@ -857,27 +900,69 @@ function MessagesAdmin() {
           <Mail className="h-4 w-4" /> Mensajes de contacto
         </h3>
         <p className="mt-2 text-sm text-foreground/80">
-          Mensajes enviados desde el formulario de la página de Contacto. Próximamente también llegarán al correo del torneo.
+          Mensajes enviados desde el formulario de la página de Contacto. Pulsa "Responder" para enviar una respuesta directamente al email del usuario.
         </p>
       </Card>
+
+      <Dialog open={!!replyId} onOpenChange={(open) => { if (!open) { setReplyId(null); setReplyText(""); } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><MessageSquareReply className="h-5 w-5" /> Responder a {replyMessage?.name}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="rounded-lg bg-muted p-3 text-sm">
+              <p className="font-medium text-foreground/90">Mensaje original:</p>
+              <p className="mt-1 whitespace-pre-wrap text-foreground/80">{replyMessage?.message}</p>
+            </div>
+            <div>
+              <Label>Tu respuesta</Label>
+              <Textarea
+                rows={6}
+                placeholder="Escribe aquí la respuesta que recibirá el usuario..."
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setReplyId(null); setReplyText(""); }}>Cancelar</Button>
+            <Button onClick={sendReply} disabled={replying || !replyText.trim()}>
+              {replying ? "Enviando..." : <><Send className="mr-2 h-4 w-4" /> Enviar respuesta</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {messages.length === 0 ? (
         <Card className="p-8 text-center text-sm text-muted-foreground">No hay mensajes todavía.</Card>
       ) : (
         <div className="space-y-3">
           {messages.map((m) => (
-            <Card key={m.id} className="p-4">
+            <Card key={m.id} className={cn("p-4", m.responded_at && "border-green-200 bg-green-50/50 dark:border-green-900 dark:bg-green-950/20")}>
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span className="font-bold">{m.name}</span>
                     <a href={`mailto:${m.email}`} className="text-sm text-primary hover:underline">{m.email}</a>
                     <span className="text-xs text-muted-foreground">{new Date(m.created_at).toLocaleString("es-ES")}</span>
+                    {m.responded_at && <span className="text-xs font-medium text-green-700">Respondido</span>}
                   </div>
                   <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/90">{m.message}</p>
+                  {m.response && (
+                    <div className="mt-3 rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-900 dark:bg-green-950/20">
+                      <p className="text-xs font-bold uppercase text-green-800 dark:text-green-200">Respuesta enviada:</p>
+                      <p className="mt-1 whitespace-pre-wrap text-sm text-foreground/90">{m.response}</p>
+                    </div>
+                  )}
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => remove(m.id)}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
-                </Button>
+                <div className="flex flex-col gap-1">
+                  <Button variant="ghost" size="icon" onClick={() => setReplyId(m.id)} title="Responder">
+                    <MessageSquareReply className="h-4 w-4 text-primary" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => remove(m.id)}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </div>
               </div>
             </Card>
           ))}
@@ -886,6 +971,7 @@ function MessagesAdmin() {
     </div>
   );
 }
+
 
 /* ================== FAQs ================== */
 function FaqsAdmin() {
