@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, ArrowUpDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ type Player = { id: string; player_name: string; goals: number; assists: number 
 type Keeper = { id: string; goalkeeper_name: string; clean_sheets: number };
 
 export default function Stats() {
+  const { t } = useTranslation("stats");
   const seasonsQ = useSeasons();
   const [season, setSeason] = useState<string>("");
 
@@ -27,26 +29,26 @@ export default function Stats() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-4xl font-black sm:text-5xl">Estadísticas individuales</h1>
-      <p className="mt-2 text-muted-foreground">Goleadores, asistentes y porterías a 0 — temporada actual o histórico.</p>
+      <h1 className="text-4xl font-black sm:text-5xl">{t("stats.title")}</h1>
+      <p className="mt-2 text-muted-foreground">{t("stats.subtitle")}</p>
 
       <div className="mt-6 max-w-xs">
-        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Temporada</label>
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("stats.season")}</label>
         <Select value={season} onValueChange={setSeason}>
-          <SelectTrigger className="mt-1"><SelectValue placeholder="Seleccionar..." /></SelectTrigger>
+          <SelectTrigger className="mt-1"><SelectValue placeholder={t("stats.seasonPlaceholder")} /></SelectTrigger>
           <SelectContent>
             {(seasonsQ.data ?? []).map((s) => (
-              <SelectItem key={s.id} value={s.id}>{s.label}{s.is_active ? " · actual" : ""}</SelectItem>
+              <SelectItem key={s.id} value={s.id}>{s.label}{s.is_active ? t("stats.seasonCurrentSuffix") : ""}</SelectItem>
             ))}
-            <SelectItem value={HISTORIC}>Histórico (todas las temporadas)</SelectItem>
+            <SelectItem value={HISTORIC}>{t("stats.historic")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <Tabs defaultValue="players" className="mt-8">
         <TabsList>
-          <TabsTrigger value="players">Goleadores y asistentes</TabsTrigger>
-          <TabsTrigger value="keepers">Porterías a 0</TabsTrigger>
+          <TabsTrigger value="players">{t("stats.tabs.players")}</TabsTrigger>
+          <TabsTrigger value="keepers">{t("stats.tabs.keepers")}</TabsTrigger>
         </TabsList>
         <TabsContent value="players" className="mt-4">
           <PlayersTable seasonId={season} />
@@ -62,6 +64,7 @@ export default function Stats() {
 type SortKey = "name" | "goals" | "assists" | "ga";
 
 function PlayersTable({ seasonId }: { seasonId: string }) {
+  const { t } = useTranslation("stats");
   const isHistoric = seasonId === HISTORIC;
   const q = useQuery({
     queryKey: ["players", seasonId],
@@ -115,26 +118,26 @@ function PlayersTable({ seasonId }: { seasonId: string }) {
       <div className="mb-4 flex items-center gap-2">
         <div className="relative max-w-sm flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Buscar jugador..." value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Input className="pl-9" placeholder={t("stats.searchPlayerPlaceholder")} value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        <span className="text-xs text-muted-foreground">{rows.length} jugadores</span>
+        <span className="text-xs text-muted-foreground">{t("stats.playersCount", { count: rows.length })}</span>
       </div>
       <Card className="overflow-hidden">
         <div className="max-h-[70vh] overflow-auto">
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
-                <SortTh onClick={() => toggle("name")} active={sortKey === "name"} dir={sortDir} align="left">Jugador</SortTh>
-                <SortTh onClick={() => toggle("goals")} active={sortKey === "goals"} dir={sortDir}>Goles</SortTh>
-                <SortTh onClick={() => toggle("assists")} active={sortKey === "assists"} dir={sortDir}>Asistencias</SortTh>
-                <SortTh onClick={() => toggle("ga")} active={sortKey === "ga"} dir={sortDir}>G+A</SortTh>
+                <SortTh onClick={() => toggle("name")} active={sortKey === "name"} dir={sortDir} align="left">{t("stats.table.player")}</SortTh>
+                <SortTh onClick={() => toggle("goals")} active={sortKey === "goals"} dir={sortDir}>{t("stats.table.goals")}</SortTh>
+                <SortTh onClick={() => toggle("assists")} active={sortKey === "assists"} dir={sortDir}>{t("stats.table.assists")}</SortTh>
+                <SortTh onClick={() => toggle("ga")} active={sortKey === "ga"} dir={sortDir}>{t("stats.table.ga")}</SortTh>
               </tr>
             </thead>
             <tbody>
               {q.isLoading ? (
                 <tr><td colSpan={4} className="p-4"><Skeleton className="h-6 w-full" /></td></tr>
               ) : rows.length === 0 ? (
-                <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">Sin datos.</td></tr>
+                <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">{t("stats.noData")}</td></tr>
               ) : (
                 rows.map((p, i) => (
                   <tr key={p.id ?? i} className="border-t border-border hover:bg-accent/40">
@@ -154,6 +157,7 @@ function PlayersTable({ seasonId }: { seasonId: string }) {
 }
 
 function KeepersTable({ seasonId }: { seasonId: string }) {
+  const { t } = useTranslation("stats");
   const isHistoric = seasonId === HISTORIC;
   const q = useQuery({
     queryKey: ["keepers", seasonId],
@@ -183,15 +187,15 @@ function KeepersTable({ seasonId }: { seasonId: string }) {
         <table className="min-w-full text-sm">
           <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
             <tr>
-              <th className="px-3 py-3 text-left">Portero</th>
-              <th className="px-3 py-3 text-center">Porterías a 0</th>
+              <th className="px-3 py-3 text-left">{t("stats.table.keeper")}</th>
+              <th className="px-3 py-3 text-center">{t("stats.table.cleanSheets")}</th>
             </tr>
           </thead>
           <tbody>
             {q.isLoading ? (
               <tr><td colSpan={2} className="p-4"><Skeleton className="h-6 w-full" /></td></tr>
             ) : rows.length === 0 ? (
-              <tr><td colSpan={2} className="p-8 text-center text-muted-foreground">Sin datos.</td></tr>
+              <tr><td colSpan={2} className="p-8 text-center text-muted-foreground">{t("stats.noData")}</td></tr>
             ) : (
               rows.map((g, i) => (
                 <tr key={g.id ?? i} className="border-t border-border hover:bg-accent/40">

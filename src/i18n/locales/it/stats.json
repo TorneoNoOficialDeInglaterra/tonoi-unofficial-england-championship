@@ -1,0 +1,32 @@
+{
+  "stats": {
+    "title": "Statistiche individuali",
+    "subtitle": "Cannonieri, assistman e porte inviolate — stagione attuale o storico.",
+    "season": "Stagione",
+    "seasonPlaceholder": "Seleziona...",
+    "seasonCurrentSuffix": " · attuale",
+    "historic": "Storico (tutte le stagioni)",
+    "tabs": {
+      "players": "Cannonieri e assistman",
+      "keepers": "Porte inviolate"
+    },
+    "searchPlayerPlaceholder": "Cerca giocatore...",
+    "playersCount": "{{count}} giocatore",
+    "playersCount_other": "{{count}} giocatori",
+    "table": {
+      "player": "Giocatore",
+      "goals": "Gol",
+      "assists": "Assist",
+      "ga": "G+A",
+      "keeper": "Portiere",
+      "cleanSheets": "Porte inviolate"
+    },
+    "noData": "Nessun dato."
+  },
+  "history": {
+    "title": "Storia del torneo",
+    "subtitle": "Tutto ciò che il ToNOI ha vissuto nel corso degli anni.",
+    "comingSoon": "Prossimamente",
+    "body": "Stiamo preparando un viaggio completo nella storia del torneo: campioni leggendari, striscie indimenticabili e le partite che hanno cambiato il corso del titolo. Torna molto presto."
+  }
+}

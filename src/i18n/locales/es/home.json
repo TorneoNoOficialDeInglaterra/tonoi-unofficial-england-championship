@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "tagline": "Torneo No Oficial de Inglaterra",
+    "titleLine1": "Para ser campeón,",
+    "titleLine2": "gana al campeón.",
+    "subtitle": "Un solo título. Una sola regla. Sigue la historia viva del ToNOI partido a partido.",
+    "viewStandings": "Ver clasificación",
+    "matchHistory": "Historial de partidos",
+    "logoAlt": "Logo ToNOI",
+    "imageAlt": "Imagen {{n}}"
+  },
+  "champion": {
+    "current": "Campeón actual",
+    "daysAsChampion_one": "{{count}} día como campeón",
+    "daysAsChampion_other": "{{count}} días como campeón",
+    "noData": "—",
+    "noMatches": "Aún no hay partidos registrados."
+  },
+  "lastMatch": {
+    "title": "Último partido",
+    "penalties": "Decidido en los penaltis.",
+    "draw": "Empate.",
+    "titleChanged": "¡Cambio de campeón!",
+    "noMatches": "Sin partidos todavía."
+  },
+  "about": {
+    "heading": "¿Qué es el ToNOI?",
+    "paragraph1": "¿Te imaginas que pasaría si en el fútbol se decidiera quién es el campeón como se hace en el boxeo? Pues nosotros estamos aquí para contarlo.",
+    "paragraph2": "El <strong>Torneo No Oficial de Inglaterra (ToNOI)</strong> es un campeonato en el que para ser campeón debes ganar al actual campeón. No existen fase de grupos, eliminatorias ni nada por el estilo: <strong>solo finales</strong>. Si te enfrentas al equipo campeón y resultas victorioso, serás el nuevo<strong> CAMPEÓN NO OFICIAL DE INGLATERRA</strong> y comenzarás a hacer historia hasta verte derrotado por otro equipo.",
+    "paragraph3": "El título cambia de manos partido a partido, atravesando décadas, generaciones y rivalidades. Aquí no importa la liga ni la copa: lo único que cuenta es ese duelo concreto en el que un club desafía al campeón del momento.",
+    "closing": "Sumérgete con nosotros en esta aventura y disfruta del fútbol como nunca."
+  },
+  "rules": {
+    "title": "Reglamento Oficial",
+    "items": [
+      "Si ganas al actual campeón, te conviertes en campeón.",
+      "Solo valen partidos oficiales.",
+      "Si en una liga no hay registros oficiales se contará el siguiente partido oficial.",
+      "En caso de desaparición del club campeón, el título vuelve al anterior campeón.",
+      "Las prórrogas cuentan únicamente si el partido en lo 90 minutos ha quedado empate.",
+      "Los penaltis cuentan: si el partido acaba en empate global o requiere desempate, el ganador se lleva el título."
+    ]
+  },
+  "top10": {
+    "title": "Top 10",
+    "viewAll": "Ver todo →",
+    "noData": "Sin datos."
+  },
+  "last5": {
+    "title": "Últimos 5 partidos",
+    "viewAll": "Ver todo →",
+    "noMatches": "Sin partidos."
+  },
+  "video": {
+    "label": "Vídeo de origen",
+    "heading": "Conoce el torneo en vídeo",
+    "iframeTitle": "¿Qué es el ToNOI?"
+  }
+}

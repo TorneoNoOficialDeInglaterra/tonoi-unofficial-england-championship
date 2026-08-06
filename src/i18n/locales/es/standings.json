@@ -1,0 +1,46 @@
+{
+  "title": "Clasificación histórica",
+  "subtitle": "Calculada partido a partido desde el primer ToNOI hasta hoy.",
+  "legend": {
+    "title": "Leyenda",
+    "pj": "<strong>PJ</strong>: Partidos Jugados",
+    "ved": "<strong>V/E/D</strong>: Victorias / Empates / Derrotas (el empate del retador cuenta como derrota)",
+    "p": "<strong>P</strong>: Puntos Totales",
+    "ppp": "<strong>PPP</strong>: Puntos por Partido",
+    "gfgcdg": "<strong>GF/GC/DG</strong>: Goles Favor / Contra / Diferencia",
+    "pct": "<strong>PcT</strong>: Partidos con Trofeo",
+    "mj": "<strong>MJ</strong>: Mejor racha (partidos seguidos con el trofeo)",
+    "intentos": "<strong>I</strong>: Número de intentos para destronar al campeón",
+    "destronamientos": "<strong>Des</strong>: Destronamientos (títulos ganados)",
+    "id": "<strong>ID</strong>: Porcentaje de éxito (Des/I)"
+  },
+  "cols": {
+    "pj": { "label": "PJ", "desc": "Partidos Jugados" },
+    "v": { "label": "V", "desc": "Victorias" },
+    "e": { "label": "E", "desc": "Empates" },
+    "d": { "label": "D", "desc": "Derrotas" },
+    "p": { "label": "P", "desc": "Puntos" },
+    "gf": { "label": "GF", "desc": "Goles a Favor" },
+    "gc": { "label": "GC", "desc": "Goles en Contra" },
+    "dg": { "label": "DG", "desc": "Diferencia de Goles" },
+    "ppp": { "label": "PPP", "desc": "Puntos por Partido" },
+    "pct": { "label": "PcT", "desc": "Partidos con Trofeo" },
+    "mj": { "label": "MJ", "desc": "Mejor racha" },
+    "intentos": { "label": "I", "desc": "Intentos" },
+    "destronamientos": { "label": "Des", "desc": "Destronamientos" },
+    "idPct": { "label": "ID", "desc": "Índice de Destronamiento (%)" }
+  },
+  "filter": {
+    "placeholder": "Filtrar por equipo…",
+    "searchPlaceholder": "Buscar equipo...",
+    "noResults": "Sin resultados.",
+    "clear": "Limpiar",
+    "teamsCount": "{{count}} equipo",
+    "teamsCount_other": "{{count}} equipos"
+  },
+  "table": {
+    "pos": "#",
+    "team": "Equipo",
+    "empty": "Sin datos todavía."
+  }
+}

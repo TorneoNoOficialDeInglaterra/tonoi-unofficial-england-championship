@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 import { Crown, Search, ArrowUpDown, Check, ChevronsUpDown, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -14,24 +15,26 @@ import { cn } from "@/lib/utils";
 
 type SortKey = "pos" | "pj" | "v" | "e" | "d" | "p" | "gf" | "gc" | "dg" | "ppp" | "pct" | "mj" | "intentos" | "destronamientos" | "id_pct" | "team";
 
-const COLS: { key: SortKey; label: string; desc?: string; numeric?: boolean }[] = [
-  { key: "pj", label: "PJ", desc: "Partidos Jugados", numeric: true },
-  { key: "v", label: "V", desc: "Victorias", numeric: true },
-  { key: "e", label: "E", desc: "Empates", numeric: true },
-  { key: "d", label: "D", desc: "Derrotas", numeric: true },
-  { key: "p", label: "P", desc: "Puntos", numeric: true },
-  { key: "gf", label: "GF", desc: "Goles a Favor", numeric: true },
-  { key: "gc", label: "GC", desc: "Goles en Contra", numeric: true },
-  { key: "dg", label: "DG", desc: "Diferencia de Goles", numeric: true },
-  { key: "ppp", label: "PPP", desc: "Puntos por Partido", numeric: true },
-  { key: "pct", label: "PcT", desc: "Partidos con Trofeo", numeric: true },
-  { key: "mj", label: "MJ", desc: "Mejor racha", numeric: true },
-  { key: "intentos", label: "I", desc: "Intentos", numeric: true },
-  { key: "destronamientos", label: "Des", desc: "Destronamientos", numeric: true },
-  { key: "id_pct", label: "ID", desc: "Índice de Destronamiento (%)", numeric: true },
+const COL_KEYS: { key: SortKey; i18nKey: string; numeric?: boolean }[] = [
+  { key: "pj", i18nKey: "pj", numeric: true },
+  { key: "v", i18nKey: "v", numeric: true },
+  { key: "e", i18nKey: "e", numeric: true },
+  { key: "d", i18nKey: "d", numeric: true },
+  { key: "p", i18nKey: "p", numeric: true },
+  { key: "gf", i18nKey: "gf", numeric: true },
+  { key: "gc", i18nKey: "gc", numeric: true },
+  { key: "dg", i18nKey: "dg", numeric: true },
+  { key: "ppp", i18nKey: "ppp", numeric: true },
+  { key: "pct", i18nKey: "pct", numeric: true },
+  { key: "mj", i18nKey: "mj", numeric: true },
+  { key: "intentos", i18nKey: "intentos", numeric: true },
+  { key: "destronamientos", i18nKey: "destronamientos", numeric: true },
+  { key: "id_pct", i18nKey: "idPct", numeric: true },
 ];
 
 export default function Standings() {
+  const { t } = useTranslation("standings");
+  const COLS = useMemo(() => COL_KEYS.map((c) => ({ ...c, label: t(`cols.${c.i18nKey}.label`), desc: t(`cols.${c.i18nKey}.desc`) })), [t]);
   const teamsQ = useTeams();
   const matchesQ = useMatches();
   const navigate = useNavigate();
@@ -89,23 +92,23 @@ export default function Standings() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-4xl font-black sm:text-5xl">Clasificación histórica</h1>
-      <p className="mt-2 text-muted-foreground">Calculada partido a partido desde el primer ToNOI hasta hoy.</p>
+      <h1 className="text-4xl font-black sm:text-5xl">{t("title")}</h1>
+      <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
 
       {/* Legend */}
       <Card className="mt-6 p-5">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-primary">Leyenda</h2>
+        <h2 className="text-sm font-bold uppercase tracking-wider text-primary">{t("legend.title")}</h2>
         <ul className="mt-3 grid gap-2 text-xs text-foreground/80 sm:grid-cols-2 lg:grid-cols-3">
-          <li><strong>PJ</strong>: Partidos Jugados</li>
-          <li><strong>V/E/D</strong>: Victorias / Empates / Derrotas (el empate del retador cuenta como derrota)</li>
-          <li><strong>P</strong>: Puntos Totales</li>
-          <li><strong>PPP</strong>: Puntos por Partido</li>
-          <li><strong>GF/GC/DG</strong>: Goles Favor / Contra / Diferencia</li>
-          <li><strong>PcT</strong>: Partidos con Trofeo</li>
-          <li><strong>MJ</strong>: Mejor racha (partidos seguidos con el trofeo)</li>
-          <li><strong>I</strong>: Número de intentos para destronar al campeón</li>
-          <li><strong>Des</strong>: Destronamientos (títulos ganados)</li>
-          <li><strong>ID</strong>: Porcentaje de éxito (Des/I)</li>
+          <li><Trans i18nKey="legend.pj" ns="standings" /></li>
+          <li><Trans i18nKey="legend.ved" ns="standings" /></li>
+          <li><Trans i18nKey="legend.p" ns="standings" /></li>
+          <li><Trans i18nKey="legend.ppp" ns="standings" /></li>
+          <li><Trans i18nKey="legend.gfgcdg" ns="standings" /></li>
+          <li><Trans i18nKey="legend.pct" ns="standings" /></li>
+          <li><Trans i18nKey="legend.mj" ns="standings" /></li>
+          <li><Trans i18nKey="legend.intentos" ns="standings" /></li>
+          <li><Trans i18nKey="legend.destronamientos" ns="standings" /></li>
+          <li><Trans i18nKey="legend.id" ns="standings" /></li>
         </ul>
       </Card>
 
@@ -125,7 +128,7 @@ export default function Standings() {
                   {selectedTeam.name}
                 </span>
               ) : (
-                <span className="text-muted-foreground">Filtrar por equipo…</span>
+                <span className="text-muted-foreground">{t("filter.placeholder")}</span>
               )}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
@@ -133,12 +136,12 @@ export default function Standings() {
           <PopoverContent className="w-[280px] p-0">
             <Command>
               <CommandInput
-                placeholder="Buscar equipo..."
+                placeholder={t("filter.searchPlaceholder")}
                 value={comboQuery}
                 onValueChange={setComboQuery}
               />
               <CommandList>
-                <CommandEmpty>Sin resultados.</CommandEmpty>
+                <CommandEmpty>{t("filter.noResults")}</CommandEmpty>
                 <CommandGroup>
                   {teamsSorted.map((t) => (
                     <CommandItem
@@ -161,10 +164,10 @@ export default function Standings() {
         </Popover>
         {teamFilter && (
           <Button variant="ghost" onClick={() => setTeamFilter("")}>
-            <X className="mr-1 h-4 w-4" /> Limpiar
+            <X className="mr-1 h-4 w-4" /> {t("filter.clear")}
           </Button>
         )}
-        <span className="text-xs text-muted-foreground">{rows.length} equipos</span>
+        <span className="text-xs text-muted-foreground">{t("filter.teamsCount", { count: rows.length })}</span>
       </div>
 
       {/* Table */}
@@ -173,8 +176,8 @@ export default function Standings() {
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
-                <Th onClick={() => toggleSort("pos")} active={sortKey === "pos"} dir={sortDir}>#</Th>
-                <Th onClick={() => toggleSort("team")} active={sortKey === "team"} dir={sortDir} align="left">Equipo</Th>
+                <Th onClick={() => toggleSort("pos")} active={sortKey === "pos"} dir={sortDir}>{t("table.pos")}</Th>
+                <Th onClick={() => toggleSort("team")} active={sortKey === "team"} dir={sortDir} align="left">{t("table.team")}</Th>
                 {COLS.map((c) => (
                   <Th key={c.key} onClick={() => toggleSort(c.key)} active={sortKey === c.key} dir={sortDir} title={c.desc}>
                     {c.label}
@@ -190,7 +193,7 @@ export default function Standings() {
                   </tr>
                 ))
               ) : rows.length === 0 ? (
-                <tr><td colSpan={COLS.length + 2} className="p-8 text-center text-muted-foreground">Sin datos todavía.</td></tr>
+                <tr><td colSpan={COLS.length + 2} className="p-8 text-center text-muted-foreground">{t("table.empty")}</td></tr>
               ) : (
                 rows.map((r: StandingRow & { _pos: number }) => (
                   <Row key={r.team.id} row={r} pos={r._pos} isChampion={r.team.id === championId} />

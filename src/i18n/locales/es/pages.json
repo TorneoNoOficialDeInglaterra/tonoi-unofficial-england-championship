@@ -1,0 +1,44 @@
+{
+  "contact": {
+    "title": "Contacto",
+    "intro": "¿Tienes una duda, sugerencia o quieres reportar un partido? Escríbenos y te responderemos lo antes posible.",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "Cuéntanos...",
+    "sendButton": "Enviar mensaje",
+    "sending": "Enviando...",
+    "errors": {
+      "name": "Indica tu nombre",
+      "email": "Email inválido",
+      "message": "Escribe un mensaje"
+    },
+    "success": "Mensaje enviado. Te responderemos lo antes posible."
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "intro": "Las dudas más comunes sobre el ToNOI.",
+    "empty": "Aún no hay preguntas frecuentes publicadas."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "¡Vaya! Página no encontrada",
+    "backHome": "Volver al inicio"
+  },
+  "unsubscribe": {
+    "title": "ToNOI",
+    "subtitle": "Gestión de suscripciones de correo",
+    "noToken": "No se ha proporcionado un token de baja.",
+    "invalidLink": "El enlace de baja no es válido o ya ha sido usado.",
+    "verifyError": "No se ha podido verificar el enlace. Inténtalo de nuevo más tarde.",
+    "confirmError": "No se ha podido completar la baja.",
+    "connectionError": "Error de conexión. Inténtalo de nuevo más tarde.",
+    "verifying": "Verificando enlace...",
+    "confirmText": "Si confirmas, dejarás de recibir correos de este remitente.",
+    "confirmButton": "Confirmar baja",
+    "confirmed": "Te has dado de baja correctamente.",
+    "invalidGeneric": "El enlace no es válido."
+  }
+}

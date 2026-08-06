@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "tagline": "Unofficial Tournament of England",
+    "titleLine1": "To be champion,",
+    "titleLine2": "beat the champion.",
+    "subtitle": "One title. One rule. Follow the living history of the ToNOI match by match.",
+    "viewStandings": "View standings",
+    "matchHistory": "Match history",
+    "logoAlt": "ToNOI logo",
+    "imageAlt": "Image {{n}}"
+  },
+  "champion": {
+    "current": "Current champion",
+    "daysAsChampion_one": "{{count}} day as champion",
+    "daysAsChampion_other": "{{count}} days as champion",
+    "noData": "—",
+    "noMatches": "No matches registered yet."
+  },
+  "lastMatch": {
+    "title": "Last match",
+    "penalties": "Decided on penalties.",
+    "draw": "Draw.",
+    "titleChanged": "Change of champion!",
+    "noMatches": "No matches yet."
+  },
+  "about": {
+    "heading": "What is the ToNOI?",
+    "paragraph1": "Can you imagine what would happen if football decided its champion the way boxing does? We're here to tell you all about it.",
+    "paragraph2": "The <strong>Unofficial Tournament of England (ToNOI)</strong> is a championship in which to become champion you must beat the current champion. There are no group stages, knockouts or anything like that: <strong>only finals</strong>. If you face the champion team and come out victorious, you'll become the new<strong> UNOFFICIAL CHAMPION OF ENGLAND</strong> and start making history until you're defeated by another team.",
+    "paragraph3": "The title changes hands match by match, spanning decades, generations and rivalries. Here neither the league nor the cup matter: the only thing that counts is that particular duel where a club challenges the current champion.",
+    "closing": "Join us on this adventure and enjoy football like never before."
+  },
+  "rules": {
+    "title": "Official Rules",
+    "items": [
+      "If you beat the current champion, you become champion.",
+      "Only official matches count.",
+      "If a league has no official records, the next official match will be counted.",
+      "If the champion club ceases to exist, the title returns to the previous champion.",
+      "Extra time only counts if the match was level after 90 minutes.",
+      "Penalties count: if the match ends level overall or requires a tiebreaker, the winner takes the title."
+    ]
+  },
+  "top10": {
+    "title": "Top 10",
+    "viewAll": "View all →",
+    "noData": "No data."
+  },
+  "last5": {
+    "title": "Last 5 matches",
+    "viewAll": "View all →",
+    "noMatches": "No matches."
+  },
+  "video": {
+    "label": "Origin video",
+    "heading": "Learn about the tournament on video",
+    "iframeTitle": "What is the ToNOI?"
+  }
+}

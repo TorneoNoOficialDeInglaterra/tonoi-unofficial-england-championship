@@ -991,6 +991,10 @@ function FaqsAdmin() {
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [questionEn, setQuestionEn] = useState("");
+  const [answerEn, setAnswerEn] = useState("");
+  const [questionIt, setQuestionIt] = useState("");
+  const [answerIt, setAnswerIt] = useState("");
   const [order, setOrder] = useState<number>(0);
 
   async function add() {
@@ -998,16 +1002,21 @@ function FaqsAdmin() {
     const { error } = await supabase.from("faqs").insert({
       question: question.trim(),
       answer: answer.trim(),
+      question_en: questionEn.trim() || null,
+      answer_en: answerEn.trim() || null,
+      question_it: questionIt.trim() || null,
+      answer_it: answerIt.trim() || null,
       display_order: Number.isFinite(order) ? order : 0,
-    });
+    } as never);
     if (error) return toast.error(error.message);
     setQuestion(""); setAnswer(""); setOrder(0);
+    setQuestionEn(""); setAnswerEn(""); setQuestionIt(""); setAnswerIt("");
     toast.success("Pregunta añadida");
     qc.invalidateQueries({ queryKey: ["faqs"] });
   }
 
   async function updateField(id: string, patch: Record<string, unknown>) {
-    const { error } = await supabase.from("faqs").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
+    const { error } = await supabase.from("faqs").update({ ...patch, updated_at: new Date().toISOString() } as never).eq("id", id);
     if (error) toast.error(error.message);
     else qc.invalidateQueries({ queryKey: ["faqs"] });
   }
@@ -1019,6 +1028,18 @@ function FaqsAdmin() {
     else qc.invalidateQueries({ queryKey: ["faqs"] });
   }
 
+  type FaqRow = {
+    id: string;
+    question: string;
+    answer: string;
+    display_order: number;
+    question_en?: string | null;
+    answer_en?: string | null;
+    question_it?: string | null;
+    answer_it?: string | null;
+  };
+  const faqs = (q.data ?? []) as FaqRow[];
+
   return (
     <div className="space-y-4">
       <Card className="p-4 border-primary/20 border-2">
@@ -1027,6 +1048,7 @@ function FaqsAdmin() {
         </h3>
         <p className="mt-2 text-sm text-foreground/80">
           Estas preguntas se mostrarán en la página pública de Preguntas Frecuentes. Usa el orden para ordenarlas (menor primero).
+          Las traducciones al inglés y al italiano son opcionales: si las dejas vacías, se mostrará el texto en español.
         </p>
       </Card>
 
@@ -1034,12 +1056,30 @@ function FaqsAdmin() {
         <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Añadir pregunta</h3>
         <div className="mt-3 grid gap-3">
           <div>
-            <Label>Pregunta</Label>
+            <Label>Pregunta (español)</Label>
             <Input value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="¿Cómo funciona el ToNOI?" />
           </div>
           <div>
-            <Label>Respuesta</Label>
+            <Label>Respuesta (español)</Label>
             <Textarea value={answer} onChange={(e) => setAnswer(e.target.value)} rows={4} placeholder="Explicación detallada..." />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <Label>Pregunta (inglés)</Label>
+              <Input value={questionEn} onChange={(e) => setQuestionEn(e.target.value)} placeholder="Opcional" />
+            </div>
+            <div>
+              <Label>Pregunta (italiano)</Label>
+              <Input value={questionIt} onChange={(e) => setQuestionIt(e.target.value)} placeholder="Opcional" />
+            </div>
+            <div>
+              <Label>Respuesta (inglés)</Label>
+              <Textarea value={answerEn} onChange={(e) => setAnswerEn(e.target.value)} rows={3} placeholder="Opcional" />
+            </div>
+            <div>
+              <Label>Respuesta (italiano)</Label>
+              <Textarea value={answerIt} onChange={(e) => setAnswerIt(e.target.value)} rows={3} placeholder="Opcional" />
+            </div>
           </div>
           <div className="grid gap-2 sm:grid-cols-[120px_auto]">
             <div>
@@ -1051,16 +1091,16 @@ function FaqsAdmin() {
         </div>
       </Card>
 
-      {(q.data ?? []).length === 0 ? (
+      {faqs.length === 0 ? (
         <Card className="p-8 text-center text-sm text-muted-foreground">No hay preguntas todavía.</Card>
       ) : (
         <div className="space-y-3">
-          {(q.data ?? []).map((f) => (
+          {faqs.map((f) => (
             <Card key={f.id} className="p-4">
               <div className="grid gap-3">
                 <div className="flex items-start gap-2">
                   <div className="flex-1">
-                    <Label>Pregunta</Label>
+                    <Label>Pregunta (español)</Label>
                     <Input defaultValue={f.question} onBlur={(e) => e.target.value !== f.question && updateField(f.id, { question: e.target.value })} />
                   </div>
                   <div className="w-24">
@@ -1076,12 +1116,44 @@ function FaqsAdmin() {
                   </Button>
                 </div>
                 <div>
-                  <Label>Respuesta</Label>
+                  <Label>Respuesta (español)</Label>
                   <Textarea
                     defaultValue={f.answer}
                     rows={3}
                     onBlur={(e) => e.target.value !== f.answer && updateField(f.id, { answer: e.target.value })}
                   />
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Pregunta (inglés)</Label>
+                    <Input
+                      defaultValue={f.question_en ?? ""}
+                      onBlur={(e) => e.target.value !== (f.question_en ?? "") && updateField(f.id, { question_en: e.target.value.trim() || null })}
+                    />
+                  </div>
+                  <div>
+                    <Label>Pregunta (italiano)</Label>
+                    <Input
+                      defaultValue={f.question_it ?? ""}
+                      onBlur={(e) => e.target.value !== (f.question_it ?? "") && updateField(f.id, { question_it: e.target.value.trim() || null })}
+                    />
+                  </div>
+                  <div>
+                    <Label>Respuesta (inglés)</Label>
+                    <Textarea
+                      defaultValue={f.answer_en ?? ""}
+                      rows={3}
+                      onBlur={(e) => e.target.value !== (f.answer_en ?? "") && updateField(f.id, { answer_en: e.target.value.trim() || null })}
+                    />
+                  </div>
+                  <div>
+                    <Label>Respuesta (italiano)</Label>
+                    <Textarea
+                      defaultValue={f.answer_it ?? ""}
+                      rows={3}
+                      onBlur={(e) => e.target.value !== (f.answer_it ?? "") && updateField(f.id, { answer_it: e.target.value.trim() || null })}
+                    />
+                  </div>
                 </div>
               </div>
             </Card>
@@ -1091,4 +1163,5 @@ function FaqsAdmin() {
     </div>
   );
 }
+
 

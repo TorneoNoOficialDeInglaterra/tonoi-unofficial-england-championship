@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "standings": "Clasificación",
+    "matchHistory": "Historial de partidos",
+    "stats": "Estadísticas",
+    "history": "Historia del torneo",
+    "faq": "Preguntas frecuentes",
+    "contact": "Contacto"
+  },
+  "header": {
+    "openMenu": "Abrir menú",
+    "tournamentName": "Torneo No Oficial de Inglaterra",
+    "logoAlt": "Logo ToNOI",
+    "twitter": "Twitter del torneo",
+    "tiktok": "TikTok del torneo",
+    "contact": "Contacto",
+    "language": "Cambiar idioma"
+  },
+  "footer": {
+    "copyright": "© {{year}} Torneo No Oficial de Inglaterra (ToNOI)",
+    "tagline": "Web oficial del torneo — creada y gestionada por sus fundadores."
+  },
+  "scrollTop": "Volver al inicio de la página",
+  "meta": {
+    "title": "ToNOI — Torneo No Oficial de Inglaterra",
+    "description": "Sigue el ToNOI: campeón actual, clasificación histórica, historial de partidos y estadísticas del Torneo No Oficial de Inglaterra."
+  }
+}

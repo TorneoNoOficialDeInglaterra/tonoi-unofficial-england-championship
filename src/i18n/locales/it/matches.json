@@ -1,0 +1,49 @@
+{
+  "history": {
+    "title": "Storico delle partite",
+    "subtitle": "Ogni partita per il titolo, raggruppata per decenni.",
+    "filters": {
+      "teamLabel": "Squadra",
+      "teamPlaceholder": "Tutte le squadre",
+      "clear": "Cancella",
+      "h2hClub1Label": "Confronto diretto — Club 1",
+      "h2hClub2Label": "Confronto diretto — Club 2",
+      "clubPlaceholder": "Seleziona club",
+      "clearH2h": "Cancella confronto diretto",
+      "searchTeam": "Cerca squadra...",
+      "noTeamsFound": "Nessuna squadra trovata."
+    },
+    "heading": {
+      "h2h": "{{teamA}} vs {{teamB}}",
+      "teamMatches": "Partite di {{team}}",
+      "decade": "Decennio {{decade}}s"
+    },
+    "matchCount": "{{count}} partita",
+    "matchCount_other": "{{count}} partite",
+    "table": {
+      "date": "Data",
+      "home": "Casa",
+      "result": "Risultato",
+      "away": "Trasferta"
+    },
+    "empty": {
+      "h2h": "Non esistono partite tra questi due club.",
+      "none": "Nessuna partita."
+    },
+    "status": {
+      "draw": "Pareggio",
+      "penalties": "Deciso ai rigori",
+      "titleChange": "Cambio di titolo"
+    },
+    "breaks": {
+      "wwi": "La competizione fu interrotta tra il 1915 e il 1919 a causa della Prima guerra mondiale",
+      "wwii": "La competizione fu interrotta tra il 1939 e il 1945 a causa della Seconda guerra mondiale",
+      "covid": "La competizione fu sospesa a causa della pandemia di COVID-19"
+    },
+    "decadeNav": {
+      "previous": "Decennio precedente",
+      "next": "Decennio successivo",
+      "jumpTo": "Vai al decennio"
+    }
+  }
+}

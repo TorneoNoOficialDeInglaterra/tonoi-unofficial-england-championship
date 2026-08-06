@@ -1,0 +1,44 @@
+{
+  "contact": {
+    "title": "Contact",
+    "intro": "Have a question, suggestion, or want to report a match? Write to us and we'll get back to you as soon as possible.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@email.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Tell us...",
+    "sendButton": "Send message",
+    "sending": "Sending...",
+    "errors": {
+      "name": "Please enter your name",
+      "email": "Invalid email",
+      "message": "Please write a message"
+    },
+    "success": "Message sent. We'll get back to you as soon as possible."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "intro": "The most common questions about ToNOI.",
+    "empty": "There are no published FAQs yet."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "backHome": "Return to Home"
+  },
+  "unsubscribe": {
+    "title": "ToNOI",
+    "subtitle": "Email subscription management",
+    "noToken": "No unsubscribe token was provided.",
+    "invalidLink": "The unsubscribe link is invalid or has already been used.",
+    "verifyError": "The link could not be verified. Please try again later.",
+    "confirmError": "The unsubscription could not be completed.",
+    "connectionError": "Connection error. Please try again later.",
+    "verifying": "Verifying link...",
+    "confirmText": "If you confirm, you will stop receiving emails from this sender.",
+    "confirmButton": "Confirm unsubscribe",
+    "confirmed": "You have successfully unsubscribed.",
+    "invalidGeneric": "The link is invalid."
+  }
+}
