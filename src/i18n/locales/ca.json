@@ -173,6 +173,7 @@
       "seasonPlaceholder": "Seleccionar...",
       "seasonCurrentSuffix": " · actual",
       "historic": "Històric (totes les temporades)",
+      "note": "Només hi ha registres d'estadístiques a partir de la temporada 2025/2026.",
       "tabs": { "players": "Golejadors i assistents", "keepers": "Porteries a 0" },
       "searchPlayerPlaceholder": "Buscar jugador...",
       "playersCount": "{{count}} jugador",

@@ -173,6 +173,7 @@
       "seasonPlaceholder": "Hautatu...",
       "seasonCurrentSuffix": " · uneko",
       "historic": "Historikoa (denboraldi guztiak)",
+      "note": "Estatistiken erregistroak 2025/2026 denboralditik aurrera daude eskuragarri.",
       "tabs": { "players": "Golegileak eta asistentziak", "keepers": "Ateak zero" },
       "searchPlayerPlaceholder": "Jokalaria bilatu...",
       "playersCount": "jokalari {{count}}",
