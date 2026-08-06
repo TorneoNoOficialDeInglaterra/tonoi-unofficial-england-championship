@@ -31,6 +31,10 @@ export default function Stats() {
     <div className="container py-10">
       <h1 className="text-4xl font-black sm:text-5xl">{t("stats.title")}</h1>
       <p className="mt-2 text-muted-foreground">{t("stats.subtitle")}</p>
+      <div className="mt-3 inline-flex items-start gap-2 rounded-md border border-border/60 bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+        <span>{t("stats.note")}</span>
+      </div>
 
       <div className="mt-6 max-w-xs">
         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("stats.season")}</label>
