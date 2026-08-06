@@ -1,1 +1,49 @@
-{}
+{
+  "history": {
+    "title": "Match history",
+    "subtitle": "Every title match, grouped by decade.",
+    "filters": {
+      "teamLabel": "Team",
+      "teamPlaceholder": "All teams",
+      "clear": "Clear",
+      "h2hClub1Label": "Head-to-head — Club 1",
+      "h2hClub2Label": "Head-to-head — Club 2",
+      "clubPlaceholder": "Select club",
+      "clearH2h": "Clear head-to-head",
+      "searchTeam": "Search team...",
+      "noTeamsFound": "No teams found."
+    },
+    "heading": {
+      "h2h": "{{teamA}} vs {{teamB}}",
+      "teamMatches": "{{team}}'s matches",
+      "decade": "{{decade}}s decade"
+    },
+    "matchCount": "{{count}} match",
+    "matchCount_other": "{{count}} matches",
+    "table": {
+      "date": "Date",
+      "home": "Home",
+      "result": "Result",
+      "away": "Away"
+    },
+    "empty": {
+      "h2h": "There are no matches between these two clubs.",
+      "none": "No matches."
+    },
+    "status": {
+      "draw": "Draw",
+      "penalties": "Decided on penalties",
+      "titleChange": "Title change"
+    },
+    "breaks": {
+      "wwi": "The competition was suspended between 1915 and 1919 due to World War I",
+      "wwii": "The competition was suspended between 1939 and 1945 due to World War II",
+      "covid": "The competition was suspended due to the COVID-19 pandemic"
+    },
+    "decadeNav": {
+      "previous": "Previous decade",
+      "next": "Next decade",
+      "jumpTo": "Jump to decade"
+    }
+  }
+}

@@ -1,1 +1,32 @@
-{}
+{
+  "stats": {
+    "title": "Estadísticas individuales",
+    "subtitle": "Goleadores, asistentes y porterías a 0 — temporada actual o histórico.",
+    "season": "Temporada",
+    "seasonPlaceholder": "Seleccionar...",
+    "seasonCurrentSuffix": " · actual",
+    "historic": "Histórico (todas las temporadas)",
+    "tabs": {
+      "players": "Goleadores y asistentes",
+      "keepers": "Porterías a 0"
+    },
+    "searchPlayerPlaceholder": "Buscar jugador...",
+    "playersCount": "{{count}} jugador",
+    "playersCount_other": "{{count}} jugadores",
+    "table": {
+      "player": "Jugador",
+      "goals": "Goles",
+      "assists": "Asistencias",
+      "ga": "G+A",
+      "keeper": "Portero",
+      "cleanSheets": "Porterías a 0"
+    },
+    "noData": "Sin datos."
+  },
+  "history": {
+    "title": "Historia del torneo",
+    "subtitle": "Todo lo que ha vivido el ToNOI a lo largo de los años.",
+    "comingSoon": "Próximamente",
+    "body": "Estamos preparando un viaje completo por la historia del torneo: campeones legendarios, rachas inolvidables y los partidos que cambiaron el rumbo del título. Vuelve muy pronto."
+  }
+}

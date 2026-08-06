@@ -1,1 +1,32 @@
-{}
+{
+  "stats": {
+    "title": "Individual statistics",
+    "subtitle": "Top scorers, assists and clean sheets — current season or all-time.",
+    "season": "Season",
+    "seasonPlaceholder": "Select...",
+    "seasonCurrentSuffix": " · current",
+    "historic": "All-time (every season)",
+    "tabs": {
+      "players": "Scorers & assists",
+      "keepers": "Clean sheets"
+    },
+    "searchPlayerPlaceholder": "Search player...",
+    "playersCount": "{{count}} player",
+    "playersCount_other": "{{count}} players",
+    "table": {
+      "player": "Player",
+      "goals": "Goals",
+      "assists": "Assists",
+      "ga": "G+A",
+      "keeper": "Goalkeeper",
+      "cleanSheets": "Clean sheets"
+    },
+    "noData": "No data."
+  },
+  "history": {
+    "title": "Tournament history",
+    "subtitle": "Everything the ToNOI has experienced over the years.",
+    "comingSoon": "Coming soon",
+    "body": "We're preparing a complete journey through the tournament's history: legendary champions, unforgettable streaks and the matches that changed the course of the title. Check back very soon."
+  }
+}

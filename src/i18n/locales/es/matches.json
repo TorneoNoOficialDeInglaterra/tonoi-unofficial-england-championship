@@ -1,1 +1,49 @@
-{}
+{
+  "history": {
+    "title": "Historial de partidos",
+    "subtitle": "Cada partido por el título, agrupados por décadas.",
+    "filters": {
+      "teamLabel": "Equipo",
+      "teamPlaceholder": "Todos los equipos",
+      "clear": "Limpiar",
+      "h2hClub1Label": "Enfrentamiento — Club 1",
+      "h2hClub2Label": "Enfrentamiento — Club 2",
+      "clubPlaceholder": "Selecciona club",
+      "clearH2h": "Limpiar enfrentamiento",
+      "searchTeam": "Buscar equipo...",
+      "noTeamsFound": "No se encontraron equipos."
+    },
+    "heading": {
+      "h2h": "{{teamA}} vs {{teamB}}",
+      "teamMatches": "Partidos de {{team}}",
+      "decade": "Década {{decade}}s"
+    },
+    "matchCount": "{{count}} partido",
+    "matchCount_other": "{{count}} partidos",
+    "table": {
+      "date": "Fecha",
+      "home": "Local",
+      "result": "Resultado",
+      "away": "Visitante"
+    },
+    "empty": {
+      "h2h": "No existen partidos entre esos dos clubes.",
+      "none": "Sin partidos."
+    },
+    "status": {
+      "draw": "Empate",
+      "penalties": "Decidido en penaltis",
+      "titleChange": "Cambio de título"
+    },
+    "breaks": {
+      "wwi": "La competición se detuvo entre 1915 y 1919 debido a la I Guerra Mundial",
+      "wwii": "La competición se detuvo entre 1939 y 1945 debido a la II Guerra Mundial",
+      "covid": "La competición se suspendió debido a la pandemia del COVID-19"
+    },
+    "decadeNav": {
+      "previous": "Década anterior",
+      "next": "Década siguiente",
+      "jumpTo": "Saltar a década"
+    }
+  }
+}
