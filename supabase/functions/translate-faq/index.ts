@@ -15,8 +15,25 @@ const SCHEMA = {
     answer_en: { type: "string" },
     question_it: { type: "string" },
     answer_it: { type: "string" },
+    question_ca: { type: "string" },
+    answer_ca: { type: "string" },
+    question_eu: { type: "string" },
+    answer_eu: { type: "string" },
+    question_pt: { type: "string" },
+    answer_pt: { type: "string" },
   },
-  required: ["question_en", "answer_en", "question_it", "answer_it"],
+  required: [
+    "question_en",
+    "answer_en",
+    "question_it",
+    "answer_it",
+    "question_ca",
+    "answer_ca",
+    "question_eu",
+    "answer_eu",
+    "question_pt",
+    "answer_pt",
+  ],
 };
 
 Deno.serve(async (req) => {
@@ -60,7 +77,7 @@ Deno.serve(async (req) => {
         stream: true,
         store: false,
         instructions:
-          "Eres traductor especializado en fútbol. Traduces preguntas frecuentes de una web de un torneo histórico de fútbol (ToNOI) del español al inglés y al italiano. Mantén nombres propios de clubes y competiciones sin traducir, conserva el tono y no añadas información nueva.",
+          "Eres traductor especializado en fútbol. Traduces preguntas frecuentes de una web de un torneo histórico de fútbol (ToNOI) del español al inglés (en), italiano (it), catalán (ca), euskera/vasco (eu) y portugués de Portugal (pt). Mantén nombres propios de clubes y competiciones sin traducir, conserva el tono y no añadas información nueva.",
         input: [
           {
             role: "user",
@@ -124,16 +141,18 @@ Deno.serve(async (req) => {
     } catch {
       parsed = null;
     }
-    if (!parsed?.question_en || !parsed?.answer_en || !parsed?.question_it || !parsed?.answer_it) {
+    const LANGS = ["en", "it", "ca", "eu", "pt"];
+    const missing = LANGS.some((l) => !parsed?.[`question_${l}`] || !parsed?.[`answer_${l}`]);
+    if (missing) {
       return json({ error: "La IA no devolvió una traducción válida. Inténtalo de nuevo." }, 502);
     }
 
-    return json({
-      question_en: parsed.question_en,
-      answer_en: parsed.answer_en,
-      question_it: parsed.question_it,
-      answer_it: parsed.answer_it,
-    });
+    const out: Record<string, string> = {};
+    for (const l of LANGS) {
+      out[`question_${l}`] = parsed![`question_${l}`];
+      out[`answer_${l}`] = parsed![`answer_${l}`];
+    }
+    return json(out);
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "Error inesperado" }, 500);
   }

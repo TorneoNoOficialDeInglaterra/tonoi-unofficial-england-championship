@@ -1,0 +1,241 @@
+{
+  "common": {
+    "nav": {
+      "home": "Inici",
+      "standings": "Classificació",
+      "matchHistory": "Historial de partits",
+      "stats": "Estadístiques",
+      "history": "Història del torneig",
+      "faq": "Preguntes freqüents",
+      "contact": "Contacte"
+    },
+    "header": {
+      "openMenu": "Obrir menú",
+      "tournamentName": "Torneig No Oficial d'Anglaterra",
+      "logoAlt": "Logo ToNOI",
+      "twitter": "Twitter del torneig",
+      "tiktok": "TikTok del torneig",
+      "contact": "Contacte",
+      "language": "Canviar idioma"
+    },
+    "footer": {
+      "copyright": "© {{year}} Torneig No Oficial d'Anglaterra (ToNOI)",
+      "tagline": "Web oficial del torneig — creada i gestionada pels seus fundadors."
+    },
+    "scrollTop": "Tornar a l'inici de la pàgina",
+    "meta": {
+      "title": "ToNOI — Torneig No Oficial d'Anglaterra",
+      "description": "Segueix el ToNOI: campió actual, classificació històrica, historial de partits i estadístiques del Torneig No Oficial d'Anglaterra."
+    }
+  },
+  "home": {
+    "hero": {
+      "tagline": "Torneig No Oficial d'Anglaterra",
+      "titleLine1": "Per ser campió,",
+      "titleLine2": "guanya al campió.",
+      "subtitle": "Un sol títol. Una sola regla. Segueix la història viva del ToNOI partit a partit.",
+      "viewStandings": "Veure classificació",
+      "matchHistory": "Historial de partits",
+      "logoAlt": "Logo ToNOI",
+      "imageAlt": "Imatge {{n}}"
+    },
+    "champion": {
+      "current": "Campió actual",
+      "daysAsChampion_one": "{{count}} dia com a campió",
+      "daysAsChampion_other": "{{count}} dies com a campió",
+      "noData": "—",
+      "noMatches": "Encara no hi ha partits registrats."
+    },
+    "lastMatch": {
+      "title": "Últim partit",
+      "penalties": "Decidit als penals.",
+      "draw": "Empat.",
+      "titleChanged": "Canvi de campió!",
+      "noMatches": "Sense partits encara."
+    },
+    "about": {
+      "heading": "Què és el ToNOI?",
+      "paragraph1": "T'imagines què passaria si al futbol es decidís qui és el campió com es fa a la boxa? Doncs nosaltres estem aquí per explicar-ho.",
+      "paragraph2": "El <strong>Torneig No Oficial d'Anglaterra (ToNOI)</strong> és un campionat en què per ser campió has de guanyar l'actual campió. No hi ha fase de grups, eliminatòries ni res semblant: <strong>només finals</strong>. Si t'enfrontes a l'equip campió i resultes victoriós, series el nou<strong> CAMPIÓ NO OFICIAL D'ANGLATERRA</strong> i començaràs a fer història fins que un altre equip et derroti.",
+      "paragraph3": "El títol canvia de mans partit a partit, travessant dècades, generacions i rivalitats. Aquí no importa la lliga ni la copa: l'únic que compta és aquell duel concret en què un club desafia el campió del moment.",
+      "closing": "Endinsa't amb nosaltres en aquesta aventura i gaudeix del futbol com mai."
+    },
+    "rules": {
+      "title": "Reglament Oficial",
+      "items": [
+        "Si guanyes l'actual campió, et converteixes en campió.",
+        "Només valen partits oficials.",
+        "Si en una lliga no hi ha registres oficials es comptarà el següent partit oficial.",
+        "En cas de desaparició del club campió, el títol torna a l'anterior campió.",
+        "Les pròrrogues compten únicament si el partit als 90 minuts ha acabat en empat.",
+        "Els penals compten: si el partit acaba en empat global o requereix desempat, el guanyador s'emporta el títol."
+      ]
+    },
+    "top10": { "title": "Top 10", "viewAll": "Veure tot →", "noData": "Sense dades." },
+    "last5": { "title": "Últims 5 partits", "viewAll": "Veure tot →", "noMatches": "Sense partits." },
+    "video": {
+      "label": "Vídeo d'origen",
+      "heading": "Coneix el torneig en vídeo",
+      "iframeTitle": "Què és el ToNOI?"
+    }
+  },
+  "standings": {
+    "title": "Classificació històrica",
+    "subtitle": "Calculada partit a partit des del primer ToNOI fins avui.",
+    "legend": {
+      "title": "Llegenda",
+      "pj": "<strong>PJ</strong>: Partits Jugats",
+      "ved": "<strong>V/E/D</strong>: Victòries / Empats / Derrotes (l'empat del reptador compta com a derrota)",
+      "p": "<strong>P</strong>: Punts Totals",
+      "ppp": "<strong>PPP</strong>: Punts per Partit",
+      "gfgcdg": "<strong>GF/GC/DG</strong>: Gols a Favor / Contra / Diferència",
+      "pct": "<strong>PcT</strong>: Partits amb Trofeu",
+      "mj": "<strong>MJ</strong>: Millor ratxa (partits seguits amb el trofeu)",
+      "intentos": "<strong>I</strong>: Nombre d'intents per destronar el campió",
+      "destronamientos": "<strong>Des</strong>: Destronaments (títols guanyats)",
+      "id": "<strong>ID</strong>: Percentatge d'èxit (Des/I)"
+    },
+    "cols": {
+      "pj": { "label": "PJ", "desc": "Partits Jugats" },
+      "v": { "label": "V", "desc": "Victòries" },
+      "e": { "label": "E", "desc": "Empats" },
+      "d": { "label": "D", "desc": "Derrotes" },
+      "p": { "label": "P", "desc": "Punts" },
+      "gf": { "label": "GF", "desc": "Gols a Favor" },
+      "gc": { "label": "GC", "desc": "Gols en Contra" },
+      "dg": { "label": "DG", "desc": "Diferència de Gols" },
+      "ppp": { "label": "PPP", "desc": "Punts per Partit" },
+      "pct": { "label": "PcT", "desc": "Partits amb Trofeu" },
+      "mj": { "label": "MJ", "desc": "Millor ratxa" },
+      "intentos": { "label": "I", "desc": "Intents" },
+      "destronamientos": { "label": "Des", "desc": "Destronaments" },
+      "idPct": { "label": "ID", "desc": "Índex de Destronament (%)" }
+    },
+    "filter": {
+      "placeholder": "Filtrar per equip…",
+      "searchPlaceholder": "Buscar equip...",
+      "noResults": "Sense resultats.",
+      "clear": "Netejar",
+      "teamsCount": "{{count}} equip",
+      "teamsCount_other": "{{count}} equips"
+    },
+    "table": { "pos": "#", "team": "Equip", "empty": "Encara sense dades." }
+  },
+  "matches": {
+    "history": {
+      "title": "Historial de partits",
+      "subtitle": "Cada partit pel títol, agrupats per dècades.",
+      "filters": {
+        "teamLabel": "Equip",
+        "teamPlaceholder": "Tots els equips",
+        "clear": "Netejar",
+        "h2hClub1Label": "Enfrontament — Club 1",
+        "h2hClub2Label": "Enfrontament — Club 2",
+        "clubPlaceholder": "Selecciona club",
+        "clearH2h": "Netejar enfrontament",
+        "searchTeam": "Buscar equip...",
+        "noTeamsFound": "No s'han trobat equips."
+      },
+      "heading": {
+        "h2h": "{{teamA}} vs {{teamB}}",
+        "teamMatches": "Partits de {{team}}",
+        "decade": "Dècada {{decade}}s"
+      },
+      "matchCount": "{{count}} partit",
+      "matchCount_other": "{{count}} partits",
+      "table": { "date": "Data", "home": "Local", "result": "Resultat", "away": "Visitant" },
+      "empty": {
+        "h2h": "No hi ha partits entre aquests dos clubs.",
+        "none": "Sense partits."
+      },
+      "status": {
+        "draw": "Empat",
+        "penalties": "Decidit als penals",
+        "titleChange": "Canvi de títol"
+      },
+      "breaks": {
+        "wwi": "La competició es va aturar entre 1915 i 1919 a causa de la I Guerra Mundial",
+        "wwii": "La competició es va aturar entre 1939 i 1945 a causa de la II Guerra Mundial",
+        "covid": "La competició es va suspendre a causa de la pandèmia de la COVID-19"
+      },
+      "decadeNav": {
+        "previous": "Dècada anterior",
+        "next": "Dècada següent",
+        "jumpTo": "Saltar a dècada"
+      }
+    }
+  },
+  "stats": {
+    "stats": {
+      "title": "Estadístiques individuals",
+      "subtitle": "Golejadors, assistents i porteries a 0 — temporada actual o històric.",
+      "season": "Temporada",
+      "seasonPlaceholder": "Seleccionar...",
+      "seasonCurrentSuffix": " · actual",
+      "historic": "Històric (totes les temporades)",
+      "tabs": { "players": "Golejadors i assistents", "keepers": "Porteries a 0" },
+      "searchPlayerPlaceholder": "Buscar jugador...",
+      "playersCount": "{{count}} jugador",
+      "playersCount_other": "{{count}} jugadors",
+      "table": {
+        "player": "Jugador",
+        "goals": "Gols",
+        "assists": "Assistències",
+        "ga": "G+A",
+        "keeper": "Porter",
+        "cleanSheets": "Porteries a 0"
+      },
+      "noData": "Sense dades."
+    },
+    "history": {
+      "title": "Història del torneig",
+      "subtitle": "Tot el que ha viscut el ToNOI al llarg dels anys.",
+      "comingSoon": "Pròximament",
+      "body": "Estem preparant un viatge complet per la història del torneig: campions llegendaris, ratxes inoblidables i els partits que van canviar el rumb del títol. Torna molt aviat."
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Contacte",
+      "intro": "Tens un dubte, suggeriment o vols reportar un partit? Escriu-nos i et respondrem el més aviat possible.",
+      "nameLabel": "Nom",
+      "namePlaceholder": "El teu nom",
+      "emailLabel": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "messageLabel": "Missatge",
+      "messagePlaceholder": "Explica'ns...",
+      "sendButton": "Enviar missatge",
+      "sending": "Enviant...",
+      "errors": {
+        "name": "Indica el teu nom",
+        "email": "Email invàlid",
+        "message": "Escriu un missatge"
+      },
+      "success": "Missatge enviat. Et respondrem el més aviat possible."
+    },
+    "faq": {
+      "title": "Preguntes freqüents",
+      "intro": "Els dubtes més comuns sobre el ToNOI.",
+      "empty": "Encara no hi ha preguntes freqüents publicades."
+    },
+    "notFound": {
+      "title": "404",
+      "message": "Ep! Pàgina no trobada",
+      "backHome": "Tornar a l'inici"
+    },
+    "unsubscribe": {
+      "title": "ToNOI",
+      "subtitle": "Gestió de subscripcions de correu",
+      "noToken": "No s'ha proporcionat cap token de baixa.",
+      "invalidLink": "L'enllaç de baixa no és vàlid o ja s'ha utilitzat.",
+      "verifyError": "No s'ha pogut verificar l'enllaç. Torna-ho a provar més tard.",
+      "confirmError": "No s'ha pogut completar la baixa.",
+      "connectionError": "Error de connexió. Torna-ho a provar més tard.",
+      "verifying": "Verificant enllaç...",
+      "confirmText": "Si confirmes, deixaràs de rebre correus d'aquest remitent.",
+      "confirmButton": "Confirmar baixa",
+      "confirmed": "T'has donat de baixa correctament.",
+      "invalidGeneric": "L'enllaç no és vàlid."
+    }
+  }
+}
