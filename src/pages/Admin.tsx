@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2 } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2, ChevronDown } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
@@ -1004,24 +1004,21 @@ function FaqsAdmin() {
   const [order, setOrder] = useState<number>(0);
   const [autoTranslate, setAutoTranslate] = useState(true);
   const [translating, setTranslating] = useState<string | null>(null);
-  const [viewLang, setViewLang] = useState<string>("es");
-  const shownLangs = FAQ_LANGS.filter((l) => l.code === viewLang);
+  const [openLangs, setOpenLangs] = useState<Record<string, boolean>>({});
+  const toggleLangs = (key: string) => setOpenLangs((m) => ({ ...m, [key]: !m[key] }));
 
-  const langSelector = (
-    <div className="w-full sm:w-64">
-      <Label>Idioma mostrado</Label>
-      <Select value={viewLang} onValueChange={setViewLang}>
-        <SelectTrigger><SelectValue /></SelectTrigger>
-        <SelectContent>
-          <SelectItem value="es">Solo español</SelectItem>
-          {FAQ_LANGS.map((l) => (
-            <SelectItem key={l.code} value={l.code}>
-              Español + {l.label.charAt(0).toUpperCase() + l.label.slice(1)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+  const langsToggle = (key: string) => (
+    <button
+      type="button"
+      onClick={() => toggleLangs(key)}
+      className="flex w-full items-center justify-between rounded-md border border-border bg-muted/40 px-3 py-2 text-sm font-medium hover:bg-muted"
+    >
+      <span className="flex items-center gap-2">
+        <Languages className="h-4 w-4 text-primary" />
+        Traducciones ({FAQ_LANGS.length} idiomas)
+      </span>
+      <ChevronDown className={`h-4 w-4 transition-transform ${openLangs[key] ? "rotate-180" : ""}`} />
+    </button>
   );
 
   async function fetchTranslations(q: string, a: string) {
@@ -1116,7 +1113,6 @@ function FaqsAdmin() {
           Estas preguntas se mostrarán en la página pública de Preguntas Frecuentes. Usa el orden para ordenarlas (menor primero).
           Las traducciones a los demás idiomas son opcionales: si las dejas vacías, se mostrará el texto en español.
         </p>
-        <div className="mt-3">{langSelector}</div>
       </Card>
 
       <Card className="p-4">
@@ -1130,8 +1126,9 @@ function FaqsAdmin() {
             <Label>Respuesta (español)</Label>
             <Textarea value={answer} onChange={(e) => setAnswer(e.target.value)} rows={4} placeholder="Explicación detallada..." />
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {shownLangs.map((l) => (
+          {langsToggle("new")}
+          <div className={`grid gap-3 sm:grid-cols-2 ${openLangs["new"] ? "" : "hidden"}`}>
+            {FAQ_LANGS.map((l) => (
               <div key={l.code} className="grid gap-3">
                 <div>
                   <Label>Pregunta ({l.label})</Label>
@@ -1204,8 +1201,9 @@ function FaqsAdmin() {
                     onBlur={(e) => e.target.value !== f.answer && updateField(f.id, { answer: e.target.value })}
                   />
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {shownLangs.map((l) => {
+                {langsToggle(f.id)}
+                <div className={`grid gap-3 sm:grid-cols-2 ${openLangs[f.id] ? "" : "hidden"}`}>
+                  {FAQ_LANGS.map((l) => {
                     const qKey = `question_${l.code}`;
                     const aKey = `answer_${l.code}`;
                     const qVal = typeof f[qKey] === "string" ? (f[qKey] as string) : "";
