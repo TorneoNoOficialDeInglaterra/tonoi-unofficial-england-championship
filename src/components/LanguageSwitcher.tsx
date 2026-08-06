@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
-import enFlagAsset from "@/assets/flag-en.png.asset.json";
 
 const FlagSpain = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
@@ -27,13 +26,17 @@ const FlagItaly = ({ className }: { className?: string }) => (
 );
 
 const FlagEn = ({ className }: { className?: string }) => (
-  <img
-    src={enFlagAsset.url}
-    alt=""
-    className={className}
-    aria-hidden="true"
-  />
+  <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
+    <rect width="24" height="18" fill="#012169" />
+    <path d="M0 0 L24 18 M24 0 L0 18" stroke="#FFFFFF" strokeWidth="2.4" />
+    <path d="M0 0 L24 18 M24 0 L0 18" stroke="#C8102E" strokeWidth="0.8" />
+    <rect y="7" width="24" height="4" fill="#FFFFFF" />
+    <rect x="10" width="4" height="18" fill="#FFFFFF" />
+    <rect y="8" width="24" height="2" fill="#C8102E" />
+    <rect x="11" width="2" height="18" fill="#C8102E" />
+  </svg>
 );
+
 
 const FlagCatalonia = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
