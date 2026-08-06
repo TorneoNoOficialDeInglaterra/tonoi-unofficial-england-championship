@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
