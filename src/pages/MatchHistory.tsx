@@ -60,9 +60,9 @@ function TeamCombo({
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Buscar equipo..." />
+          <CommandInput placeholder={t("history.filters.searchTeam")} />
           <CommandList>
-            <CommandEmpty>No se encontraron equipos.</CommandEmpty>
+            <CommandEmpty>{t("history.filters.noTeamsFound")}</CommandEmpty>
             <CommandGroup>
               {teams.map((t) => (
                 <CommandItem key={t.id} value={t.name} onSelect={() => { onChange(t.id); setOpen(false); }}>
@@ -79,6 +79,7 @@ function TeamCombo({
 }
 
 export default function MatchHistory() {
+  const { t } = useTranslation("matches");
   const teamsQ = useTeams();
   const matchesQ = useMatches();
 
@@ -155,48 +156,48 @@ export default function MatchHistory() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-4xl font-black sm:text-5xl">Historial de partidos</h1>
-      <p className="mt-2 text-muted-foreground">Cada partido por el título, agrupados por décadas.</p>
+      <h1 className="text-4xl font-black sm:text-5xl">{t("history.title")}</h1>
+      <p className="mt-2 text-muted-foreground">{t("history.subtitle")}</p>
 
       {/* Filters */}
       <Card className="mt-6 p-5">
         <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Equipo</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("history.filters.teamLabel")}</label>
             <TeamCombo
               teams={teamsSorted}
               value={teamFilter}
               onChange={(v) => { setTeamFilter(v); setH2hA(""); setH2hB(""); }}
-              placeholder="Todos los equipos"
+              placeholder={t("history.filters.teamPlaceholder")}
             />
             {teamFilter && (
               <Button size="sm" variant="ghost" className="mt-2" onClick={() => setTeamFilter("")}>
-                <X className="mr-1 h-3 w-3" /> Limpiar
+                <X className="mr-1 h-3 w-3" /> {t("history.filters.clear")}
               </Button>
             )}
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Enfrentamiento — Club 1</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("history.filters.h2hClub1Label")}</label>
             <TeamCombo
               teams={teamsSorted}
               value={h2hA}
               onChange={(v) => { setH2hA(v); setTeamFilter(""); }}
-              placeholder="Selecciona club"
+              placeholder={t("history.filters.clubPlaceholder")}
             />
           </div>
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Enfrentamiento — Club 2</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("history.filters.h2hClub2Label")}</label>
             <TeamCombo
               teams={teamsSorted}
               value={h2hB}
               onChange={(v) => { setH2hB(v); setTeamFilter(""); }}
-              placeholder="Selecciona club"
+              placeholder={t("history.filters.clubPlaceholder")}
             />
           </div>
         </div>
         {(h2hA || h2hB) && (
           <Button size="sm" variant="ghost" className="mt-3" onClick={() => { setH2hA(""); setH2hB(""); }}>
-            <X className="mr-1 h-3 w-3" /> Limpiar enfrentamiento
+            <X className="mr-1 h-3 w-3" /> {t("history.filters.clearH2h")}
           </Button>
         )}
       </Card>
@@ -204,12 +205,12 @@ export default function MatchHistory() {
       <div className="mt-6 flex items-center justify-between gap-3">
         <h2 className="text-2xl font-bold">
           {h2hActive
-            ? `${teamA?.name} vs ${teamB?.name}`
+            ? t("history.heading.h2h", { teamA: teamA?.name, teamB: teamB?.name })
             : teamFilter
-              ? `Partidos de ${selectedTeam?.name}`
-              : `Década ${decade}s`}
+              ? t("history.heading.teamMatches", { team: selectedTeam?.name })
+              : t("history.heading.decade", { decade })}
         </h2>
-        <span className="text-xs text-muted-foreground">{matches.length} partidos</span>
+        <span className="text-xs text-muted-foreground">{t("history.matchCount", { count: matches.length })}</span>
       </div>
 
       <Card className="mt-3 overflow-hidden">
@@ -217,10 +218,10 @@ export default function MatchHistory() {
           <table className="min-w-full text-sm">
             <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
               <tr>
-                <th className="px-3 py-3 text-left">Fecha</th>
-                <th className="px-3 py-3 text-right">Local</th>
-                <th className="px-3 py-3 text-center">Resultado</th>
-                <th className="px-3 py-3 text-left">Visitante</th>
+                <th className="px-3 py-3 text-left">{t("history.table.date")}</th>
+                <th className="px-3 py-3 text-right">{t("history.table.home")}</th>
+                <th className="px-3 py-3 text-center">{t("history.table.result")}</th>
+                <th className="px-3 py-3 text-left">{t("history.table.away")}</th>
               </tr>
             </thead>
             <tbody>
@@ -232,8 +233,8 @@ export default function MatchHistory() {
                 <tr>
                   <td colSpan={4} className="p-8 text-center text-muted-foreground">
                     {h2hActive
-                      ? "No existen partidos entre esos dos clubes."
-                      : "Sin partidos."}
+                      ? t("history.empty.h2h")
+                      : t("history.empty.none")}
                   </td>
                 </tr>
               ) : (
@@ -258,10 +259,10 @@ export default function MatchHistory() {
                   );
                   return (
                     <Fragment key={m.id}>
-                      {breakAbove && <BreakRow key={`${m.id}-b`} text={breakAbove.text} />}
+                      {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
                       <tr key={m.id} className="border-t border-border hover:bg-accent/40">
                         <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
-                          {new Date(m.match_date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+                          {new Date(m.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "short", year: "numeric" })}
                         </td>
                         <td className="px-3 py-2.5">
                           <div className="flex items-center justify-end gap-2">
@@ -281,7 +282,7 @@ export default function MatchHistory() {
                           </div>
                         </td>
                       </tr>
-                      {breakBelow && <BreakRow key={`${m.id}-a`} text={breakBelow.text} />}
+                      {breakBelow && <BreakRow key={`${m.id}-a`} text={t(`history.breaks.${breakBelow.key}`)} />}
                     </Fragment>
                   );
                 })
@@ -297,16 +298,16 @@ export default function MatchHistory() {
         <div className="mt-6 flex flex-col items-center gap-4">
           <div className="flex items-center gap-3">
             <Button variant="outline" disabled={!prevDecade} onClick={() => prevDecade && changeDecade(prevDecade)}>
-              <ChevronLeft className="mr-1 h-4 w-4" /> Década anterior
+              <ChevronLeft className="mr-1 h-4 w-4" /> {t("history.decadeNav.previous")}
             </Button>
             <Button variant="outline" disabled={!nextDecade} onClick={() => nextDecade && changeDecade(nextDecade)}>
-              Década siguiente <ChevronRight className="ml-1 h-4 w-4" />
+              {t("history.decadeNav.next")} <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
           {decades.length > 0 && (
             <div className="w-full max-w-xs">
               <Select value={String(decade)} onValueChange={(v) => changeDecade(Number(v))}>
-                <SelectTrigger><SelectValue placeholder="Saltar a década" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder={t("history.decadeNav.jumpTo")} /></SelectTrigger>
                 <SelectContent>
                   {decades.map((d) => (
                     <SelectItem key={d} value={String(d)}>{d}s</SelectItem>
