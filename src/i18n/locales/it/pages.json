@@ -1,1 +1,44 @@
-{}
+{
+  "contact": {
+    "title": "Contatti",
+    "intro": "Hai un dubbio, un suggerimento o vuoi segnalare una partita? Scrivici e ti risponderemo il prima possibile.",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Il tuo nome",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "messageLabel": "Messaggio",
+    "messagePlaceholder": "Raccontaci...",
+    "sendButton": "Invia messaggio",
+    "sending": "Invio in corso...",
+    "errors": {
+      "name": "Inserisci il tuo nome",
+      "email": "Email non valida",
+      "message": "Scrivi un messaggio"
+    },
+    "success": "Messaggio inviato. Ti risponderemo il prima possibile."
+  },
+  "faq": {
+    "title": "Domande frequenti",
+    "intro": "Le domande più comuni sul ToNOI.",
+    "empty": "Non ci sono ancora domande frequenti pubblicate."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Ops! Pagina non trovata",
+    "backHome": "Torna alla home"
+  },
+  "unsubscribe": {
+    "title": "ToNOI",
+    "subtitle": "Gestione delle iscrizioni email",
+    "noToken": "Nessun token di disiscrizione fornito.",
+    "invalidLink": "Il link di disiscrizione non è valido o è già stato utilizzato.",
+    "verifyError": "Impossibile verificare il link. Riprova più tardi.",
+    "confirmError": "Impossibile completare la disiscrizione.",
+    "connectionError": "Errore di connessione. Riprova più tardi.",
+    "verifying": "Verifica del link in corso...",
+    "confirmText": "Se confermi, non riceverai più email da questo mittente.",
+    "confirmButton": "Conferma disiscrizione",
+    "confirmed": "Ti sei disiscritto correttamente.",
+    "invalidGeneric": "Il link non è valido."
+  }
+}
