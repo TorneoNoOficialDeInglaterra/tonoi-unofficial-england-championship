@@ -996,16 +996,46 @@ function FaqsAdmin() {
   const [questionIt, setQuestionIt] = useState("");
   const [answerIt, setAnswerIt] = useState("");
   const [order, setOrder] = useState<number>(0);
+  const [autoTranslate, setAutoTranslate] = useState(true);
+  const [translating, setTranslating] = useState<string | null>(null);
+
+  async function fetchTranslations(q: string, a: string) {
+    const { data, error } = await supabase.functions.invoke("translate-faq", {
+      body: { question: q, answer: a },
+    });
+    if (error) throw new Error(error.message);
+    if ((data as { error?: string })?.error) throw new Error((data as { error?: string }).error);
+    return data as { question_en: string; answer_en: string; question_it: string; answer_it: string };
+  }
 
   async function add() {
     if (!question.trim() || !answer.trim()) return toast.error("Rellena la pregunta y la respuesta");
-    const { error } = await supabase.from("faqs").insert({
-      question: question.trim(),
-      answer: answer.trim(),
+    let tr = {
       question_en: questionEn.trim() || null,
       answer_en: answerEn.trim() || null,
       question_it: questionIt.trim() || null,
       answer_it: answerIt.trim() || null,
+    };
+    if (autoTranslate) {
+      setTranslating("new");
+      try {
+        const t = await fetchTranslations(question.trim(), answer.trim());
+        tr = {
+          question_en: questionEn.trim() || t.question_en,
+          answer_en: answerEn.trim() || t.answer_en,
+          question_it: questionIt.trim() || t.question_it,
+          answer_it: answerIt.trim() || t.answer_it,
+        };
+      } catch (e) {
+        toast.error(`No se pudo traducir automáticamente: ${e instanceof Error ? e.message : "error"}`);
+      } finally {
+        setTranslating(null);
+      }
+    }
+    const { error } = await supabase.from("faqs").insert({
+      question: question.trim(),
+      answer: answer.trim(),
+      ...tr,
       display_order: Number.isFinite(order) ? order : 0,
     } as never);
     if (error) return toast.error(error.message);
@@ -1014,6 +1044,21 @@ function FaqsAdmin() {
     toast.success("Pregunta añadida");
     qc.invalidateQueries({ queryKey: ["faqs"] });
   }
+
+  async function retranslate(id: string, q: string, a: string) {
+    if (!q.trim() || !a.trim()) return toast.error("Rellena la pregunta y la respuesta en español");
+    setTranslating(id);
+    try {
+      const t = await fetchTranslations(q.trim(), a.trim());
+      await updateField(id, t);
+      toast.success("Traducciones generadas");
+    } catch (e) {
+      toast.error(`No se pudo traducir: ${e instanceof Error ? e.message : "error"}`);
+    } finally {
+      setTranslating(null);
+    }
+  }
+
 
   async function updateField(id: string, patch: Record<string, unknown>) {
     const { error } = await supabase.from("faqs").update({ ...patch, updated_at: new Date().toISOString() } as never).eq("id", id);
