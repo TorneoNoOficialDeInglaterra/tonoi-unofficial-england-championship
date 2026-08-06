@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
@@ -996,16 +996,46 @@ function FaqsAdmin() {
   const [questionIt, setQuestionIt] = useState("");
   const [answerIt, setAnswerIt] = useState("");
   const [order, setOrder] = useState<number>(0);
+  const [autoTranslate, setAutoTranslate] = useState(true);
+  const [translating, setTranslating] = useState<string | null>(null);
+
+  async function fetchTranslations(q: string, a: string) {
+    const { data, error } = await supabase.functions.invoke("translate-faq", {
+      body: { question: q, answer: a },
+    });
+    if (error) throw new Error(error.message);
+    if ((data as { error?: string })?.error) throw new Error((data as { error?: string }).error);
+    return data as { question_en: string; answer_en: string; question_it: string; answer_it: string };
+  }
 
   async function add() {
     if (!question.trim() || !answer.trim()) return toast.error("Rellena la pregunta y la respuesta");
-    const { error } = await supabase.from("faqs").insert({
-      question: question.trim(),
-      answer: answer.trim(),
+    let tr = {
       question_en: questionEn.trim() || null,
       answer_en: answerEn.trim() || null,
       question_it: questionIt.trim() || null,
       answer_it: answerIt.trim() || null,
+    };
+    if (autoTranslate) {
+      setTranslating("new");
+      try {
+        const t = await fetchTranslations(question.trim(), answer.trim());
+        tr = {
+          question_en: questionEn.trim() || t.question_en,
+          answer_en: answerEn.trim() || t.answer_en,
+          question_it: questionIt.trim() || t.question_it,
+          answer_it: answerIt.trim() || t.answer_it,
+        };
+      } catch (e) {
+        toast.error(`No se pudo traducir automáticamente: ${e instanceof Error ? e.message : "error"}`);
+      } finally {
+        setTranslating(null);
+      }
+    }
+    const { error } = await supabase.from("faqs").insert({
+      question: question.trim(),
+      answer: answer.trim(),
+      ...tr,
       display_order: Number.isFinite(order) ? order : 0,
     } as never);
     if (error) return toast.error(error.message);
@@ -1014,6 +1044,21 @@ function FaqsAdmin() {
     toast.success("Pregunta añadida");
     qc.invalidateQueries({ queryKey: ["faqs"] });
   }
+
+  async function retranslate(id: string, q: string, a: string) {
+    if (!q.trim() || !a.trim()) return toast.error("Rellena la pregunta y la respuesta en español");
+    setTranslating(id);
+    try {
+      const t = await fetchTranslations(q.trim(), a.trim());
+      await updateField(id, t);
+      toast.success("Traducciones generadas");
+    } catch (e) {
+      toast.error(`No se pudo traducir: ${e instanceof Error ? e.message : "error"}`);
+    } finally {
+      setTranslating(null);
+    }
+  }
+
 
   async function updateField(id: string, patch: Record<string, unknown>) {
     const { error } = await supabase.from("faqs").update({ ...patch, updated_at: new Date().toISOString() } as never).eq("id", id);
@@ -1081,13 +1126,22 @@ function FaqsAdmin() {
               <Textarea value={answerIt} onChange={(e) => setAnswerIt(e.target.value)} rows={3} placeholder="Opcional" />
             </div>
           </div>
+          <label className="flex items-center gap-2 text-sm">
+            <Checkbox checked={autoTranslate} onCheckedChange={(v) => setAutoTranslate(Boolean(v))} />
+            Traducir automáticamente al inglés e italiano al guardar (los campos que rellenes a mano se respetan)
+          </label>
           <div className="grid gap-2 sm:grid-cols-[120px_auto]">
             <div>
               <Label>Orden</Label>
               <Input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} />
             </div>
-            <div className="flex items-end"><Button onClick={add}>Añadir</Button></div>
+            <div className="flex items-end">
+              <Button onClick={add} disabled={translating === "new"}>
+                {translating === "new" ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Traduciendo…</>) : "Añadir"}
+              </Button>
+            </div>
           </div>
+
         </div>
       </Card>
 
@@ -1155,6 +1209,21 @@ function FaqsAdmin() {
                     />
                   </div>
                 </div>
+                <div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={translating === f.id}
+                    onClick={() => retranslate(f.id, f.question, f.answer)}
+                  >
+                    {translating === f.id ? (
+                      <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Traduciendo…</>
+                    ) : (
+                      <><Languages className="mr-2 h-4 w-4" /> Regenerar traducciones</>
+                    )}
+                  </Button>
+                </div>
+
               </div>
             </Card>
           ))}
