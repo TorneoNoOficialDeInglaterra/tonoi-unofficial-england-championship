@@ -1,1 +1,46 @@
-{}
+{
+  "title": "Classifica storica",
+  "subtitle": "Calcolata partita per partita dal primo ToNOI ad oggi.",
+  "legend": {
+    "title": "Legenda",
+    "pj": "<strong>PJ</strong>: Partite Giocate",
+    "ved": "<strong>V/E/D</strong>: Vittorie / Pareggi / Sconfitte (il pareggio dello sfidante conta come sconfitta)",
+    "p": "<strong>P</strong>: Punti Totali",
+    "ppp": "<strong>PPP</strong>: Punti a Partita",
+    "gfgcdg": "<strong>GF/GC/DG</strong>: Gol Fatti / Subiti / Differenza",
+    "pct": "<strong>PcT</strong>: Partite con Trofeo",
+    "mj": "<strong>MJ</strong>: Miglior striscia (partite consecutive con il trofeo)",
+    "intentos": "<strong>I</strong>: Numero di tentativi per detronizzare il campione",
+    "destronamientos": "<strong>Des</strong>: Detronizzazioni (titoli vinti)",
+    "id": "<strong>ID</strong>: Percentuale di successo (Des/I)"
+  },
+  "cols": {
+    "pj": { "label": "PJ", "desc": "Partite Giocate" },
+    "v": { "label": "V", "desc": "Vittorie" },
+    "e": { "label": "E", "desc": "Pareggi" },
+    "d": { "label": "D", "desc": "Sconfitte" },
+    "p": { "label": "P", "desc": "Punti" },
+    "gf": { "label": "GF", "desc": "Gol Fatti" },
+    "gc": { "label": "GC", "desc": "Gol Subiti" },
+    "dg": { "label": "DG", "desc": "Differenza Reti" },
+    "ppp": { "label": "PPP", "desc": "Punti a Partita" },
+    "pct": { "label": "PcT", "desc": "Partite con Trofeo" },
+    "mj": { "label": "MJ", "desc": "Miglior striscia" },
+    "intentos": { "label": "I", "desc": "Tentativi" },
+    "destronamientos": { "label": "Des", "desc": "Detronizzazioni" },
+    "idPct": { "label": "ID", "desc": "Indice di Detronizzazione (%)" }
+  },
+  "filter": {
+    "placeholder": "Filtra per squadra…",
+    "searchPlaceholder": "Cerca squadra...",
+    "noResults": "Nessun risultato.",
+    "clear": "Cancella",
+    "teamsCount": "{{count}} squadra",
+    "teamsCount_other": "{{count}} squadre"
+  },
+  "table": {
+    "pos": "#",
+    "team": "Squadra",
+    "empty": "Ancora nessun dato."
+  }
+}

@@ -1,1 +1,58 @@
-{}
+{
+  "hero": {
+    "tagline": "Torneo Non Ufficiale d'Inghilterra",
+    "titleLine1": "Per essere campione,",
+    "titleLine2": "batti il campione.",
+    "subtitle": "Un solo titolo. Una sola regola. Segui la storia viva del ToNOI partita dopo partita.",
+    "viewStandings": "Vedi classifica",
+    "matchHistory": "Storico partite",
+    "logoAlt": "Logo ToNOI",
+    "imageAlt": "Immagine {{n}}"
+  },
+  "champion": {
+    "current": "Campione attuale",
+    "daysAsChampion_one": "{{count}} giorno da campione",
+    "daysAsChampion_other": "{{count}} giorni da campione",
+    "noData": "—",
+    "noMatches": "Ancora nessuna partita registrata."
+  },
+  "lastMatch": {
+    "title": "Ultima partita",
+    "penalties": "Deciso ai rigori.",
+    "draw": "Pareggio.",
+    "titleChanged": "Cambio di campione!",
+    "noMatches": "Ancora nessuna partita."
+  },
+  "about": {
+    "heading": "Cos'è il ToNOI?",
+    "paragraph1": "Ti immagini cosa succederebbe se nel calcio si decidesse il campione come si fa nel pugilato? Noi siamo qui per raccontartelo.",
+    "paragraph3": "Il titolo cambia mano partita dopo partita, attraversando decenni, generazioni e rivalità. Qui non contano né il campionato né la coppa: l'unica cosa che conta è quel duello specifico in cui un club sfida il campione del momento.",
+    "closing": "Immergiti con noi in questa avventura e goditi il calcio come mai prima d'ora."
+  },
+  "rules": {
+    "title": "Regolamento Ufficiale",
+    "items": [
+      "Se batti il campione attuale, diventi campione.",
+      "Contano solo le partite ufficiali.",
+      "Se in un campionato non ci sono registri ufficiali, verrà conteggiata la partita ufficiale successiva.",
+      "In caso di scomparsa del club campione, il titolo torna al campione precedente.",
+      "I tempi supplementari contano solo se la partita è terminata in parità dopo 90 minuti.",
+      "I rigori contano: se la partita finisce in parità complessiva o richiede uno spareggio, il vincitore si porta a casa il titolo."
+    ]
+  },
+  "top10": {
+    "title": "Top 10",
+    "viewAll": "Vedi tutto →",
+    "noData": "Nessun dato."
+  },
+  "last5": {
+    "title": "Ultime 5 partite",
+    "viewAll": "Vedi tutto →",
+    "noMatches": "Nessuna partita."
+  },
+  "video": {
+    "label": "Video d'origine",
+    "heading": "Scopri il torneo in video",
+    "iframeTitle": "Cos'è il ToNOI?"
+  }
+}

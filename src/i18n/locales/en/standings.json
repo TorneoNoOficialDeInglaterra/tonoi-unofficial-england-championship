@@ -1,1 +1,46 @@
-{}
+{
+  "title": "Historical Standings",
+  "subtitle": "Calculated match by match from the first ToNOI to today.",
+  "legend": {
+    "title": "Legend",
+    "pj": "<strong>PJ</strong>: Matches Played",
+    "ved": "<strong>V/E/D</strong>: Wins / Draws / Losses (a draw for the challenger counts as a loss)",
+    "p": "<strong>P</strong>: Total Points",
+    "ppp": "<strong>PPP</strong>: Points per Match",
+    "gfgcdg": "<strong>GF/GC/DG</strong>: Goals For / Against / Difference",
+    "pct": "<strong>PcT</strong>: Matches with Trophy",
+    "mj": "<strong>MJ</strong>: Best streak (consecutive matches holding the trophy)",
+    "intentos": "<strong>I</strong>: Number of attempts to dethrone the champion",
+    "destronamientos": "<strong>Des</strong>: Dethronements (titles won)",
+    "id": "<strong>ID</strong>: Success percentage (Des/I)"
+  },
+  "cols": {
+    "pj": { "label": "PJ", "desc": "Matches Played" },
+    "v": { "label": "V", "desc": "Wins" },
+    "e": { "label": "E", "desc": "Draws" },
+    "d": { "label": "D", "desc": "Losses" },
+    "p": { "label": "P", "desc": "Points" },
+    "gf": { "label": "GF", "desc": "Goals For" },
+    "gc": { "label": "GC", "desc": "Goals Against" },
+    "dg": { "label": "DG", "desc": "Goal Difference" },
+    "ppp": { "label": "PPP", "desc": "Points per Match" },
+    "pct": { "label": "PcT", "desc": "Matches with Trophy" },
+    "mj": { "label": "MJ", "desc": "Best streak" },
+    "intentos": { "label": "I", "desc": "Attempts" },
+    "destronamientos": { "label": "Des", "desc": "Dethronements" },
+    "idPct": { "label": "ID", "desc": "Dethronement Index (%)" }
+  },
+  "filter": {
+    "placeholder": "Filter by team…",
+    "searchPlaceholder": "Search team...",
+    "noResults": "No results.",
+    "clear": "Clear",
+    "teamsCount": "{{count}} team",
+    "teamsCount_other": "{{count}} teams"
+  },
+  "table": {
+    "pos": "#",
+    "team": "Team",
+    "empty": "No data yet."
+  }
+}
