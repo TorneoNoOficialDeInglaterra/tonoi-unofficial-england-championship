@@ -15,23 +15,18 @@ type Faq = {
   question: string;
   answer: string;
   display_order: number;
-  question_en?: string | null;
-  answer_en?: string | null;
-  question_it?: string | null;
-  answer_it?: string | null;
+  [key: string]: unknown;
 };
 
+const TRANSLATED_LANGS = ["en", "it", "ca", "eu", "pt"];
+
 function localizedFaq(f: Faq, lang?: string) {
-  if (lang === "en") {
+  if (lang && TRANSLATED_LANGS.includes(lang)) {
+    const q = f[`question_${lang}`];
+    const a = f[`answer_${lang}`];
     return {
-      question: f.question_en?.trim() ? f.question_en : f.question,
-      answer: f.answer_en?.trim() ? f.answer_en : f.answer,
-    };
-  }
-  if (lang === "it") {
-    return {
-      question: f.question_it?.trim() ? f.question_it : f.question,
-      answer: f.answer_it?.trim() ? f.answer_it : f.answer,
+      question: typeof q === "string" && q.trim() ? q : f.question,
+      answer: typeof a === "string" && a.trim() ? a : f.answer,
     };
   }
   return { question: f.question, answer: f.answer };
