@@ -6,6 +6,7 @@
     "seasonPlaceholder": "Select...",
     "seasonCurrentSuffix": " · current",
     "historic": "All-time (every season)",
+    "note": "Individual statistics records are only available from the 2025/2026 season onwards.",
     "tabs": {
       "players": "Scorers & assists",
       "keepers": "Clean sheets"

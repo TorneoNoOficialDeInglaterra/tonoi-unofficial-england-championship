@@ -6,6 +6,7 @@
     "seasonPlaceholder": "Seleccionar...",
     "seasonCurrentSuffix": " · actual",
     "historic": "Histórico (todas las temporadas)",
+    "note": "Solo se tienen registros de estadísticas a partir de la temporada 2025/2026.",
     "tabs": {
       "players": "Goleadores y asistentes",
       "keepers": "Porterías a 0"
