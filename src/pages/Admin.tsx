@@ -209,7 +209,7 @@ function TeamsAdmin() {
                 <tr key={t.id} className="border-t border-border">
                   <td className="px-3 py-2 font-medium">{t.name}</td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
-                  <td className="px-3 py-2"><Input className="w-24" inputMode="numeric" defaultValue={(t as { api_football_team_id?: number | null }).api_football_team_id ?? ""} onBlur={(e) => updateApiId(t.id, e.target.value)} /></td>
+                  <td className="px-3 py-2"><ApiTeamIdCell team={t} onSave={(v) => updateApiId(t.id, v)} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                 </tr>
               ))}
@@ -220,6 +220,74 @@ function TeamsAdmin() {
     </div>
   );
 }
+
+/* ================== API-FOOTBALL TEAM ID ================== */
+type ApiTeamResult = { id: number; name: string; country: string | null; logo: string | null };
+
+function ApiTeamIdCell({ team, onSave }: { team: Team; onSave: (value: string) => void | Promise<void> }) {
+  const apiId = (team as { api_football_team_id?: number | null }).api_football_team_id ?? "";
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<ApiTeamResult[]>([]);
+
+  async function search() {
+    setLoading(true);
+    setResults([]);
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        `sync-live-fixture?search=${encodeURIComponent(team.name)}`,
+        { body: {} },
+      );
+      if (error) throw error;
+      const res = data as { ok?: boolean; teams?: ApiTeamResult[]; reason?: string; error?: string };
+      if (res?.reason === "missing_api_key") throw new Error("Falta la clave de la API de fútbol");
+      if (res?.error) throw new Error(res.error);
+      setResults(res?.teams ?? []);
+      if ((res?.teams ?? []).length === 0) toast.info("Sin resultados en la API");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al buscar");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <Input className="w-20" inputMode="numeric" defaultValue={apiId} onBlur={(e) => onSave(e.target.value)} />
+      <Popover open={open} onOpenChange={(o) => { setOpen(o); if (o) search(); }}>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon" title="Buscar ID en la API">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronsUpDown className="h-4 w-4" />}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-72 p-2" align="end">
+          {loading ? (
+            <p className="p-2 text-xs text-muted-foreground">Buscando...</p>
+          ) : results.length === 0 ? (
+            <p className="p-2 text-xs text-muted-foreground">Sin resultados.</p>
+          ) : (
+            <ul className="space-y-1">
+              {results.map((r) => (
+                <li key={r.id}>
+                  <button
+                    className="flex w-full items-center gap-2 rounded-md p-2 text-left text-xs hover:bg-muted"
+                    onClick={async () => { await onSave(String(r.id)); setOpen(false); toast.success(`ID ${r.id} guardado`); }}
+                  >
+                    {r.logo && <img src={r.logo} alt="" className="h-5 w-5 object-contain" />}
+                    <span className="min-w-0 flex-1 truncate">{r.name}</span>
+                    <span className="text-muted-foreground">{r.country}</span>
+                    <span className="font-mono">{r.id}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
 
 
 /* ================== TEAM COMBOBOX ================== */
