@@ -188,7 +188,10 @@ export default function Home() {
             <p className="mt-4 text-sm text-muted-foreground">{t("lastMatch.noMatches")}</p>
           )}
         </Card>
+
+        <NextMatchWidget />
       </section>
+
 
       {/* What is ToNOI + side widgets (2-column on desktop) */}
       <section className="container mt-16">
