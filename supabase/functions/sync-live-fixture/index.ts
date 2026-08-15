@@ -43,6 +43,57 @@ async function apiGet(path: string, key: string) {
 }
 
 
+function ymd(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
+
+// The free API-Football plan rejects the "next" parameter, so we query by
+// date range / season and pick the closest upcoming fixture ourselves.
+async function findNextFixture(apiTeamId: number, key: string) {
+  const now = Date.now();
+  const from = new Date(now - 6 * 3600_000);
+  const to = new Date(now + 120 * 24 * 3600_000);
+  const year = new Date().getUTCFullYear();
+  const seasons = [year, year - 1, year + 1];
+
+  const pick = (list: any[]) => {
+    const upcoming = list
+      .filter((f) => {
+        const t = new Date(f?.fixture?.date ?? 0).getTime();
+        return Number.isFinite(t) && t > now - 3 * 3600_000;
+      })
+      .sort(
+        (a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime(),
+      );
+    return upcoming[0] ?? null;
+  };
+
+  for (const season of seasons) {
+    try {
+      const res = await apiGet(
+        `/fixtures?team=${apiTeamId}&season=${season}&from=${ymd(from)}&to=${ymd(to)}`,
+        key,
+      );
+      const found = pick(res?.response ?? []);
+      if (found) return found;
+    } catch (_) {
+      // ignore and try the next season / strategy
+    }
+  }
+
+  for (const season of seasons) {
+    try {
+      const res = await apiGet(`/fixtures?team=${apiTeamId}&season=${season}`, key);
+      const found = pick(res?.response ?? []);
+      if (found) return found;
+    } catch (_) {
+      // ignore
+    }
+  }
+
+  return null;
+}
+
 function mapEvents(fx: any) {
   const evs = Array.isArray(fx?.events) ? fx.events : [];
   return evs
@@ -138,8 +189,7 @@ Deno.serve(async (req) => {
       const detail = await apiGet(`/fixtures?id=${liveRes.response[0].fixture.id}`, apiKey);
       fixture = detail?.response?.[0] ?? liveRes.response[0];
     } else {
-      const nextRes = await apiGet(`/fixtures?team=${apiTeamId}&next=1`, apiKey);
-      fixture = nextRes?.response?.[0] ?? null;
+      fixture = await findNextFixture(apiTeamId, apiKey);
     }
 
     if (!fixture) {
