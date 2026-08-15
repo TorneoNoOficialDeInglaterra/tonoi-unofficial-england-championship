@@ -129,7 +129,7 @@ export default function Home() {
       </section>
 
       {/* Champion + last match */}
-      <section className="container mt-10 grid gap-4 sm:grid-cols-2">
+      <section className="container mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="overflow-hidden border-2 border-primary/20 p-6 shadow-[var(--shadow-elegant)]">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
             <Crown className="h-4 w-4" /> {t("champion.current")}
