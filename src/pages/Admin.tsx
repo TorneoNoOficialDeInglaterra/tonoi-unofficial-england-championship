@@ -155,6 +155,23 @@ function TeamsAdmin() {
     const { error } = await supabase.from("teams").update({ logo_url: value || null }).eq("id", id);
     if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["teams"] });
   }
+  async function updateApiId(id: string, value: string) {
+    const parsed = value.trim() === "" ? null : Number(value.trim());
+    if (parsed !== null && (!Number.isInteger(parsed) || parsed <= 0)) return toast.error("ID de API no válido");
+    const { error } = await supabase.from("teams").update({ api_football_team_id: parsed }).eq("id", id);
+    if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["teams"] });
+  }
+  async function syncLive() {
+    const { data, error } = await supabase.functions.invoke("sync-live-fixture", { body: {} });
+    if (error) return toast.error(error.message);
+    const res = data as { ok?: boolean; reason?: string; error?: string; fixture?: unknown };
+    if (res?.reason === "missing_api_key") return toast.error("Falta configurar la clave de la API de fútbol");
+    if (res?.reason === "no_api_id") return toast.error("El campeón actual no tiene ID de API asignado");
+    if (res?.reason === "no_fixture") return toast.info("La API no devuelve próximo partido del campeón");
+    if (res?.error) return toast.error(res.error);
+    toast.success("Partido sincronizado");
+    qc.invalidateQueries({ queryKey: ["live-fixture"] });
+  }
   async function remove(id: string) {
     if (!confirm("¿Eliminar equipo?")) return;
     const { error } = await supabase.from("teams").delete().eq("id", id);
@@ -171,15 +188,28 @@ function TeamsAdmin() {
           <Button onClick={add}>Añadir</Button>
         </div>
       </Card>
+      <Card className="p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Partido en directo</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Rellena el "ID API" del campeón actual y de sus rivales (identificador del club en api-football) para que el widget de la
+              portada encuentre el próximo partido y lo siga en directo.
+            </p>
+          </div>
+          <Button variant="outline" onClick={syncLive}>Sincronizar ahora</Button>
+        </div>
+      </Card>
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th /></tr></thead>
+            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-left">ID API</th><th /></tr></thead>
             <tbody>
               {(teamsQ.data ?? []).map((t) => (
                 <tr key={t.id} className="border-t border-border">
                   <td className="px-3 py-2 font-medium">{t.name}</td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
+                  <td className="px-3 py-2"><Input className="w-24" inputMode="numeric" defaultValue={(t as { api_football_team_id?: number | null }).api_football_team_id ?? ""} onBlur={(e) => updateApiId(t.id, e.target.value)} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                 </tr>
               ))}
@@ -190,6 +220,7 @@ function TeamsAdmin() {
     </div>
   );
 }
+
 
 /* ================== TEAM COMBOBOX ================== */
 function TeamCombobox({ teams, value, onChange, placeholder }: { teams: Team[]; value: string; onChange: (v: string) => void; placeholder: string }) {

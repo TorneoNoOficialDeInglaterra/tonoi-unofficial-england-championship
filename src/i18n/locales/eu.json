@@ -71,12 +71,33 @@
         "Penaltiak zenbatzen dira 90 minutuetan (edo 120 minutuetan luzapena barne hartzen badu) emaitza berdinketa bada eta penaltiak behar badira berdinketa hausteko."
       ]
     },
-    "top10": { "title": "Top 10", "viewAll": "Dena ikusi →", "noData": "Daturik ez." },
-    "last5": { "title": "Azken 5 partiduak", "viewAll": "Dena ikusi →", "noMatches": "Partidurik ez." },
+    "top10": {
+      "title": "Top 10",
+      "viewAll": "Dena ikusi →",
+      "noData": "Daturik ez."
+    },
+    "last5": {
+      "title": "Azken 5 partiduak",
+      "viewAll": "Dena ikusi →",
+      "noMatches": "Partidurik ez."
+    },
     "video": {
       "label": "Jatorrizko bideoa",
       "heading": "Ezagutu txapelketa bideoan",
       "iframeTitle": "Zer da ToNOI?"
+    },
+    "next": {
+      "title": "Hurrengo partida",
+      "liveTitle": "Partida zuzenean",
+      "finishedTitle": "Partida amaituta",
+      "liveBadge": "Zuzenean",
+      "none": "Ez dago hurrengo partidarik berretsita.",
+      "minute": "{{n}}. minutua",
+      "halfTime": "Atsedena",
+      "fullTime": "Partidaren amaiera",
+      "startsIn": "{{time}} barru hasten da",
+      "titleChanges": "Emaitza honekin titulua eskuz aldatzen da!",
+      "titleRetained": "Emaitza honekin txapeldunak titulua mantentzen du."
     }
   },
   "standings": {
@@ -96,20 +117,62 @@
       "id": "<strong>ID</strong>: Arrakasta ehunekoa (Des/I)"
     },
     "cols": {
-      "pj": { "label": "PJ", "desc": "Jokatutako partiduak" },
-      "v": { "label": "V", "desc": "Garaipenak" },
-      "e": { "label": "E", "desc": "Berdinketak" },
-      "d": { "label": "D", "desc": "Galdutakoak" },
-      "p": { "label": "P", "desc": "Puntuak" },
-      "gf": { "label": "GF", "desc": "Aldeko golak" },
-      "gc": { "label": "GC", "desc": "Kontrako golak" },
-      "dg": { "label": "DG", "desc": "Gol diferentzia" },
-      "ppp": { "label": "PPP", "desc": "Puntuak partiduko" },
-      "pct": { "label": "PcT", "desc": "Garaikurrarekin jokatutako partiduak" },
-      "mj": { "label": "MJ", "desc": "Marka onena" },
-      "intentos": { "label": "I", "desc": "Saiakerak" },
-      "destronamientos": { "label": "Des", "desc": "Tronutik kentzeak" },
-      "idPct": { "label": "ID", "desc": "Tronutik kentze indizea (%)" }
+      "pj": {
+        "label": "PJ",
+        "desc": "Jokatutako partiduak"
+      },
+      "v": {
+        "label": "V",
+        "desc": "Garaipenak"
+      },
+      "e": {
+        "label": "E",
+        "desc": "Berdinketak"
+      },
+      "d": {
+        "label": "D",
+        "desc": "Galdutakoak"
+      },
+      "p": {
+        "label": "P",
+        "desc": "Puntuak"
+      },
+      "gf": {
+        "label": "GF",
+        "desc": "Aldeko golak"
+      },
+      "gc": {
+        "label": "GC",
+        "desc": "Kontrako golak"
+      },
+      "dg": {
+        "label": "DG",
+        "desc": "Gol diferentzia"
+      },
+      "ppp": {
+        "label": "PPP",
+        "desc": "Puntuak partiduko"
+      },
+      "pct": {
+        "label": "PcT",
+        "desc": "Garaikurrarekin jokatutako partiduak"
+      },
+      "mj": {
+        "label": "MJ",
+        "desc": "Marka onena"
+      },
+      "intentos": {
+        "label": "I",
+        "desc": "Saiakerak"
+      },
+      "destronamientos": {
+        "label": "Des",
+        "desc": "Tronutik kentzeak"
+      },
+      "idPct": {
+        "label": "ID",
+        "desc": "Tronutik kentze indizea (%)"
+      }
     },
     "filter": {
       "placeholder": "Taldearen arabera filtratu…",
@@ -119,7 +182,11 @@
       "teamsCount": "talde {{count}}",
       "teamsCount_other": "{{count}} talde"
     },
-    "table": { "pos": "#", "team": "Taldea", "empty": "Oraindik daturik ez." }
+    "table": {
+      "pos": "#",
+      "team": "Taldea",
+      "empty": "Oraindik daturik ez."
+    }
   },
   "matches": {
     "history": {
@@ -143,7 +210,12 @@
       },
       "matchCount": "partidu {{count}}",
       "matchCount_other": "{{count}} partidu",
-      "table": { "date": "Data", "home": "Etxean", "result": "Emaitza", "away": "Kanpoan" },
+      "table": {
+        "date": "Data",
+        "home": "Etxean",
+        "result": "Emaitza",
+        "away": "Kanpoan"
+      },
       "empty": {
         "h2h": "Ez dago partidurik bi klub horien artean.",
         "none": "Partidurik ez."
@@ -174,7 +246,10 @@
       "seasonCurrentSuffix": " · uneko",
       "historic": "Historikoa (denboraldi guztiak)",
       "note": "Estatistiken erregistroak 2025/2026 denboralditik aurrera daude eskuragarri.",
-      "tabs": { "players": "Golegileak eta asistentziak", "keepers": "Ateak zero" },
+      "tabs": {
+        "players": "Golegileak eta asistentziak",
+        "keepers": "Ateak zero"
+      },
       "searchPlayerPlaceholder": "Jokalaria bilatu...",
       "playersCount": "jokalari {{count}}",
       "playersCount_other": "{{count}} jokalari",
