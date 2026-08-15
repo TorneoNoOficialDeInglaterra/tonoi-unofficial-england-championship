@@ -13,17 +13,35 @@ function json(body: Json, status = 200) {
   });
 }
 
+const RAPID_BASE = "https://api-football-v1.p.rapidapi.com/v3";
+
 async function apiGet(path: string, key: string) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "x-apisports-key": key },
-  });
-  if (!res.ok) throw new Error(`API football ${res.status}`);
-  const data = await res.json();
-  if (Array.isArray(data?.errors) === false && data?.errors && Object.keys(data.errors).length > 0) {
-    throw new Error(`API football: ${JSON.stringify(data.errors)}`);
+  // Try the direct api-sports.io endpoint first, then RapidAPI (some keys only work there)
+  const attempts: { url: string; headers: Record<string, string> }[] = [
+    { url: `${API_BASE}${path}`, headers: { "x-apisports-key": key } },
+    {
+      url: `${RAPID_BASE}${path}`,
+      headers: { "x-rapidapi-key": key, "x-rapidapi-host": "api-football-v1.p.rapidapi.com" },
+    },
+  ];
+  let lastStatus = 0;
+  for (const a of attempts) {
+    const res = await fetch(a.url, { headers: a.headers });
+    if (res.status === 401 || res.status === 403) {
+      lastStatus = res.status;
+      continue;
+    }
+    if (!res.ok) throw new Error(`API football ${res.status}`);
+    const data = await res.json();
+    const errs = data?.errors;
+    if (errs && !Array.isArray(errs) && Object.keys(errs).length > 0) {
+      throw new Error(`API football: ${JSON.stringify(errs)}`);
+    }
+    return data;
   }
-  return data;
+  throw new Error(`API football ${lastStatus} (clave rechazada)`);
 }
+
 
 function mapEvents(fx: any) {
   const evs = Array.isArray(fx?.events) ? fx.events : [];
@@ -52,6 +70,25 @@ Deno.serve(async (req) => {
   );
 
   if (!apiKey) return json({ ok: false, reason: "missing_api_key" }, 200);
+
+  const url = new URL(req.url);
+  const search = url.searchParams.get("search");
+  if (search) {
+    if (search.trim().length < 3) return json({ ok: false, error: "search too short" }, 400);
+    try {
+      const res = await apiGet(`/teams?search=${encodeURIComponent(search.trim().slice(0, 60))}`, apiKey);
+      const teams = (res?.response ?? []).slice(0, 10).map((r: any) => ({
+        id: r?.team?.id,
+        name: r?.team?.name,
+        country: r?.team?.country,
+        logo: r?.team?.logo,
+      }));
+      return json({ ok: true, teams });
+    } catch (e) {
+      return json({ ok: false, error: e instanceof Error ? e.message : String(e) }, 200);
+    }
+  }
+
 
   try {
     // 1. Current ToNOI champion = winner of the last title change
@@ -86,7 +123,7 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
 
-    const force = new URL(req.url).searchParams.get("force") === "1";
+    const force = url.searchParams.get("force") === "1";
     if (current && !force) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
