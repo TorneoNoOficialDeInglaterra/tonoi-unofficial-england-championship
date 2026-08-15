@@ -27,6 +27,85 @@ export type NormalisedFixture = {
 };
 
 /* ------------------------------------------------------------------ */
+/* TheSportsDB (free key, current seasons, worldwide)                  */
+/* ------------------------------------------------------------------ */
+
+const TSDB = "https://www.thesportsdb.com/api/v1/json/3";
+
+async function tsdbGet(path: string) {
+  const res = await fetch(`${TSDB}${path}`);
+  if (!res.ok) throw new Error(`thesportsdb ${res.status}`);
+  return await res.json();
+}
+
+/** Find the TheSportsDB team id (and its api-football id, when known). */
+export async function tsdbFindTeam(
+  name: string,
+): Promise<{ id: number; apiFootballId: number | null } | null> {
+  const data = await tsdbGet(`/searchteams.php?t=${encodeURIComponent(name)}`);
+  const teams: any[] = data?.teams ?? [];
+  const soccer = teams.filter((t) => t?.strSport === "Soccer");
+  const target = normalise(name);
+  const best =
+    soccer.find((t) => normalise(t?.strTeam ?? "") === target) ??
+    soccer.find((t) => normalise(`${t?.strTeamAlternate ?? ""}`).includes(target)) ??
+    soccer[0];
+  if (!best?.idTeam) return null;
+  return {
+    id: Number(best.idTeam),
+    apiFootballId: best?.idAPIfootball ? Number(best.idAPIfootball) : null,
+  };
+}
+
+function tsdbMap(e: any): NormalisedFixture {
+  const kickoff = e?.strTimestamp
+    ? new Date(`${e.strTimestamp}${e.strTimestamp.endsWith("Z") ? "" : "Z"}`)
+    : new Date(`${e?.dateEvent}T${e?.strTime ?? "00:00:00"}Z`);
+  const home = e?.intHomeScore === null || e?.intHomeScore === undefined ? null : Number(e.intHomeScore);
+  const away = e?.intAwayScore === null || e?.intAwayScore === undefined ? null : Number(e.intAwayScore);
+  const finished = home !== null && away !== null;
+  return {
+    fixture_id: Number(e.idEvent),
+    kickoff_at: kickoff.toISOString(),
+    league_name: e?.strLeague ?? null,
+    league_logo: e?.strLeagueBadge ?? null,
+    round: e?.intRound ? `Jornada ${e.intRound}` : (e?.strGroup ?? null),
+    home_name: e?.strHomeTeam ?? "?",
+    away_name: e?.strAwayTeam ?? "?",
+    home_logo: e?.strHomeTeamBadge ?? null,
+    away_logo: e?.strAwayTeamBadge ?? null,
+    home_goals: home,
+    away_goals: away,
+    home_pens: null,
+    away_pens: null,
+    status_short: finished ? "FT" : "NS",
+    status_long: finished ? "Match Finished" : "Not Started",
+    elapsed: null,
+    events: [],
+    source: "thesportsdb",
+  };
+}
+
+/** Next scheduled fixture for a team. */
+export async function tsdbNextFixture(teamId: number): Promise<NormalisedFixture | null> {
+  const data = await tsdbGet(`/eventsnext.php?id=${teamId}`);
+  const list: any[] = data?.events ?? [];
+  const mapped = list
+    .filter((e) => e?.strSport === "Soccer")
+    .map(tsdbMap)
+    .filter((f) => Number.isFinite(new Date(f.kickoff_at).getTime()))
+    .sort((a, b) => new Date(a.kickoff_at).getTime() - new Date(b.kickoff_at).getTime());
+  return mapped[0] ?? null;
+}
+
+/** Refresh a stored TheSportsDB event (score once the match is played). */
+export async function tsdbEvent(eventId: number): Promise<NormalisedFixture | null> {
+  const data = await tsdbGet(`/lookupevent.php?id=${eventId}`);
+  const e = data?.events?.[0];
+  return e ? tsdbMap(e) : null;
+}
+
+/* ------------------------------------------------------------------ */
 /* football-data.org                                                   */
 /* ------------------------------------------------------------------ */
 
@@ -128,7 +207,7 @@ export async function scrapeNextFixture(
   firecrawlKey: string,
   lovableKey: string,
 ): Promise<NormalisedFixture | null> {
-  const query = `${teamName} próximo partido calendario resultado en directo`;
+  const query = `"${teamName}" próximo partido fecha hora rival calendario fútbol`;
   const res = await fetch(`${FIRECRAWL_V2}/search`, {
     method: "POST",
     headers: { Authorization: `Bearer ${firecrawlKey}`, "Content-Type": "application/json" },
@@ -136,13 +215,12 @@ export async function scrapeNextFixture(
       query,
       limit: 3,
       lang: "es",
-      tbs: "qdr:w",
       scrapeOptions: { formats: ["markdown"], onlyMainContent: true },
     }),
   });
   if (!res.ok) throw new Error(`firecrawl ${res.status}: ${await res.text()}`);
   const payload = await res.json();
-  const docs: any[] = payload?.data ?? payload?.results ?? [];
+  const docs: any[] = payload?.data?.web ?? payload?.data ?? payload?.results ?? [];
   const context = docs
     .map((d) => `SOURCE: ${d?.url}\n${(d?.markdown ?? d?.description ?? "").slice(0, 6000)}`)
     .join("\n\n---\n\n")
