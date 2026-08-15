@@ -671,26 +671,32 @@ export type Database = {
         Row: {
           api_football_team_id: number | null
           created_at: string
+          football_data_team_id: number | null
           id: string
           logo_url: string | null
           name: string
           slug: string
+          sportsdb_team_id: number | null
         }
         Insert: {
           api_football_team_id?: number | null
           created_at?: string
+          football_data_team_id?: number | null
           id?: string
           logo_url?: string | null
           name: string
           slug: string
+          sportsdb_team_id?: number | null
         }
         Update: {
           api_football_team_id?: number | null
           created_at?: string
+          football_data_team_id?: number | null
           id?: string
           logo_url?: string | null
           name?: string
           slug?: string
+          sportsdb_team_id?: number | null
         }
         Relationships: []
       }
