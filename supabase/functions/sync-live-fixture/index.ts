@@ -53,6 +53,25 @@ Deno.serve(async (req) => {
 
   if (!apiKey) return json({ ok: false, reason: "missing_api_key" }, 200);
 
+  const url = new URL(req.url);
+  const search = url.searchParams.get("search");
+  if (search) {
+    if (search.trim().length < 3) return json({ ok: false, error: "search too short" }, 400);
+    try {
+      const res = await apiGet(`/teams?search=${encodeURIComponent(search.trim().slice(0, 60))}`, apiKey);
+      const teams = (res?.response ?? []).slice(0, 10).map((r: any) => ({
+        id: r?.team?.id,
+        name: r?.team?.name,
+        country: r?.team?.country,
+        logo: r?.team?.logo,
+      }));
+      return json({ ok: true, teams });
+    } catch (e) {
+      return json({ ok: false, error: e instanceof Error ? e.message : String(e) }, 200);
+    }
+  }
+
+
   try {
     // 1. Current ToNOI champion = winner of the last title change
     const { data: lastChange, error: lcErr } = await supabase
