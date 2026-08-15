@@ -292,6 +292,115 @@ export type Database = {
           },
         ]
       }
+      live_fixtures: {
+        Row: {
+          away_api_team_id: number | null
+          away_goals: number | null
+          away_logo: string | null
+          away_name: string
+          away_pens: number | null
+          away_team_id: string | null
+          champion_team_id: string | null
+          created_at: string
+          elapsed: number | null
+          events: Json
+          fixture_id: number
+          home_api_team_id: number | null
+          home_goals: number | null
+          home_logo: string | null
+          home_name: string
+          home_pens: number | null
+          home_team_id: string | null
+          id: string
+          is_current: boolean
+          kickoff_at: string
+          league_logo: string | null
+          league_name: string | null
+          round: string | null
+          status_long: string | null
+          status_short: string
+          updated_at: string
+        }
+        Insert: {
+          away_api_team_id?: number | null
+          away_goals?: number | null
+          away_logo?: string | null
+          away_name: string
+          away_pens?: number | null
+          away_team_id?: string | null
+          champion_team_id?: string | null
+          created_at?: string
+          elapsed?: number | null
+          events?: Json
+          fixture_id: number
+          home_api_team_id?: number | null
+          home_goals?: number | null
+          home_logo?: string | null
+          home_name: string
+          home_pens?: number | null
+          home_team_id?: string | null
+          id?: string
+          is_current?: boolean
+          kickoff_at: string
+          league_logo?: string | null
+          league_name?: string | null
+          round?: string | null
+          status_long?: string | null
+          status_short?: string
+          updated_at?: string
+        }
+        Update: {
+          away_api_team_id?: number | null
+          away_goals?: number | null
+          away_logo?: string | null
+          away_name?: string
+          away_pens?: number | null
+          away_team_id?: string | null
+          champion_team_id?: string | null
+          created_at?: string
+          elapsed?: number | null
+          events?: Json
+          fixture_id?: number
+          home_api_team_id?: number | null
+          home_goals?: number | null
+          home_logo?: string | null
+          home_name?: string
+          home_pens?: number | null
+          home_team_id?: string | null
+          id?: string
+          is_current?: boolean
+          kickoff_at?: string
+          league_logo?: string | null
+          league_name?: string | null
+          round?: string | null
+          status_long?: string | null
+          status_short?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_fixtures_away_team_id_fkey"
+            columns: ["away_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_fixtures_champion_team_id_fkey"
+            columns: ["champion_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_fixtures_home_team_id_fkey"
+            columns: ["home_team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       logo_fetch_attempts: {
         Row: {
           attempts: number
@@ -560,6 +669,7 @@ export type Database = {
       }
       teams: {
         Row: {
+          api_football_team_id: number | null
           created_at: string
           id: string
           logo_url: string | null
@@ -567,6 +677,7 @@ export type Database = {
           slug: string
         }
         Insert: {
+          api_football_team_id?: number | null
           created_at?: string
           id?: string
           logo_url?: string | null
@@ -574,6 +685,7 @@ export type Database = {
           slug: string
         }
         Update: {
+          api_football_team_id?: number | null
           created_at?: string
           id?: string
           logo_url?: string | null
