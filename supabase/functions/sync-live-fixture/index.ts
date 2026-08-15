@@ -129,7 +129,7 @@ Deno.serve(async (req) => {
     { auth: { persistSession: false } },
   );
 
-  const fdToken = Deno.env.get("FOOTBALL_DATA_TOKEN");
+  const fdToken = Deno.env.get("FOOTBALL_DATA_API_KEY");
   const firecrawlKey = Deno.env.get("FIRECRAWL_API_KEY");
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
