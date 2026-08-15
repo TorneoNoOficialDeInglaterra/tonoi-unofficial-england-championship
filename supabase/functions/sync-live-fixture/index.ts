@@ -13,17 +13,35 @@ function json(body: Json, status = 200) {
   });
 }
 
+const RAPID_BASE = "https://api-football-v1.p.rapidapi.com/v3";
+
 async function apiGet(path: string, key: string) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "x-apisports-key": key },
-  });
-  if (!res.ok) throw new Error(`API football ${res.status}`);
-  const data = await res.json();
-  if (Array.isArray(data?.errors) === false && data?.errors && Object.keys(data.errors).length > 0) {
-    throw new Error(`API football: ${JSON.stringify(data.errors)}`);
+  // Try the direct api-sports.io endpoint first, then RapidAPI (some keys only work there)
+  const attempts: { url: string; headers: Record<string, string> }[] = [
+    { url: `${API_BASE}${path}`, headers: { "x-apisports-key": key } },
+    {
+      url: `${RAPID_BASE}${path}`,
+      headers: { "x-rapidapi-key": key, "x-rapidapi-host": "api-football-v1.p.rapidapi.com" },
+    },
+  ];
+  let lastStatus = 0;
+  for (const a of attempts) {
+    const res = await fetch(a.url, { headers: a.headers });
+    if (res.status === 401 || res.status === 403) {
+      lastStatus = res.status;
+      continue;
+    }
+    if (!res.ok) throw new Error(`API football ${res.status}`);
+    const data = await res.json();
+    const errs = data?.errors;
+    if (errs && !Array.isArray(errs) && Object.keys(errs).length > 0) {
+      throw new Error(`API football: ${JSON.stringify(errs)}`);
+    }
+    return data;
   }
-  return data;
+  throw new Error(`API football ${lastStatus} (clave rechazada)`);
 }
+
 
 function mapEvents(fx: any) {
   const evs = Array.isArray(fx?.events) ? fx.events : [];
