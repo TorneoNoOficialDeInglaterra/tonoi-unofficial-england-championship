@@ -105,7 +105,7 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
 
-    const force = new URL(req.url).searchParams.get("force") === "1";
+    const force = url.searchParams.get("force") === "1";
     if (current && !force) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
