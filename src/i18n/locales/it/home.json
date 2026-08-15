@@ -55,5 +55,18 @@
     "label": "Video d'origine",
     "heading": "Scopri il torneo in video",
     "iframeTitle": "Cos'è il ToNOI?"
+  },
+  "next": {
+    "title": "Prossima partita",
+    "liveTitle": "Partita in diretta",
+    "finishedTitle": "Partita finita",
+    "liveBadge": "In diretta",
+    "none": "Nessuna partita confermata.",
+    "minute": "Minuto {{n}}",
+    "halfTime": "Intervallo",
+    "fullTime": "Fine partita",
+    "startsIn": "inizia in {{time}}",
+    "titleChanges": "Con questo risultato il titolo cambia di mano!",
+    "titleRetained": "Con questo risultato il campione mantiene il titolo."
   }
 }

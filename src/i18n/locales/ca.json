@@ -71,12 +71,33 @@
         "Els penals compten si als 90 minuts (o 120 minuts en cas que inclogui pròrroga) el resultat és d'empat i calen els penals per desempatar."
       ]
     },
-    "top10": { "title": "Top 10", "viewAll": "Veure tot →", "noData": "Sense dades." },
-    "last5": { "title": "Últims 5 partits", "viewAll": "Veure tot →", "noMatches": "Sense partits." },
+    "top10": {
+      "title": "Top 10",
+      "viewAll": "Veure tot →",
+      "noData": "Sense dades."
+    },
+    "last5": {
+      "title": "Últims 5 partits",
+      "viewAll": "Veure tot →",
+      "noMatches": "Sense partits."
+    },
     "video": {
       "label": "Vídeo d'origen",
       "heading": "Coneix el torneig en vídeo",
       "iframeTitle": "Què és el ToNOI?"
+    },
+    "next": {
+      "title": "Pròxim partit",
+      "liveTitle": "Partit en directe",
+      "finishedTitle": "Partit finalitzat",
+      "liveBadge": "En directe",
+      "none": "Sense pròxim partit confirmat.",
+      "minute": "Minut {{n}}",
+      "halfTime": "Descans",
+      "fullTime": "Final del partit",
+      "startsIn": "comença en {{time}}",
+      "titleChanges": "Amb aquest resultat el títol canvia de mans!",
+      "titleRetained": "Amb aquest resultat el campió manté el títol."
     }
   },
   "standings": {
@@ -96,20 +117,62 @@
       "id": "<strong>ID</strong>: Percentatge d'èxit (Des/I)"
     },
     "cols": {
-      "pj": { "label": "PJ", "desc": "Partits Jugats" },
-      "v": { "label": "V", "desc": "Victòries" },
-      "e": { "label": "E", "desc": "Empats" },
-      "d": { "label": "D", "desc": "Derrotes" },
-      "p": { "label": "P", "desc": "Punts" },
-      "gf": { "label": "GF", "desc": "Gols a Favor" },
-      "gc": { "label": "GC", "desc": "Gols en Contra" },
-      "dg": { "label": "DG", "desc": "Diferència de Gols" },
-      "ppp": { "label": "PPP", "desc": "Punts per Partit" },
-      "pct": { "label": "PcT", "desc": "Partits amb Trofeu" },
-      "mj": { "label": "MJ", "desc": "Millor ratxa" },
-      "intentos": { "label": "I", "desc": "Intents" },
-      "destronamientos": { "label": "Des", "desc": "Destronaments" },
-      "idPct": { "label": "ID", "desc": "Índex de Destronament (%)" }
+      "pj": {
+        "label": "PJ",
+        "desc": "Partits Jugats"
+      },
+      "v": {
+        "label": "V",
+        "desc": "Victòries"
+      },
+      "e": {
+        "label": "E",
+        "desc": "Empats"
+      },
+      "d": {
+        "label": "D",
+        "desc": "Derrotes"
+      },
+      "p": {
+        "label": "P",
+        "desc": "Punts"
+      },
+      "gf": {
+        "label": "GF",
+        "desc": "Gols a Favor"
+      },
+      "gc": {
+        "label": "GC",
+        "desc": "Gols en Contra"
+      },
+      "dg": {
+        "label": "DG",
+        "desc": "Diferència de Gols"
+      },
+      "ppp": {
+        "label": "PPP",
+        "desc": "Punts per Partit"
+      },
+      "pct": {
+        "label": "PcT",
+        "desc": "Partits amb Trofeu"
+      },
+      "mj": {
+        "label": "MJ",
+        "desc": "Millor ratxa"
+      },
+      "intentos": {
+        "label": "I",
+        "desc": "Intents"
+      },
+      "destronamientos": {
+        "label": "Des",
+        "desc": "Destronaments"
+      },
+      "idPct": {
+        "label": "ID",
+        "desc": "Índex de Destronament (%)"
+      }
     },
     "filter": {
       "placeholder": "Filtrar per equip…",
@@ -119,7 +182,11 @@
       "teamsCount": "{{count}} equip",
       "teamsCount_other": "{{count}} equips"
     },
-    "table": { "pos": "#", "team": "Equip", "empty": "Encara sense dades." }
+    "table": {
+      "pos": "#",
+      "team": "Equip",
+      "empty": "Encara sense dades."
+    }
   },
   "matches": {
     "history": {
@@ -143,7 +210,12 @@
       },
       "matchCount": "{{count}} partit",
       "matchCount_other": "{{count}} partits",
-      "table": { "date": "Data", "home": "Local", "result": "Resultat", "away": "Visitant" },
+      "table": {
+        "date": "Data",
+        "home": "Local",
+        "result": "Resultat",
+        "away": "Visitant"
+      },
       "empty": {
         "h2h": "No hi ha partits entre aquests dos clubs.",
         "none": "Sense partits."
@@ -174,7 +246,10 @@
       "seasonCurrentSuffix": " · actual",
       "historic": "Històric (totes les temporades)",
       "note": "Només hi ha registres d'estadístiques a partir de la temporada 2025/2026.",
-      "tabs": { "players": "Golejadors i assistents", "keepers": "Porteries a 0" },
+      "tabs": {
+        "players": "Golejadors i assistents",
+        "keepers": "Porteries a 0"
+      },
       "searchPlayerPlaceholder": "Buscar jugador...",
       "playersCount": "{{count}} jugador",
       "playersCount_other": "{{count}} jugadors",

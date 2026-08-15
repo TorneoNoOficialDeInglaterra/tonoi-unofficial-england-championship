@@ -55,5 +55,18 @@
     "label": "Vídeo de origen",
     "heading": "Conoce el torneo en vídeo",
     "iframeTitle": "¿Qué es el ToNOI?"
+  },
+  "next": {
+    "title": "Próximo partido",
+    "liveTitle": "Partido en directo",
+    "finishedTitle": "Partido finalizado",
+    "liveBadge": "En directo",
+    "none": "Sin próximo partido confirmado.",
+    "minute": "Minuto {{n}}",
+    "halfTime": "Descanso",
+    "fullTime": "Final del partido",
+    "startsIn": "empieza en {{time}}",
+    "titleChanges": "¡Con este resultado el título cambia de manos!",
+    "titleRetained": "Con este resultado el campeón retiene el título."
   }
 }

@@ -71,12 +71,33 @@
         "Os penaltis contan se nos 90 minutos (ou 120 minutos no caso de que inclúa prórroga) o resultado é de empate e se requiren os penaltis para desempatar."
       ]
     },
-    "top10": { "title": "Top 10", "viewAll": "Ver todo →", "noData": "Sen datos." },
-    "last5": { "title": "Últimos 5 partidos", "viewAll": "Ver todo →", "noMatches": "Sen partidos." },
+    "top10": {
+      "title": "Top 10",
+      "viewAll": "Ver todo →",
+      "noData": "Sen datos."
+    },
+    "last5": {
+      "title": "Últimos 5 partidos",
+      "viewAll": "Ver todo →",
+      "noMatches": "Sen partidos."
+    },
     "video": {
       "label": "Vídeo de orixe",
       "heading": "Coñece o torneo en vídeo",
       "iframeTitle": "Que é o ToNOI?"
+    },
+    "next": {
+      "title": "Próximo partido",
+      "liveTitle": "Partido en directo",
+      "finishedTitle": "Partido finalizado",
+      "liveBadge": "En directo",
+      "none": "Sen próximo partido confirmado.",
+      "minute": "Minuto {{n}}",
+      "halfTime": "Descanso",
+      "fullTime": "Final do partido",
+      "startsIn": "comeza en {{time}}",
+      "titleChanges": "Con este resultado o título cambia de mans!",
+      "titleRetained": "Con este resultado o campión mantén o título."
     }
   },
   "standings": {
@@ -96,20 +117,62 @@
       "id": "<strong>ID</strong>: Porcentaxe de éxito (Des/I)"
     },
     "cols": {
-      "pj": { "label": "PX", "desc": "Partidos Xogados" },
-      "v": { "label": "V", "desc": "Vitorias" },
-      "e": { "label": "E", "desc": "Empates" },
-      "d": { "label": "D", "desc": "Derrotas" },
-      "p": { "label": "P", "desc": "Puntos" },
-      "gf": { "label": "GF", "desc": "Goles a Favor" },
-      "gc": { "label": "GC", "desc": "Goles en Contra" },
-      "dg": { "label": "DG", "desc": "Diferenza de Goles" },
-      "ppp": { "label": "PPP", "desc": "Puntos por Partido" },
-      "pct": { "label": "PcT", "desc": "Partidos con Trofeo" },
-      "mj": { "label": "MX", "desc": "Mellor racha" },
-      "intentos": { "label": "I", "desc": "Intentos" },
-      "destronamientos": { "label": "Des", "desc": "Destronamentos" },
-      "idPct": { "label": "ID", "desc": "Índice de Destronamento (%)" }
+      "pj": {
+        "label": "PX",
+        "desc": "Partidos Xogados"
+      },
+      "v": {
+        "label": "V",
+        "desc": "Vitorias"
+      },
+      "e": {
+        "label": "E",
+        "desc": "Empates"
+      },
+      "d": {
+        "label": "D",
+        "desc": "Derrotas"
+      },
+      "p": {
+        "label": "P",
+        "desc": "Puntos"
+      },
+      "gf": {
+        "label": "GF",
+        "desc": "Goles a Favor"
+      },
+      "gc": {
+        "label": "GC",
+        "desc": "Goles en Contra"
+      },
+      "dg": {
+        "label": "DG",
+        "desc": "Diferenza de Goles"
+      },
+      "ppp": {
+        "label": "PPP",
+        "desc": "Puntos por Partido"
+      },
+      "pct": {
+        "label": "PcT",
+        "desc": "Partidos con Trofeo"
+      },
+      "mj": {
+        "label": "MX",
+        "desc": "Mellor racha"
+      },
+      "intentos": {
+        "label": "I",
+        "desc": "Intentos"
+      },
+      "destronamientos": {
+        "label": "Des",
+        "desc": "Destronamentos"
+      },
+      "idPct": {
+        "label": "ID",
+        "desc": "Índice de Destronamento (%)"
+      }
     },
     "filter": {
       "placeholder": "Filtrar por equipo…",
@@ -119,7 +182,11 @@
       "teamsCount": "{{count}} equipo",
       "teamsCount_other": "{{count}} equipos"
     },
-    "table": { "pos": "#", "team": "Equipo", "empty": "Aínda non hai datos." }
+    "table": {
+      "pos": "#",
+      "team": "Equipo",
+      "empty": "Aínda non hai datos."
+    }
   },
   "matches": {
     "history": {
@@ -143,7 +210,12 @@
       },
       "matchCount": "{{count}} partido",
       "matchCount_other": "{{count}} partidos",
-      "table": { "date": "Data", "home": "Local", "result": "Resultado", "away": "Visitante" },
+      "table": {
+        "date": "Data",
+        "home": "Local",
+        "result": "Resultado",
+        "away": "Visitante"
+      },
       "empty": {
         "h2h": "Non hai partidos entre eses dous clubs.",
         "none": "Sen partidos."
@@ -174,7 +246,10 @@
       "seasonCurrentSuffix": " · actual",
       "historic": "Histórico (todas as tempadas)",
       "note": "Os rexistros de estatísticas individuais só están dispoñibles a partir da tempada 2025/2026.",
-      "tabs": { "players": "Goleadores e asistencias", "keepers": "Porterías a cero" },
+      "tabs": {
+        "players": "Goleadores e asistencias",
+        "keepers": "Porterías a cero"
+      },
       "searchPlayerPlaceholder": "Buscar xogador...",
       "playersCount": "{{count}} xogador",
       "playersCount_other": "{{count}} xogadores",

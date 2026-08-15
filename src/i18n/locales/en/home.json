@@ -55,5 +55,18 @@
     "label": "Origin video",
     "heading": "Learn about the tournament on video",
     "iframeTitle": "What is the ToNOI?"
+  },
+  "next": {
+    "title": "Next match",
+    "liveTitle": "Live match",
+    "finishedTitle": "Match finished",
+    "liveBadge": "Live",
+    "none": "No upcoming match confirmed.",
+    "minute": "Minute {{n}}",
+    "halfTime": "Half-time",
+    "fullTime": "Full time",
+    "startsIn": "starts in {{time}}",
+    "titleChanges": "With this result the title changes hands!",
+    "titleRetained": "With this result the champion keeps the title."
   }
 }
