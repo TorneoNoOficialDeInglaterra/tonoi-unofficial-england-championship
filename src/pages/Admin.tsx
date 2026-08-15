@@ -209,7 +209,7 @@ function TeamsAdmin() {
                 <tr key={t.id} className="border-t border-border">
                   <td className="px-3 py-2 font-medium">{t.name}</td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
-                  <td className="px-3 py-2"><ApiTeamIdCell team={t} onSave={(v) => updateApiId(t.id, v)} /></td>
+                  <td className="px-3 py-2"><ApiTeamIdCell team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                 </tr>
               ))}
