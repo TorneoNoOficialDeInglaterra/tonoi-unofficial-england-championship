@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
+import NextMatchWidget from "@/components/NextMatchWidget";
+
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings, daysBetween, buildLocalByMatchMap, sideScore, isPenaltyMatch } from "@/lib/tonoi";
 
