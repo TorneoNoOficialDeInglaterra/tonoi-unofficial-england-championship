@@ -4,6 +4,9 @@ import {
   fdFindTeamId,
   fdNextFixture,
   scrapeNextFixture,
+  tsdbEvent,
+  tsdbFindTeam,
+  tsdbNextFixture,
   type NormalisedFixture,
 } from "./sources.ts";
 
@@ -165,7 +168,7 @@ Deno.serve(async (req) => {
 
     const { data: champion, error: chErr } = await supabase
       .from("teams")
-      .select("id, name, api_football_team_id, football_data_team_id")
+      .select("id, name, api_football_team_id, football_data_team_id, sportsdb_team_id")
       .eq("id", lastChange.winner_team_id)
       .maybeSingle();
     if (chErr) throw chErr;
@@ -229,6 +232,33 @@ Deno.serve(async (req) => {
         }
       } catch (e) {
         console.warn("api-football source failed", e);
+      }
+    }
+
+    // 3a-bis. TheSportsDB (free, worldwide, current season schedule)
+    if (!norm) {
+      tried.push("thesportsdb");
+      try {
+        let sdbId = (champion.sportsdb_team_id ?? null) as number | null;
+        if (!sdbId) {
+          const found = await tsdbFindTeam(champion.name as string);
+          if (found) {
+            sdbId = found.id;
+            const patch: Record<string, unknown> = { sportsdb_team_id: found.id };
+            if (!apiTeamId && found.apiFootballId) patch.api_football_team_id = found.apiFootballId;
+            await supabase.from("teams").update(patch).eq("id", champion.id);
+          }
+        }
+        if (sdbId) {
+          // If the stored fixture has already kicked off, refresh that same event first
+          if (current && new Date(current.kickoff_at).getTime() < Date.now()) {
+            const refreshed = await tsdbEvent(Number(current.fixture_id));
+            if (refreshed && refreshed.home_goals !== null) norm = refreshed;
+          }
+          if (!norm) norm = await tsdbNextFixture(sdbId);
+        }
+      } catch (e) {
+        console.warn("thesportsdb source failed", e);
       }
     }
 
