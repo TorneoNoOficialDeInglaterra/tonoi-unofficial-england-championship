@@ -59,9 +59,14 @@ export default function Admin() {
           <h1 className="flex items-center gap-2 text-3xl font-black"><Shield className="h-7 w-7 text-primary" />Panel admin</h1>
           <p className="text-sm text-muted-foreground">Gestiona equipos, partidos, jugadores, porteros y temporadas.</p>
         </div>
-        <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); nav("/auth"); }}>
-          <LogOut className="mr-1 h-4 w-4" /> Salir
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => nav("/auditoria")}>
+            <ClipboardList className="mr-1 h-4 w-4" /> Auditoría
+          </Button>
+          <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); nav("/auth"); }}>
+            <LogOut className="mr-1 h-4 w-4" /> Salir
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="teams" className="mt-8">
