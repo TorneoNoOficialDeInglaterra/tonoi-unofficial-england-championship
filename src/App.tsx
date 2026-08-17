@@ -12,6 +12,7 @@ import Stats from "./pages/Stats";
 import History from "./pages/History";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Auditoria from "./pages/Auditoria";
 import Contact from "./pages/Contact";
 import Faq from "./pages/Faq";
 import Unsubscribe from "./pages/Unsubscribe";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/auditoria" element={<Auditoria />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
