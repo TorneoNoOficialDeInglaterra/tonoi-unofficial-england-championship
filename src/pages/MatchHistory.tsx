@@ -250,14 +250,16 @@ export default function MatchHistory() {
                   const prev = matches[i - 1];
                   const next = matches[i + 1];
                   // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
-                  const breakAbove = BREAKS.find(
-                    (b) =>
-                      m.match_date <= b.after &&
-                      (!prev || prev.match_date >= b.before),
-                  );
-                  const breakBelow = BREAKS.find(
-                    (b) => !next && m.match_date === b.before,
-                  );
+                  const breakAbove = filtering
+                    ? undefined
+                    : BREAKS.find(
+                        (b) =>
+                          m.match_date <= b.after &&
+                          (!prev || prev.match_date >= b.before),
+                      );
+                  const breakBelow = filtering
+                    ? undefined
+                    : BREAKS.find((b) => !next && m.match_date === b.before);
                   return (
                     <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
