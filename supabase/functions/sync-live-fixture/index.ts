@@ -184,13 +184,21 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
 
+    // A stored fixture is dropped 6 h after kickoff so the widget moves on to
+    // the next match; a change of champion also forces an immediate refresh.
+    const KEEP_RESULT_MS = 6 * 3600_000;
+    const staleFinished =
+      !!current && Date.now() - new Date(current.kickoff_at).getTime() > KEEP_RESULT_MS;
+    const championChanged = !!current && current.champion_team_id !== champion.id;
+
     const force = url.searchParams.get("force") === "1";
-    if (current && !force) {
+    if (current && !force && !staleFinished && !championChanged) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
       const minAge = live ? 45_000 : 20 * 60_000;
       if (ageMs < minAge) return json({ ok: true, cached: true, fixture: current });
     }
+
 
     // 3. Resolve the fixture from the available sources, in order of quality
     let norm: NormalisedFixture | null = null;
@@ -250,13 +258,15 @@ Deno.serve(async (req) => {
           }
         }
         if (sdbId) {
-          // If the stored fixture has already kicked off, refresh that same event first
-          if (current && new Date(current.kickoff_at).getTime() < Date.now()) {
+          // Refresh the stored event only while it is still relevant (kicked off
+          // less than 6 h ago and same champion); otherwise jump to the next one.
+          if (current && !staleFinished && !championChanged && new Date(current.kickoff_at).getTime() < Date.now()) {
             const refreshed = await tsdbEvent(Number(current.fixture_id));
             if (refreshed && refreshed.home_goals !== null) norm = refreshed;
           }
           if (!norm) norm = await tsdbNextFixture(sdbId);
         }
+
       } catch (e) {
         console.warn("thesportsdb source failed", e);
       }
@@ -289,10 +299,14 @@ Deno.serve(async (req) => {
       }
     }
 
-    if (!norm || !norm.fixture_id || !norm.kickoff_at) {
+    const sameAsStale =
+      !!current && staleFinished && norm && Number(norm.fixture_id) === Number(current.fixture_id);
+
+    if (!norm || !norm.fixture_id || !norm.kickoff_at || sameAsStale) {
       if (current) await supabase.from("live_fixtures").update({ is_current: false }).eq("id", current.id);
       return json({ ok: true, fixture: null, reason: "no_fixture", tried });
     }
+
 
     // 4. Map the fixture teams to ToNOI teams (by API id when we have it, else by name)
     const { data: allTeams } = await supabase.from("teams").select("id, name, api_football_team_id");
