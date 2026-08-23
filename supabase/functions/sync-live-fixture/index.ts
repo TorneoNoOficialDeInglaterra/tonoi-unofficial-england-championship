@@ -258,13 +258,15 @@ Deno.serve(async (req) => {
           }
         }
         if (sdbId) {
-          // If the stored fixture has already kicked off, refresh that same event first
-          if (current && new Date(current.kickoff_at).getTime() < Date.now()) {
+          // Refresh the stored event only while it is still relevant (kicked off
+          // less than 6 h ago and same champion); otherwise jump to the next one.
+          if (current && !staleFinished && !championChanged && new Date(current.kickoff_at).getTime() < Date.now()) {
             const refreshed = await tsdbEvent(Number(current.fixture_id));
             if (refreshed && refreshed.home_goals !== null) norm = refreshed;
           }
           if (!norm) norm = await tsdbNextFixture(sdbId);
         }
+
       } catch (e) {
         console.warn("thesportsdb source failed", e);
       }
