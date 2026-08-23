@@ -184,13 +184,21 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
 
+    // A stored fixture is dropped 6 h after kickoff so the widget moves on to
+    // the next match; a change of champion also forces an immediate refresh.
+    const KEEP_RESULT_MS = 6 * 3600_000;
+    const staleFinished =
+      !!current && Date.now() - new Date(current.kickoff_at).getTime() > KEEP_RESULT_MS;
+    const championChanged = !!current && current.champion_team_id !== champion.id;
+
     const force = url.searchParams.get("force") === "1";
-    if (current && !force) {
+    if (current && !force && !staleFinished && !championChanged) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
       const minAge = live ? 45_000 : 20 * 60_000;
       if (ageMs < minAge) return json({ ok: true, cached: true, fixture: current });
     }
+
 
     // 3. Resolve the fixture from the available sources, in order of quality
     let norm: NormalisedFixture | null = null;
