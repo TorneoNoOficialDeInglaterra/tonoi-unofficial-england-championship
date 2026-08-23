@@ -299,10 +299,14 @@ Deno.serve(async (req) => {
       }
     }
 
-    if (!norm || !norm.fixture_id || !norm.kickoff_at) {
+    const sameAsStale =
+      !!current && staleFinished && norm && Number(norm.fixture_id) === Number(current.fixture_id);
+
+    if (!norm || !norm.fixture_id || !norm.kickoff_at || sameAsStale) {
       if (current) await supabase.from("live_fixtures").update({ is_current: false }).eq("id", current.id);
       return json({ ok: true, fixture: null, reason: "no_fixture", tried });
     }
+
 
     // 4. Map the fixture teams to ToNOI teams (by API id when we have it, else by name)
     const { data: allTeams } = await supabase.from("teams").select("id, name, api_football_team_id");
