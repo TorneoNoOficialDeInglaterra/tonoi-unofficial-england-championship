@@ -56,6 +56,27 @@ function ymd(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
+function inferElapsed(statusShort: string, kickoffAt: string, elapsed: number | null) {
+  if (typeof elapsed === "number" && Number.isFinite(elapsed) && elapsed > 0) {
+    return Math.round(elapsed);
+  }
+
+  const status = statusShort.toUpperCase();
+  if (status === "HT") return 45;
+  if (!LIVE_STATUSES.includes(status)) return elapsed;
+
+  const kickoffMs = new Date(kickoffAt).getTime();
+  if (!Number.isFinite(kickoffMs)) return elapsed;
+
+  const realMinutes = Math.floor((Date.now() - kickoffMs) / 60_000);
+  if (realMinutes <= 0) return 1;
+
+  if (status === "1H") return Math.min(realMinutes, 45);
+  if (status === "2H") return Math.min(Math.max(realMinutes - 15, 46), 90);
+  if (status === "ET") return Math.min(Math.max(realMinutes - 20, 91), 120);
+  return Math.min(realMinutes, 120);
+}
+
 // The free API-Football plan rejects the "next" parameter, so we query by
 // date range / season and pick the closest upcoming fixture ourselves.
 async function findNextFixture(apiTeamId: number, key: string) {
@@ -350,7 +371,7 @@ Deno.serve(async (req) => {
       away_pens: norm.away_pens,
       status_short: norm.status_short,
       status_long: norm.status_long,
-      elapsed: norm.elapsed,
+      elapsed: inferElapsed(norm.status_short, norm.kickoff_at, norm.elapsed),
       events: norm.events,
       champion_team_id: champion.id,
       is_current: true,

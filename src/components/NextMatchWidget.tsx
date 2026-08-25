@@ -22,13 +22,33 @@ function EventIcon({ type }: { type: string | null }) {
   return <ArrowRightLeft className="h-3.5 w-3.5 text-muted-foreground" />;
 }
 
+function estimateLiveMinute(fixture: NonNullable<ReturnType<typeof useLiveFixture>["data"]>, now: number) {
+  const stored = typeof fixture.elapsed === "number" && fixture.elapsed > 0 ? fixture.elapsed : null;
+  const status = fixture.status_short.toUpperCase();
+  if (status === "HT") return 45;
+
+  const kickoffMs = new Date(fixture.kickoff_at).getTime();
+  if (!Number.isFinite(kickoffMs)) return stored ?? 0;
+
+  const realMinutes = Math.floor((now - kickoffMs) / 60_000);
+  let estimated = 0;
+  if (realMinutes > 0) {
+    if (status === "1H") estimated = Math.min(realMinutes, 45);
+    else if (status === "2H") estimated = Math.min(Math.max(realMinutes - 15, 46), 90);
+    else if (status === "ET") estimated = Math.min(Math.max(realMinutes - 20, 91), 120);
+    else estimated = Math.min(realMinutes, 120);
+  }
+
+  return Math.max(stored ?? 0, estimated || 1);
+}
+
 export default function NextMatchWidget() {
   const { t } = useTranslation("home");
   const { data: fixture, isLoading } = useLiveFixture();
 
   const live = isLive(fixture);
   const finished = isFinished(fixture);
-  const now = useNow(!!fixture && !live && !finished);
+  const now = useNow(!!fixture && !finished);
 
   const countdown = useMemo(() => {
     if (!fixture || live || finished) return null;
@@ -63,6 +83,7 @@ export default function NextMatchWidget() {
   }, [fixture, live, finished]);
 
   const events = (fixture?.events ?? []) as LiveEvent[];
+  const liveMinute = live && fixture ? estimateLiveMinute(fixture, now) : 0;
 
   return (
     <Card className="p-6 shadow-[var(--shadow-card)]">
@@ -110,7 +131,7 @@ export default function NextMatchWidget() {
             {live
               ? fixture.status_short === "HT"
                 ? t("next.halfTime")
-                : t("next.minute", { n: fixture.elapsed ?? 0 })
+                : t("next.minute", { n: liveMinute })
               : finished
                 ? t("next.fullTime")
                 : new Date(fixture.kickoff_at).toLocaleDateString(localeTag(), { weekday: "long", day: "numeric", month: "long" })}
