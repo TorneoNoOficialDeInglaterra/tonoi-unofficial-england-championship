@@ -164,18 +164,26 @@ function TeamsAdmin() {
     const parsed = value.trim() === "" ? null : Number(value.trim());
     if (parsed !== null && (!Number.isInteger(parsed) || parsed <= 0)) return toast.error("ID de API no válido");
     const { error } = await supabase.from("teams").update({ api_football_team_id: parsed }).eq("id", id);
-    if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["teams"] });
+    if (error) return toast.error(error.message);
+    qc.invalidateQueries({ queryKey: ["teams"] });
+    try {
+      await refreshLiveFixtureNow(qc);
+    } catch {
+      // El ID queda guardado aunque la sincronización automática falle puntualmente.
+    }
   }
   async function syncLive() {
-    const { data, error } = await supabase.functions.invoke("sync-live-fixture", { body: {} });
-    if (error) return toast.error(error.message);
-    const res = data as { ok?: boolean; reason?: string; error?: string; fixture?: unknown };
+    let res: { ok?: boolean; reason?: string; error?: string; fixture?: unknown };
+    try {
+      res = await refreshLiveFixtureNow(qc);
+    } catch (e) {
+      return toast.error(e instanceof Error ? e.message : "Error al sincronizar");
+    }
     if (res?.reason === "missing_api_key") return toast.error("Falta configurar la clave de la API de fútbol");
     if (res?.reason === "no_api_id") return toast.error("El campeón actual no tiene ID de API asignado");
     if (res?.reason === "no_fixture") return toast.info("La API no devuelve próximo partido del campeón");
     if (res?.error) return toast.error(res.error);
     toast.success("Partido sincronizado");
-    qc.invalidateQueries({ queryKey: ["live-fixture"] });
   }
   async function remove(id: string) {
     if (!confirm("¿Eliminar equipo?")) return;
@@ -228,6 +236,14 @@ function TeamsAdmin() {
 
 /* ================== API-FOOTBALL TEAM ID ================== */
 type ApiTeamResult = { id: number; name: string; country: string | null; logo: string | null };
+
+async function refreshLiveFixtureNow(qc: ReturnType<typeof useQueryClient>) {
+  const { data, error } = await supabase.functions.invoke("sync-live-fixture?force=1", { body: {} });
+  if (error) throw error;
+  qc.invalidateQueries({ queryKey: ["live-fixture"] });
+  qc.invalidateQueries({ queryKey: ["live-fixture-champion"] });
+  return data as { ok?: boolean; reason?: string; error?: string; fixture?: unknown };
+}
 
 function ApiTeamIdCell({ team, onSave }: { team: Team; onSave: (value: string) => void | Promise<void> }) {
   const apiId = (team as { api_football_team_id?: number | null }).api_football_team_id ?? "";
@@ -436,13 +452,18 @@ function MatchesAdmin() {
     setHomePens("");
     setAwayPens("");
     qc.invalidateQueries({ queryKey: ["matches"] });
+    refreshLiveFixtureNow(qc).catch(() => undefined);
   }
 
 
   async function remove(id: string) {
     if (!confirm("¿Eliminar partido?")) return;
     const { error } = await supabase.from("matches").delete().eq("id", id);
-    if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["matches"] });
+    if (error) toast.error(error.message);
+    else {
+      qc.invalidateQueries({ queryKey: ["matches"] });
+      refreshLiveFixtureNow(qc).catch(() => undefined);
+    }
   }
 
   // Edit state
@@ -503,6 +524,7 @@ function MatchesAdmin() {
     toast.success("Partido actualizado");
     setEditId(null);
     qc.invalidateQueries({ queryKey: ["matches"] });
+    refreshLiveFixtureNow(qc).catch(() => undefined);
   }
 
 
