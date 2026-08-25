@@ -54,7 +54,7 @@ async function fetchCurrentChampionId(): Promise<string | null> {
 }
 
 export const LIVE_STATUSES = ["1H", "HT", "2H", "ET", "BT", "P", "SUSP", "INT", "LIVE"];
-export const FINISHED_STATUSES = ["FT", "AET", "PEN"];
+export const FINISHED_STATUSES = ["FT", "AET", "PEN", "AWD"];
 
 export function isLive(f?: LiveFixture | null) {
   return !!f && LIVE_STATUSES.includes(f.status_short);
@@ -113,7 +113,10 @@ export function useLiveFixture() {
     let cancelled = false;
     const sync = async () => {
       try {
-        const force = q.data && championQ.data && q.data.champion_team_id !== championQ.data;
+        const force = q.data && championQ.data &&
+          q.data.home_team_id !== championQ.data &&
+          q.data.away_team_id !== championQ.data &&
+          q.data.champion_team_id !== championQ.data;
         await supabase.functions.invoke(force ? "sync-live-fixture?force=1" : "sync-live-fixture");
         if (!cancelled) qc.invalidateQueries({ queryKey: ["live-fixture"] });
       } catch {
@@ -126,7 +129,7 @@ export function useLiveFixture() {
       cancelled = true;
       clearInterval(id);
     };
-  }, [championQ.data, live, q.data, qc]);
+  }, [championQ.data, live, q.data?.away_team_id, q.data?.champion_team_id, q.data?.home_team_id, qc]);
 
   return { ...q, isLoading: championQ.isLoading || q.isLoading };
 }
