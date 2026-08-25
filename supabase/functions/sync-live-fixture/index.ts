@@ -12,6 +12,7 @@ import {
 
 const API_BASE = "https://v3.football.api-sports.io";
 const LIVE_STATUSES = ["1H", "HT", "2H", "ET", "BT", "P", "SUSP", "INT", "LIVE"];
+const FINISHED_STATUSES = ["FT", "AET", "PEN", "AWD"];
 
 type Json = Record<string, unknown>;
 
@@ -140,6 +141,55 @@ function mapEvents(fx: any) {
     }));
 }
 
+function isActiveOrPlayedFixture(fixture: NormalisedFixture) {
+  const status = fixture.status_short.toUpperCase();
+  const kickoffMs = new Date(fixture.kickoff_at).getTime();
+  return (
+    LIVE_STATUSES.includes(status) ||
+    FINISHED_STATUSES.includes(status) ||
+    (Number.isFinite(kickoffMs) && kickoffMs <= Date.now())
+  );
+}
+
+async function titleHolderForFixture(
+  supabase: any,
+  currentChampionId: string,
+  fixture: NormalisedFixture,
+  homeTeamId: string | null,
+  awayTeamId: string | null,
+) {
+  if (!homeTeamId || !awayTeamId || !isActiveOrPlayedFixture(fixture)) return currentChampionId;
+
+  const fixtureDate = fixture.kickoff_at.slice(0, 10);
+  const { data: sameDayMatches } = await supabase
+    .from("matches")
+    .select("id, match_date, winner_team_id, loser_team_id, title_changed, created_at")
+    .eq("match_date", fixtureDate)
+    .in("winner_team_id", [homeTeamId, awayTeamId])
+    .in("loser_team_id", [homeTeamId, awayTeamId])
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  const savedFixtureMatch = (sameDayMatches ?? []).find((m: any) => {
+    const ids = new Set([m.winner_team_id, m.loser_team_id]);
+    return ids.has(homeTeamId) && ids.has(awayTeamId);
+  });
+
+  if (!savedFixtureMatch?.title_changed) return currentChampionId;
+
+  const { data: previousChange } = await supabase
+    .from("matches")
+    .select("winner_team_id")
+    .eq("title_changed", true)
+    .lt("match_date", savedFixtureMatch.match_date)
+    .order("match_date", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  return previousChange?.winner_team_id ?? currentChampionId;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -205,15 +255,25 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
 
-    // A stored fixture is dropped 6 h after kickoff so the widget moves on to
-    // the next match; a change of champion also forces an immediate refresh.
+    // A stored finished fixture is dropped 6 h after it was last saved by the
+    // backend/admin sync, so the widget moves on after the result is recorded.
+    // If the stored fixture does not include the latest champion, refresh now.
     const KEEP_RESULT_MS = 6 * 3600_000;
+    const currentStatus = current ? String(current.status_short).toUpperCase() : "";
+    const currentStoredAt = current ? new Date(current.updated_at ?? current.kickoff_at).getTime() : 0;
     const staleFinished =
-      !!current && Date.now() - new Date(current.kickoff_at).getTime() > KEEP_RESULT_MS;
-    const championChanged = !!current && current.champion_team_id !== champion.id;
+      !!current &&
+      FINISHED_STATUSES.includes(currentStatus) &&
+      Number.isFinite(currentStoredAt) &&
+      Date.now() - currentStoredAt > KEEP_RESULT_MS;
+    const championMissingFromCurrent =
+      !!current &&
+      current.home_team_id !== champion.id &&
+      current.away_team_id !== champion.id &&
+      current.champion_team_id !== champion.id;
 
     const force = url.searchParams.get("force") === "1";
-    if (current && !force && !staleFinished && !championChanged) {
+    if (current && !force && !staleFinished && !championMissingFromCurrent) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
       const minAge = live ? 45_000 : 20 * 60_000;
@@ -279,9 +339,8 @@ Deno.serve(async (req) => {
           }
         }
         if (sdbId) {
-          // Refresh the stored event only while it is still relevant (kicked off
-          // less than 6 h ago and same champion); otherwise jump to the next one.
-          if (current && !staleFinished && !championChanged && new Date(current.kickoff_at).getTime() < Date.now()) {
+          // Refresh the stored event only while it is still relevant; otherwise jump to the next one.
+          if (current && !staleFinished && !championMissingFromCurrent && new Date(current.kickoff_at).getTime() < Date.now()) {
             const refreshed = await tsdbEvent(Number(current.fixture_id));
             if (refreshed && refreshed.home_goals !== null) norm = refreshed;
           }
@@ -362,6 +421,10 @@ Deno.serve(async (req) => {
     const isHomeChampion = slug(norm.home_name).includes(slug(champion.name as string).slice(0, 6));
     const championApi = apiTeamId;
 
+    const homeTeamId = findTeam(norm.home_name, null);
+    const awayTeamId = findTeam(norm.away_name, null);
+    const titleHolderId = await titleHolderForFixture(supabase, champion.id, norm, homeTeamId, awayTeamId);
+
     const row = {
       fixture_id: norm.fixture_id,
       kickoff_at: norm.kickoff_at,
@@ -374,8 +437,8 @@ Deno.serve(async (req) => {
       away_name: norm.away_name,
       home_logo: norm.home_logo,
       away_logo: norm.away_logo,
-      home_team_id: findTeam(norm.home_name, null),
-      away_team_id: findTeam(norm.away_name, null),
+      home_team_id: homeTeamId,
+      away_team_id: awayTeamId,
       home_goals: norm.home_goals,
       away_goals: norm.away_goals,
       home_pens: norm.home_pens,
@@ -384,7 +447,7 @@ Deno.serve(async (req) => {
       status_long: norm.status_long,
       elapsed: inferElapsed(norm.status_short, norm.kickoff_at, norm.elapsed),
       events: norm.events,
-      champion_team_id: champion.id,
+      champion_team_id: titleHolderId,
       is_current: true,
       updated_at: new Date().toISOString(),
     };
