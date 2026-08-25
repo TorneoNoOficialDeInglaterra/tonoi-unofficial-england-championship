@@ -333,6 +333,10 @@ Deno.serve(async (req) => {
     const { data: allTeams } = await supabase.from("teams").select("id, name, api_football_team_id");
     const slug = (s: string) =>
       s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+    const isReserveTeamName = (name: string) =>
+      /\b(b|c|ii|iii|u\s*-?\s*\d{2}|under\s*\d{2}|reserve|reserves|youth|academy)\b/.test(
+        name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, " "),
+      );
     const findTeam = (name: string, apiId: number | null) => {
       const list = allTeams ?? [];
       if (apiId) {
@@ -342,10 +346,17 @@ Deno.serve(async (req) => {
       const target = slug(name);
       const exact = list.find((t: any) => slug(t.name) === target);
       if (exact) return exact.id;
-      const partial = list.find(
-        (t: any) => slug(t.name).includes(target) || target.includes(slug(t.name)),
-      );
-      return partial?.id ?? null;
+      const allowsReserve = isReserveTeamName(name);
+      const partial = list
+        .map((t: any) => {
+          const candidate = slug(t.name);
+          const matches = candidate.includes(target) || target.includes(candidate);
+          const reservePenalty = !allowsReserve && isReserveTeamName(t.name) ? 1 : 0;
+          return { team: t, matches, reservePenalty, length: candidate.length };
+        })
+        .filter((item) => item.matches)
+        .sort((a, b) => a.reservePenalty - b.reservePenalty || a.length - b.length)[0];
+      return partial?.team?.id ?? null;
     };
 
     const isHomeChampion = slug(norm.home_name).includes(slug(champion.name as string).slice(0, 6));

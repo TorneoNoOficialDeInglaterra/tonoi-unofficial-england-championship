@@ -42,19 +42,54 @@ async function tsdbGet(path: string) {
 export async function tsdbFindTeam(
   name: string,
 ): Promise<{ id: number; apiFootballId: number | null } | null> {
-  const data = await tsdbGet(`/searchteams.php?t=${encodeURIComponent(name)}`);
-  const teams: any[] = data?.teams ?? [];
-  const soccer = teams.filter((t) => t?.strSport === "Soccer");
+  const searches = Array.from(new Set([name, simplifySearchName(name)].filter(Boolean)));
+  const soccer: any[] = [];
+  for (const search of searches) {
+    const data = await tsdbGet(`/searchteams.php?t=${encodeURIComponent(search)}`);
+    const teams: any[] = data?.teams ?? [];
+    for (const team of teams.filter((t) => t?.strSport === "Soccer")) {
+      if (!soccer.some((existing) => existing?.idTeam === team?.idTeam)) soccer.push(team);
+    }
+  }
   const target = normalise(name);
-  const best =
-    soccer.find((t) => normalise(t?.strTeam ?? "") === target) ??
-    soccer.find((t) => normalise(`${t?.strTeamAlternate ?? ""}`).includes(target)) ??
-    soccer[0];
+  const allowsReserve = isReserveTeamName(name);
+  const best = soccer
+    .map((team) => ({ team, score: scoreTeamMatch(team, target, allowsReserve) }))
+    .sort((a, b) => b.score - a.score)[0]?.team;
   if (!best?.idTeam) return null;
   return {
     id: Number(best.idTeam),
     apiFootballId: best?.idAPIfootball ? Number(best.idAPIfootball) : null,
   };
+}
+
+function simplifySearchName(name: string) {
+  return name
+    .replace(/\b(balompi[eé]|s\.?a\.?d\.?)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isReserveTeamName(name: string) {
+  const clean = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, " ");
+  return /\b(b|c|ii|iii|u\s*-?\s*\d{2}|under\s*\d{2}|reserve|reserves|youth|academy)\b/.test(clean);
+}
+
+function scoreTeamMatch(team: any, target: string, allowsReserve: boolean) {
+  const name = normalise(team?.strTeam ?? "");
+  const alternate = normalise(`${team?.strTeamAlternate ?? ""}`);
+  let score = 0;
+  if (name === target) score = 100;
+  else if (name.includes(target) || target.includes(name)) score = 80;
+  else if (alternate === target) score = 70;
+  else if (alternate.includes(target) || target.includes(alternate)) score = 60;
+  else score = 10;
+
+  if (!allowsReserve && isReserveTeamName(team?.strTeam ?? "")) score -= 50;
+  return score;
 }
 
 function tsdbMap(e: any): NormalisedFixture {
@@ -157,7 +192,7 @@ function normalise(s: string) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\b(fc|cf|afc|sc|ac|club|de|futbol|football|calcio|cd|ud|rcd|sv|spvgg|bsc)\b/g, "")
+    .replace(/\b(fc|cf|afc|sc|ac|club|de|futbol|football|calcio|cd|ud|rcd|sv|spvgg|bsc|balompie|sad)\b/g, "")
     .replace(/[^a-z0-9]/g, "")
     .trim();
 }
