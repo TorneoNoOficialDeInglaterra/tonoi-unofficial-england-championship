@@ -63,7 +63,8 @@ function tsdbMap(e: any): NormalisedFixture {
     : new Date(`${e?.dateEvent}T${e?.strTime ?? "00:00:00"}Z`);
   const home = e?.intHomeScore === null || e?.intHomeScore === undefined ? null : Number(e.intHomeScore);
   const away = e?.intAwayScore === null || e?.intAwayScore === undefined ? null : Number(e.intAwayScore);
-  const finished = home !== null && away !== null;
+  const rawStatus = String(e?.strStatus ?? "").trim();
+  const status = mapTsdbStatus(rawStatus, home !== null && away !== null);
   return {
     fixture_id: Number(e.idEvent),
     kickoff_at: kickoff.toISOString(),
@@ -78,12 +79,26 @@ function tsdbMap(e: any): NormalisedFixture {
     away_goals: away,
     home_pens: null,
     away_pens: null,
-    status_short: finished ? "FT" : "NS",
-    status_long: finished ? "Match Finished" : "Not Started",
+    status_short: status.short,
+    status_long: status.long,
     elapsed: null,
     events: [],
     source: "thesportsdb",
   };
+}
+
+function mapTsdbStatus(rawStatus: string, hasScore: boolean) {
+  const status = rawStatus.toUpperCase();
+  if (["1H", "HT", "2H", "ET", "P", "LIVE"].includes(status)) {
+    return { short: status, long: rawStatus || "Live" };
+  }
+  if (["FT", "AET", "PEN"].includes(status) || status.includes("FINISHED")) {
+    return { short: status.includes("PEN") ? "PEN" : status.includes("AET") ? "AET" : "FT", long: rawStatus || "Match Finished" };
+  }
+  if (status.includes("POSTPONED")) return { short: "PST", long: rawStatus };
+  if (status.includes("CANCELLED")) return { short: "CANC", long: rawStatus };
+  if (status.includes("SUSPENDED")) return { short: "SUSP", long: rawStatus };
+  return { short: hasScore ? "LIVE" : "NS", long: rawStatus || (hasScore ? "Live" : "Not Started") };
 }
 
 /** Next scheduled fixture for a team. */
