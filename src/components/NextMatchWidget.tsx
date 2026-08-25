@@ -4,7 +4,7 @@ import { localeTag } from "@/i18n";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Radio, CalendarClock, Crown, Goal, Square, ArrowRightLeft } from "lucide-react";
-import { useLiveFixture, isLive, isFinished, type LiveEvent } from "@/hooks/useLiveFixture";
+import { useLiveFixture, isLive, isFinished, type LiveEvent, type LiveFixture } from "@/hooks/useLiveFixture";
 
 function useNow(active: boolean) {
   const [now, setNow] = useState(() => Date.now());
@@ -22,7 +22,7 @@ function EventIcon({ type }: { type: string | null }) {
   return <ArrowRightLeft className="h-3.5 w-3.5 text-muted-foreground" />;
 }
 
-function estimateLiveMinute(fixture: NonNullable<ReturnType<typeof useLiveFixture>["data"]>, now: number) {
+function estimateLiveMinute(fixture: LiveFixture, now: number) {
   const stored = typeof fixture.elapsed === "number" && fixture.elapsed > 0 ? fixture.elapsed : null;
   const status = fixture.status_short.toUpperCase();
   if (status === "HT") return 45;
