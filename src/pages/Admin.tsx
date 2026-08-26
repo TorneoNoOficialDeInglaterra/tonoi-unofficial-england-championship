@@ -235,6 +235,40 @@ function TeamsAdmin() {
   );
 }
 
+/* ================== WIDGET PRÓXIMO PARTIDO ================== */
+function AdvanceLiveFixtureButton() {
+  const qc = useQueryClient();
+  const [loading, setLoading] = useState(false);
+
+  async function advance() {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("sync-live-fixture?advance=1", { body: {} });
+      if (error) throw error;
+      const res = data as { ok?: boolean; error?: string; reason?: string; fixture?: { home_name?: string; away_name?: string } | null };
+      if (res?.error) throw new Error(res.error);
+      qc.invalidateQueries({ queryKey: ["live-fixture"] });
+      qc.invalidateQueries({ queryKey: ["live-fixture-champion"] });
+      if (res?.fixture) {
+        toast.success(`Widget actualizado: ${res.fixture.home_name} vs ${res.fixture.away_name}`);
+      } else {
+        toast.info("No se ha encontrado un próximo partido todavía");
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al actualizar el widget");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button variant="outline" onClick={advance} disabled={loading} title="Pasar el widget al próximo partido">
+      {loading ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-1 h-4 w-4" />}
+      Próximo partido
+    </Button>
+  );
+}
+
 /* ================== API-FOOTBALL TEAM ID ================== */
 type ApiTeamResult = { id: number; name: string; country: string | null; logo: string | null };
 
