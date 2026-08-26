@@ -174,7 +174,10 @@ export function computeStandings(teams: Team[], matchesAsc: Match[]) {
       if (challengerId) {
         const ch = ensure(challengerId);
         if (ch) ch.intentos += 1;
-        const newWinner = m.winner_team_id;
+        // En un empate el título sólo cambia de manos si se resolvió por penaltis.
+        const pensDecided =
+          m.winner_pens != null && m.loser_pens != null && m.winner_pens > m.loser_pens;
+        const newWinner = m.was_draw && !pensDecided ? champion : m.winner_team_id;
         if (newWinner !== champion) {
           if (ch) ch.destronamientos += 1;
           champion = newWinner;
