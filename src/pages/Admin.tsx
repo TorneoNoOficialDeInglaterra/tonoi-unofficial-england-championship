@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2, ChevronDown, ClipboardList } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2, ChevronDown, ClipboardList, RefreshCw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
@@ -60,6 +60,7 @@ export default function Admin() {
           <p className="text-sm text-muted-foreground">Gestiona equipos, partidos, jugadores, porteros y temporadas.</p>
         </div>
         <div className="flex items-center gap-2">
+          <AdvanceLiveFixtureButton />
           <Button variant="outline" onClick={() => nav("/auditoria")}>
             <ClipboardList className="mr-1 h-4 w-4" /> Auditoría
           </Button>
@@ -231,6 +232,40 @@ function TeamsAdmin() {
         </div>
       </Card>
     </div>
+  );
+}
+
+/* ================== WIDGET PRÓXIMO PARTIDO ================== */
+function AdvanceLiveFixtureButton() {
+  const qc = useQueryClient();
+  const [loading, setLoading] = useState(false);
+
+  async function advance() {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("sync-live-fixture?advance=1", { body: {} });
+      if (error) throw error;
+      const res = data as { ok?: boolean; error?: string; reason?: string; fixture?: { home_name?: string; away_name?: string } | null };
+      if (res?.error) throw new Error(res.error);
+      qc.invalidateQueries({ queryKey: ["live-fixture"] });
+      qc.invalidateQueries({ queryKey: ["live-fixture-champion"] });
+      if (res?.fixture) {
+        toast.success(`Widget actualizado: ${res.fixture.home_name} vs ${res.fixture.away_name}`);
+      } else {
+        toast.info("No se ha encontrado un próximo partido todavía");
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Error al actualizar el widget");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button variant="outline" onClick={advance} disabled={loading} title="Pasar el widget al próximo partido">
+      {loading ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-1 h-4 w-4" />}
+      Próximo partido
+    </Button>
   );
 }
 
