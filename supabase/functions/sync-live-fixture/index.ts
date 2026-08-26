@@ -343,7 +343,7 @@ Deno.serve(async (req) => {
         }
         if (sdbId) {
           // Refresh the stored event only while it is still relevant; otherwise jump to the next one.
-          if (current && !staleFinished && !championMissingFromCurrent && new Date(current.kickoff_at).getTime() < Date.now()) {
+          if (current && !dropCurrent && !championMissingFromCurrent && new Date(current.kickoff_at).getTime() < Date.now()) {
             const refreshed = await tsdbEvent(Number(current.fixture_id));
             if (refreshed && refreshed.home_goals !== null) norm = refreshed;
           }
@@ -383,7 +383,7 @@ Deno.serve(async (req) => {
     }
 
     const sameAsStale =
-      !!current && staleFinished && norm && Number(norm.fixture_id) === Number(current.fixture_id);
+      !!current && dropCurrent && norm && Number(norm.fixture_id) === Number(current.fixture_id);
 
     if (!norm || !norm.fixture_id || !norm.kickoff_at || sameAsStale) {
       if (current) await supabase.from("live_fixtures").update({ is_current: false }).eq("id", current.id);
