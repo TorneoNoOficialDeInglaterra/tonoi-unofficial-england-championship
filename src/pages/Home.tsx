@@ -79,9 +79,13 @@ export default function Home() {
               key={src}
               src={src}
               alt=""
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ${i === heroIdx ? "opacity-100" : "opacity-0"}`}
+              aria-hidden="true"
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-[1500ms] ${i === heroIdx ? "opacity-100" : "opacity-0"}`}
             />
           ))}
+
           {/* Dark overlay for legibility */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
