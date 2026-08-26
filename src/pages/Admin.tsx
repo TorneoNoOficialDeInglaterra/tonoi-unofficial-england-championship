@@ -60,6 +60,7 @@ export default function Admin() {
           <p className="text-sm text-muted-foreground">Gestiona equipos, partidos, jugadores, porteros y temporadas.</p>
         </div>
         <div className="flex items-center gap-2">
+          <AdvanceLiveFixtureButton />
           <Button variant="outline" onClick={() => nav("/auditoria")}>
             <ClipboardList className="mr-1 h-4 w-4" /> Auditoría
           </Button>
