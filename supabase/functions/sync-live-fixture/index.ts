@@ -273,7 +273,10 @@ Deno.serve(async (req) => {
       current.champion_team_id !== champion.id;
 
     const force = url.searchParams.get("force") === "1";
-    if (current && !force && !staleFinished && !championMissingFromCurrent) {
+    // "advance=1" -> el admin decide pasar ya al próximo partido, sin esperar las 6 h.
+    const advance = url.searchParams.get("advance") === "1";
+    const dropCurrent = staleFinished || advance;
+    if (current && !force && !advance && !staleFinished && !championMissingFromCurrent) {
       const ageMs = Date.now() - new Date(current.updated_at).getTime();
       const live = LIVE_STATUSES.includes(current.status_short);
       const minAge = live ? 45_000 : 20 * 60_000;
