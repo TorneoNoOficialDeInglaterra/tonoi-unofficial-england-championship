@@ -115,7 +115,7 @@ export default function NationalStandings() {
           </div>
         </div>
         <div className="mt-6">
-          <StandingsTable rows={rows} championId={championId} loading={loading} pageSize={50} />
+          <StandingsTable rows={rows} championId={championId} loading={loading} />
         </div>
       </div>
     );
