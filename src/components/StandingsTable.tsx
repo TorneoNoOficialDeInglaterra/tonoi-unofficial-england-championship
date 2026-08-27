@@ -158,8 +158,8 @@ function Row({ row, pos, isChampion }: { row: StandingRow; pos: number; isChampi
       <td className="px-3 py-2">
         <div className="flex items-center gap-2">
           <TeamBadge team={row.team} size={24} />
-          <span className="font-medium">{row.team.name}</span>
           <CountryFlag code={row.team.country_code} width={18} />
+          <span className="font-medium">{row.team.name}</span>
           {isChampion && <Crown className="h-4 w-4 text-primary" />}
         </div>
       </td>
