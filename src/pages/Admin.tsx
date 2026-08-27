@@ -161,6 +161,11 @@ function TeamsAdmin() {
     const { error } = await supabase.from("teams").update({ logo_url: value || null }).eq("id", id);
     if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["teams"] });
   }
+  async function updateCountry(id: string, value: string) {
+    const { error } = await supabase.from("teams").update({ country_code: value || null }).eq("id", id);
+    if (error) toast.error(error.message);
+    else qc.invalidateQueries({ queryKey: ["teams"] });
+  }
   async function updateApiId(id: string, value: string) {
     const parsed = value.trim() === "" ? null : Number(value.trim());
     if (parsed !== null && (!Number.isInteger(parsed) || parsed <= 0)) return toast.error("ID de API no válido");
