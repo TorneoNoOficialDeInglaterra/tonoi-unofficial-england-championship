@@ -154,13 +154,28 @@ function Th({ children, onClick, active, dir, align = "center", title }: { child
 }
 
 function Row({ row, pos, isChampion }: { row: StandingRow; pos: number; isChampion: boolean }) {
+  const { i18n } = useTranslation();
+  const country = row.team.country_code ? countryName(row.team.country_code, i18n.language) : null;
   return (
     <tr className={`border-t border-border transition-colors hover:bg-accent/40 ${isChampion ? "bg-primary/5" : ""}`}>
       <td className="px-3 py-2 text-center font-semibold tabular-nums">{pos}</td>
       <td className="px-3 py-2">
         <div className="flex items-center gap-2">
           <TeamBadge team={row.team} size={24} />
-          <CountryFlag code={row.team.country_code} width={18} />
+          {country ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex cursor-help">
+                  <CountryFlag code={row.team.country_code} width={18} showTitle={false} />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="top" sideOffset={4}>
+                <p>{country}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <CountryFlag code={row.team.country_code} width={18} />
+          )}
           <span className="font-medium">{row.team.name}</span>
           {isChampion && <Crown className="h-4 w-4 text-primary" />}
         </div>
