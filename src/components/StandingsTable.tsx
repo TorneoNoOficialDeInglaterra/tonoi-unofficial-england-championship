@@ -35,11 +35,13 @@ export function StandingsTable({
   championId,
   loading,
   maxHeight = "88vh",
+  pageSize,
 }: {
   rows: PositionedRow[];
   championId: string | null;
   loading?: boolean;
   maxHeight?: string;
+  pageSize?: number;
 }) {
   const { t } = useTranslation("standings");
   const COLS = useMemo(
@@ -48,6 +50,7 @@ export function StandingsTable({
   );
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(0);
 
   const sorted = useMemo(() => {
     if (sortKey === "pos") return rows;
@@ -62,10 +65,22 @@ export function StandingsTable({
     });
   }, [rows, sortKey, sortDir]);
 
+  const totalPages = pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1;
+  const currentPage = Math.min(page, totalPages - 1);
+  const visible = useMemo(
+    () => (pageSize ? sorted.slice(currentPage * pageSize, currentPage * pageSize + pageSize) : sorted),
+    [sorted, pageSize, currentPage],
+  );
+
+  useEffect(() => {
+    setPage(0);
+  }, [rows, sortKey, sortDir]);
+
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
     else { setSortKey(k); setSortDir(k === "team" ? "asc" : "desc"); }
   }
+
 
   return (
     <Card className="overflow-hidden">
