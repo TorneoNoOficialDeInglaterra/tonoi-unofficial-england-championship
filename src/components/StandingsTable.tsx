@@ -4,8 +4,10 @@ import { ArrowUpDown, ChevronLeft, ChevronRight, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TeamBadge } from "@/components/TeamBadge";
 import { CountryFlag } from "@/components/CountryFlag";
+import { countryName } from "@/lib/countries";
 import type { StandingRow } from "@/lib/tonoi";
 
 export type SortKey =
