@@ -1,14 +1,18 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Search, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StandingsTable, type PositionedRow } from "@/components/StandingsTable";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings } from "@/lib/tonoi";
 import { countryName, flagUrl } from "@/lib/countries";
+
+const norm = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 
 export default function NationalStandings() {
   const { t, i18n } = useTranslation("standings");
