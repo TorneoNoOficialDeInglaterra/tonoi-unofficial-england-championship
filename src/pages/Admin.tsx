@@ -12,9 +12,9 @@ import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { toast } from "sonner";
-import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2, ChevronDown, ClipboardList, RefreshCw } from "lucide-react";
+import { Trash2, LogOut, Shield, Archive, Check, ChevronsUpDown, Mail, Pencil, HelpCircle, Send, MessageSquareReply, Languages, Loader2, ChevronDown, ClipboardList, RefreshCw, Settings } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { useTeams, useSeasons, useMatches } from "@/hooks/useTonoiData";
 import { ImageGenerator } from "@/components/social/ImageGenerator";
 
@@ -207,8 +207,8 @@ function TeamsAdmin() {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Partido en directo</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Rellena el "ID API" del campeón actual y de sus rivales (identificador del club en api-football) para que el widget de la
-              portada encuentre el próximo partido y lo siga en directo.
+              El widget busca automáticamente el próximo partido del campeón. El "ID API" es opcional y solo se usa como fuente
+              preferente o para corregir a mano el equipo elegido por el autobúsqueda.
             </p>
           </div>
           <Button variant="outline" onClick={syncLive}>Sincronizar ahora</Button>
@@ -217,13 +217,13 @@ function TeamsAdmin() {
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-left">ID API</th><th /></tr></thead>
+            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
             <tbody>
               {(teamsQ.data ?? []).map((t) => (
                 <tr key={t.id} className="border-t border-border">
                   <td className="px-3 py-2 font-medium">{t.name}</td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
-                  <td className="px-3 py-2"><ApiTeamIdCell team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
+                  <td className="px-3 py-2 text-center"><TeamAdvancedDialog team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                 </tr>
               ))}
@@ -341,6 +341,37 @@ function ApiTeamIdCell({ team, onSave }: { team: Team; onSave: (value: string) =
         </PopoverContent>
       </Popover>
     </div>
+  );
+}
+
+function TeamAdvancedDialog({ team, onSave }: { team: Team; onSave: (value: string) => void | Promise<void> }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" title="Opciones avanzadas">
+          <Settings className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Opciones avanzadas: {team.name}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div>
+            <Label htmlFor={`api-id-${team.id}`} className="text-sm font-medium">
+              ID API-Football <span className="text-xs font-normal text-muted-foreground">(opcional)</span>
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Se usa como fuente preferente para el widget. Si lo dejas vacío, el sistema buscará el equipo automáticamente.
+            </p>
+            <div className="mt-2">
+              <ApiTeamIdCell team={team} onSave={async (v) => { await onSave(v); }} />
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
