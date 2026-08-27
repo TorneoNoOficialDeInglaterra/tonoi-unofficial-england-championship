@@ -5,6 +5,7 @@ export type Team = {
   name: string;
   slug: string;
   logo_url: string | null;
+  country_code?: string | null;
 };
 
 export type Match = {

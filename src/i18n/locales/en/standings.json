@@ -15,20 +15,62 @@
     "id": "<strong>ID</strong>: Success percentage (Des/I)"
   },
   "cols": {
-    "pj": { "label": "PJ", "desc": "Matches Played" },
-    "v": { "label": "V", "desc": "Wins" },
-    "e": { "label": "E", "desc": "Draws" },
-    "d": { "label": "D", "desc": "Losses" },
-    "p": { "label": "P", "desc": "Points" },
-    "gf": { "label": "GF", "desc": "Goals For" },
-    "gc": { "label": "GC", "desc": "Goals Against" },
-    "dg": { "label": "DG", "desc": "Goal Difference" },
-    "ppp": { "label": "PPP", "desc": "Points per Match" },
-    "pct": { "label": "PcT", "desc": "Matches with Trophy" },
-    "mj": { "label": "MJ", "desc": "Best streak" },
-    "intentos": { "label": "I", "desc": "Attempts" },
-    "destronamientos": { "label": "Des", "desc": "Dethronements" },
-    "idPct": { "label": "ID", "desc": "Dethronement Index (%)" }
+    "pj": {
+      "label": "PJ",
+      "desc": "Matches Played"
+    },
+    "v": {
+      "label": "V",
+      "desc": "Wins"
+    },
+    "e": {
+      "label": "E",
+      "desc": "Draws"
+    },
+    "d": {
+      "label": "D",
+      "desc": "Losses"
+    },
+    "p": {
+      "label": "P",
+      "desc": "Points"
+    },
+    "gf": {
+      "label": "GF",
+      "desc": "Goals For"
+    },
+    "gc": {
+      "label": "GC",
+      "desc": "Goals Against"
+    },
+    "dg": {
+      "label": "DG",
+      "desc": "Goal Difference"
+    },
+    "ppp": {
+      "label": "PPP",
+      "desc": "Points per Match"
+    },
+    "pct": {
+      "label": "PcT",
+      "desc": "Matches with Trophy"
+    },
+    "mj": {
+      "label": "MJ",
+      "desc": "Best streak"
+    },
+    "intentos": {
+      "label": "I",
+      "desc": "Attempts"
+    },
+    "destronamientos": {
+      "label": "Des",
+      "desc": "Dethronements"
+    },
+    "idPct": {
+      "label": "ID",
+      "desc": "Dethronement Index (%)"
+    }
   },
   "filter": {
     "placeholder": "Filter by team…",
@@ -42,5 +84,18 @@
     "pos": "#",
     "team": "Team",
     "empty": "No data yet."
+  },
+  "scoring": {
+    "title": "Points system",
+    "win": "<strong>Win</strong>: 2 points",
+    "pens": "<strong>Win on penalties</strong>: 2 points (loser gets 0)",
+    "drawChampion": "<strong>Champion's draw</strong>: 1 point, counts as a draw",
+    "drawChallenger": "<strong>Challenger's draw</strong>: 0 points, counts as a defeat",
+    "loss": "<strong>Defeat</strong>: 0 points"
+  },
+  "national": {
+    "title": "National standings",
+    "subtitle": "Pick a country to see the standings with its clubs only.",
+    "back": "Back to countries"
   }
 }

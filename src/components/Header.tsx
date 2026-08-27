@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Twitter, Mail } from "lucide-react";
+import { Menu, Twitter, Mail, ChevronDown } from "lucide-react";
 import { useState, type SVGProps } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -15,9 +15,17 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import logoImg from "@/assets/logo.png";
 const LOGO = logoImg;
 
-const NAV = [
+type NavItem = { to?: string; key: string; children?: { to: string; key: string }[] };
+
+const NAV: NavItem[] = [
   { to: "/", key: "home" },
-  { to: "/clasificacion", key: "standings" },
+  {
+    key: "standings",
+    children: [
+      { to: "/clasificacion", key: "standingsHistoric" },
+      { to: "/clasificaciones-nacionales", key: "standingsNational" },
+    ],
+  },
   { to: "/historial", key: "matchHistory" },
   { to: "/estadisticas", key: "stats" },
   { to: "/historia", key: "history" },
@@ -27,6 +35,7 @@ const NAV = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [standingsOpen, setStandingsOpen] = useState(false);
   const { t } = useTranslation();
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
@@ -45,21 +54,53 @@ export default function Header() {
               </SheetTitle>
             </SheetHeader>
             <nav className="mt-8 flex flex-col gap-1">
-              {NAV.map((n) => (
-                <NavLink
-                  key={n.to}
-                  to={n.to}
-                  end={n.to === "/"}
-                  onClick={() => setOpen(false)}
-                  className={({ isActive }) =>
-                    `rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
-                      isActive ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent hover:text-accent-foreground"
-                    }`
-                  }
-                >
-                  {t(`nav.${n.key}`)}
-                </NavLink>
-              ))}
+              {NAV.map((n) =>
+                n.children ? (
+                  <div key={n.key}>
+                    <button
+                      type="button"
+                      onClick={() => setStandingsOpen((v) => !v)}
+                      aria-expanded={standingsOpen}
+                      className="flex w-full items-center justify-between rounded-md px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {t(`nav.${n.key}`)}
+                      <ChevronDown className={`h-4 w-4 transition-transform ${standingsOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    {standingsOpen && (
+                      <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-border pl-3">
+                        {n.children.map((c) => (
+                          <NavLink
+                            key={c.to}
+                            to={c.to}
+                            onClick={() => setOpen(false)}
+                            className={({ isActive }) =>
+                              `rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                                isActive ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                              }`
+                            }
+                          >
+                            {t(`nav.${c.key}`)}
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <NavLink
+                    key={n.to}
+                    to={n.to!}
+                    end={n.to === "/"}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      `rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+                        isActive ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent hover:text-accent-foreground"
+                      }`
+                    }
+                  >
+                    {t(`nav.${n.key}`)}
+                  </NavLink>
+                ),
+              )}
             </nav>
             <div className="mt-6 border-t border-border pt-4">
               <LanguageSwitcher />

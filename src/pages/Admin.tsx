@@ -21,6 +21,56 @@ import { ImageGenerator } from "@/components/social/ImageGenerator";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { isPenaltyMatch, sideScore, type Match, type Team } from "@/lib/tonoi";
+import { COUNTRY_CODES, countryName, flagUrl } from "@/lib/countries";
+
+/* ================== SELECTOR DE PAÍS ================== */
+function CountryCombobox({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const options = useMemo(
+    () => COUNTRY_CODES.map((code) => ({ code, name: countryName(code, "es") })).sort((a, b) => a.name.localeCompare(b.name)),
+    [],
+  );
+  const selected = options.find((o) => o.code === value);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" role="combobox" aria-expanded={open} className="w-[220px] justify-between">
+          {selected ? (
+            <span className="flex items-center gap-2 truncate">
+              <img src={flagUrl(selected.code, 20)} alt="" className="h-3.5 w-5 rounded-[2px] object-cover" />
+              <span className="truncate">{selected.name}</span>
+            </span>
+          ) : (
+            <span className="text-muted-foreground">Sin país</span>
+          )}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[240px] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Buscar país..." />
+          <CommandList>
+            <CommandEmpty>Sin resultados.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem value="__none__" onSelect={() => { onChange(""); setOpen(false); }}>
+                <Check className={cn("mr-2 h-4 w-4", value ? "opacity-0" : "opacity-100")} />
+                Sin país
+              </CommandItem>
+              {options.map((o) => (
+                <CommandItem key={o.code} value={`${o.name} ${o.code}`} onSelect={() => { onChange(o.code); setOpen(false); }}>
+                  <Check className={cn("mr-2 h-4 w-4", value === o.code ? "opacity-100" : "opacity-0")} />
+                  <img src={flagUrl(o.code, 20)} alt="" className="mr-2 h-3.5 w-5 rounded-[2px] object-cover" />
+                  {o.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 
 
 export default function Admin() {
@@ -161,6 +211,11 @@ function TeamsAdmin() {
     const { error } = await supabase.from("teams").update({ logo_url: value || null }).eq("id", id);
     if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["teams"] });
   }
+  async function updateCountry(id: string, value: string) {
+    const { error } = await supabase.from("teams").update({ country_code: value || null }).eq("id", id);
+    if (error) toast.error(error.message);
+    else qc.invalidateQueries({ queryKey: ["teams"] });
+  }
   async function updateApiId(id: string, value: string) {
     const parsed = value.trim() === "" ? null : Number(value.trim());
     if (parsed !== null && (!Number.isInteger(parsed) || parsed <= 0)) return toast.error("ID de API no válido");
@@ -217,11 +272,12 @@ function TeamsAdmin() {
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
+            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">País</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
             <tbody>
               {(teamsQ.data ?? []).map((t) => (
-                <tr key={t.id} className="border-t border-border">
+                <tr key={t.id} className={`border-t border-border ${t.country_code ? "" : "bg-destructive/5"}`}>
                   <td className="px-3 py-2 font-medium">{t.name}</td>
+                  <td className="px-3 py-2"><CountryCombobox value={t.country_code ?? ""} onChange={(v) => updateCountry(t.id, v)} /></td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
                   <td className="px-3 py-2 text-center"><TeamAdvancedDialog team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>

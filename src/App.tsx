@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Standings from "./pages/Standings";
+import NationalStandings from "./pages/NationalStandings";
 import MatchHistory from "./pages/MatchHistory";
 import Stats from "./pages/Stats";
 import History from "./pages/History";
@@ -31,6 +32,7 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/clasificacion" element={<Standings />} />
+            <Route path="/clasificaciones-nacionales" element={<NationalStandings />} />
             <Route path="/historial" element={<MatchHistory />} />
             <Route path="/estadisticas" element={<Stats />} />
             <Route path="/historia" element={<History />} />
