@@ -21,6 +21,56 @@ import { ImageGenerator } from "@/components/social/ImageGenerator";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { isPenaltyMatch, sideScore, type Match, type Team } from "@/lib/tonoi";
+import { COUNTRY_CODES, countryName, flagUrl } from "@/lib/countries";
+
+/* ================== SELECTOR DE PAÍS ================== */
+function CountryCombobox({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const options = useMemo(
+    () => COUNTRY_CODES.map((code) => ({ code, name: countryName(code, "es") })).sort((a, b) => a.name.localeCompare(b.name)),
+    [],
+  );
+  const selected = options.find((o) => o.code === value);
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline" role="combobox" aria-expanded={open} className="w-[220px] justify-between">
+          {selected ? (
+            <span className="flex items-center gap-2 truncate">
+              <img src={flagUrl(selected.code, 20)} alt="" className="h-3.5 w-5 rounded-[2px] object-cover" />
+              <span className="truncate">{selected.name}</span>
+            </span>
+          ) : (
+            <span className="text-muted-foreground">Sin país</span>
+          )}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[240px] p-0" align="start">
+        <Command>
+          <CommandInput placeholder="Buscar país..." />
+          <CommandList>
+            <CommandEmpty>Sin resultados.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem value="__none__" onSelect={() => { onChange(""); setOpen(false); }}>
+                <Check className={cn("mr-2 h-4 w-4", value ? "opacity-0" : "opacity-100")} />
+                Sin país
+              </CommandItem>
+              {options.map((o) => (
+                <CommandItem key={o.code} value={`${o.name} ${o.code}`} onSelect={() => { onChange(o.code); setOpen(false); }}>
+                  <Check className={cn("mr-2 h-4 w-4", value === o.code ? "opacity-100" : "opacity-0")} />
+                  <img src={flagUrl(o.code, 20)} alt="" className="mr-2 h-3.5 w-5 rounded-[2px] object-cover" />
+                  {o.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 
 
 export default function Admin() {
