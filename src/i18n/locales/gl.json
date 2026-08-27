@@ -7,7 +7,9 @@
       "stats": "Estatísticas",
       "history": "Historia do torneo",
       "faq": "Preguntas frecuentes",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "standingsHistoric": "Clasificación histórica",
+      "standingsNational": "Clasificacións nacionais"
     },
     "header": {
       "openMenu": "Abrir menú",
@@ -186,6 +188,19 @@
       "pos": "#",
       "team": "Equipo",
       "empty": "Aínda non hai datos."
+    },
+    "scoring": {
+      "title": "Sistema de puntuación",
+      "win": "<strong>Vitoria</strong>: 2 puntos",
+      "pens": "<strong>Vitoria nos penaltis</strong>: 2 puntos (o perdedor, 0)",
+      "drawChampion": "<strong>Empate do campión</strong>: 1 punto e conta como empate",
+      "drawChallenger": "<strong>Empate do retador</strong>: 0 puntos e conta como derrota",
+      "loss": "<strong>Derrota</strong>: 0 puntos"
+    },
+    "national": {
+      "title": "Clasificacións nacionais",
+      "subtitle": "Escolle un país para ver a clasificación só cos seus equipos.",
+      "back": "Volver aos países"
     }
   },
   "matches": {

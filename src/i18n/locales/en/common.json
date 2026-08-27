@@ -6,7 +6,9 @@
     "stats": "Statistics",
     "history": "Tournament history",
     "faq": "FAQ",
-    "contact": "Contact"
+    "contact": "Contact",
+    "standingsHistoric": "Historic standings",
+    "standingsNational": "National standings"
   },
   "header": {
     "openMenu": "Open menu",

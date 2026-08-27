@@ -6,7 +6,9 @@
     "stats": "Estadísticas",
     "history": "Historia del torneo",
     "faq": "Preguntas frecuentes",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "standingsHistoric": "Clasificación histórica",
+    "standingsNational": "Clasificaciones nacionales"
   },
   "header": {
     "openMenu": "Abrir menú",

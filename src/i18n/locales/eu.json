@@ -7,7 +7,9 @@
       "stats": "Estatistikak",
       "history": "Txapelketaren historia",
       "faq": "Ohiko galderak",
-      "contact": "Harremana"
+      "contact": "Harremana",
+      "standingsHistoric": "Sailkapen historikoa",
+      "standingsNational": "Sailkapen nazionalak"
     },
     "header": {
       "openMenu": "Menua ireki",
@@ -186,6 +188,19 @@
       "pos": "#",
       "team": "Taldea",
       "empty": "Oraindik daturik ez."
+    },
+    "scoring": {
+      "title": "Puntuazio sistema",
+      "win": "<strong>Garaipena</strong>: 2 puntu",
+      "pens": "<strong>Penaltietan garaipena</strong>: 2 puntu (galtzaileak 0)",
+      "drawChampion": "<strong>Txapeldunaren berdinketa</strong>: puntu 1, berdinketa gisa",
+      "drawChallenger": "<strong>Erronkariaren berdinketa</strong>: 0 puntu, porrot gisa",
+      "loss": "<strong>Porrota</strong>: 0 puntu"
+    },
+    "national": {
+      "title": "Sailkapen nazionalak",
+      "subtitle": "Aukeratu herrialde bat bere taldeen sailkapena ikusteko.",
+      "back": "Herrialdeetara itzuli"
     }
   },
   "matches": {

@@ -15,20 +15,62 @@
     "id": "<strong>ID</strong>: Percentuale di successo (Des/I)"
   },
   "cols": {
-    "pj": { "label": "PJ", "desc": "Partite Giocate" },
-    "v": { "label": "V", "desc": "Vittorie" },
-    "e": { "label": "E", "desc": "Pareggi" },
-    "d": { "label": "D", "desc": "Sconfitte" },
-    "p": { "label": "P", "desc": "Punti" },
-    "gf": { "label": "GF", "desc": "Gol Fatti" },
-    "gc": { "label": "GC", "desc": "Gol Subiti" },
-    "dg": { "label": "DG", "desc": "Differenza Reti" },
-    "ppp": { "label": "PPP", "desc": "Punti a Partita" },
-    "pct": { "label": "PcT", "desc": "Partite con Trofeo" },
-    "mj": { "label": "MJ", "desc": "Miglior striscia" },
-    "intentos": { "label": "I", "desc": "Tentativi" },
-    "destronamientos": { "label": "Des", "desc": "Detronizzazioni" },
-    "idPct": { "label": "ID", "desc": "Indice di Detronizzazione (%)" }
+    "pj": {
+      "label": "PJ",
+      "desc": "Partite Giocate"
+    },
+    "v": {
+      "label": "V",
+      "desc": "Vittorie"
+    },
+    "e": {
+      "label": "E",
+      "desc": "Pareggi"
+    },
+    "d": {
+      "label": "D",
+      "desc": "Sconfitte"
+    },
+    "p": {
+      "label": "P",
+      "desc": "Punti"
+    },
+    "gf": {
+      "label": "GF",
+      "desc": "Gol Fatti"
+    },
+    "gc": {
+      "label": "GC",
+      "desc": "Gol Subiti"
+    },
+    "dg": {
+      "label": "DG",
+      "desc": "Differenza Reti"
+    },
+    "ppp": {
+      "label": "PPP",
+      "desc": "Punti a Partita"
+    },
+    "pct": {
+      "label": "PcT",
+      "desc": "Partite con Trofeo"
+    },
+    "mj": {
+      "label": "MJ",
+      "desc": "Miglior striscia"
+    },
+    "intentos": {
+      "label": "I",
+      "desc": "Tentativi"
+    },
+    "destronamientos": {
+      "label": "Des",
+      "desc": "Detronizzazioni"
+    },
+    "idPct": {
+      "label": "ID",
+      "desc": "Indice di Detronizzazione (%)"
+    }
   },
   "filter": {
     "placeholder": "Filtra per squadra…",
@@ -42,5 +84,18 @@
     "pos": "#",
     "team": "Squadra",
     "empty": "Ancora nessun dato."
+  },
+  "scoring": {
+    "title": "Sistema di punteggio",
+    "win": "<strong>Vittoria</strong>: 2 punti",
+    "pens": "<strong>Vittoria ai rigori</strong>: 2 punti (0 per chi perde)",
+    "drawChampion": "<strong>Pareggio del campione</strong>: 1 punto, conta come pareggio",
+    "drawChallenger": "<strong>Pareggio dello sfidante</strong>: 0 punti, conta come sconfitta",
+    "loss": "<strong>Sconfitta</strong>: 0 punti"
+  },
+  "national": {
+    "title": "Classifiche nazionali",
+    "subtitle": "Scegli un paese per vedere la classifica con i suoi club.",
+    "back": "Torna ai paesi"
   }
 }

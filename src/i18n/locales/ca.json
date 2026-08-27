@@ -7,7 +7,9 @@
       "stats": "Estadístiques",
       "history": "Història del torneig",
       "faq": "Preguntes freqüents",
-      "contact": "Contacte"
+      "contact": "Contacte",
+      "standingsHistoric": "Classificació històrica",
+      "standingsNational": "Classificacions nacionals"
     },
     "header": {
       "openMenu": "Obrir menú",
@@ -186,6 +188,19 @@
       "pos": "#",
       "team": "Equip",
       "empty": "Encara sense dades."
+    },
+    "scoring": {
+      "title": "Sistema de puntuació",
+      "win": "<strong>Victòria</strong>: 2 punts",
+      "pens": "<strong>Victòria als penals</strong>: 2 punts (el perdedor, 0)",
+      "drawChampion": "<strong>Empat del campió</strong>: 1 punt i compta com a empat",
+      "drawChallenger": "<strong>Empat del reptador</strong>: 0 punts i compta com a derrota",
+      "loss": "<strong>Derrota</strong>: 0 punts"
+    },
+    "national": {
+      "title": "Classificacions nacionals",
+      "subtitle": "Tria un país per veure la classificació només amb els seus equips.",
+      "back": "Tornar als països"
     }
   },
   "matches": {
