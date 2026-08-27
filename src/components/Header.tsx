@@ -15,9 +15,17 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import logoImg from "@/assets/logo.png";
 const LOGO = logoImg;
 
-const NAV = [
+type NavItem = { to?: string; key: string; children?: { to: string; key: string }[] };
+
+const NAV: NavItem[] = [
   { to: "/", key: "home" },
-  { to: "/clasificacion", key: "standings" },
+  {
+    key: "standings",
+    children: [
+      { to: "/clasificacion", key: "standingsHistoric" },
+      { to: "/clasificaciones-nacionales", key: "standingsNational" },
+    ],
+  },
   { to: "/historial", key: "matchHistory" },
   { to: "/estadisticas", key: "stats" },
   { to: "/historia", key: "history" },
