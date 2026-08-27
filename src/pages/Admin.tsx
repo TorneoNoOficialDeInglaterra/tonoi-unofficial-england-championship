@@ -217,11 +217,12 @@ function TeamsAdmin() {
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
+            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">País</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
             <tbody>
               {(teamsQ.data ?? []).map((t) => (
-                <tr key={t.id} className="border-t border-border">
+                <tr key={t.id} className={`border-t border-border ${t.country_code ? "" : "bg-destructive/5"}`}>
                   <td className="px-3 py-2 font-medium">{t.name}</td>
+                  <td className="px-3 py-2"><CountryCombobox value={t.country_code ?? ""} onChange={(v) => updateCountry(t.id, v)} /></td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
                   <td className="px-3 py-2 text-center"><TeamAdvancedDialog team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
