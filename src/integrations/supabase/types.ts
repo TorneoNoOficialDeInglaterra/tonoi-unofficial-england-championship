@@ -670,6 +670,7 @@ export type Database = {
       teams: {
         Row: {
           api_football_team_id: number | null
+          country_code: string | null
           created_at: string
           football_data_team_id: number | null
           id: string
@@ -680,6 +681,7 @@ export type Database = {
         }
         Insert: {
           api_football_team_id?: number | null
+          country_code?: string | null
           created_at?: string
           football_data_team_id?: number | null
           id?: string
@@ -690,6 +692,7 @@ export type Database = {
         }
         Update: {
           api_football_team_id?: number | null
+          country_code?: string | null
           created_at?: string
           football_data_team_id?: number | null
           id?: string
