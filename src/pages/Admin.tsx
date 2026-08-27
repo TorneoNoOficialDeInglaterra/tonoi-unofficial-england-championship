@@ -207,8 +207,8 @@ function TeamsAdmin() {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Partido en directo</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Rellena el "ID API" del campeón actual y de sus rivales (identificador del club en api-football) para que el widget de la
-              portada encuentre el próximo partido y lo siga en directo.
+              El widget busca automáticamente el próximo partido del campeón. El "ID API" es opcional y solo se usa como fuente
+              preferente o para corregir a mano el equipo elegido por el autobúsqueda.
             </p>
           </div>
           <Button variant="outline" onClick={syncLive}>Sincronizar ahora</Button>
@@ -217,13 +217,13 @@ function TeamsAdmin() {
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-left">ID API</th><th /></tr></thead>
+            <thead className="bg-muted/60 text-xs uppercase text-muted-foreground"><tr><th className="px-3 py-2 text-left">Equipo</th><th className="px-3 py-2 text-left">URL del escudo</th><th className="px-3 py-2 text-center">Avanzado</th><th /></tr></thead>
             <tbody>
               {(teamsQ.data ?? []).map((t) => (
                 <tr key={t.id} className="border-t border-border">
                   <td className="px-3 py-2 font-medium">{t.name}</td>
                   <td className="px-3 py-2"><Input defaultValue={t.logo_url ?? ""} onBlur={(e) => updateLogo(t.id, e.target.value)} /></td>
-                  <td className="px-3 py-2"><ApiTeamIdCell team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
+                  <td className="px-3 py-2 text-center"><TeamAdvancedDialog team={t} onSave={async (v) => { await updateApiId(t.id, v); }} /></td>
                   <td className="px-3 py-2 text-right"><Button variant="ghost" size="icon" onClick={() => remove(t.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                 </tr>
               ))}
