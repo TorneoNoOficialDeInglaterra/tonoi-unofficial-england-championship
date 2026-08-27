@@ -20,6 +20,8 @@ export default function NationalStandings() {
   const matchesQ = useMatches();
   const [params, setParams] = useSearchParams();
   const selected = params.get("pais");
+  const [query, setQuery] = useState("");
+  const [teamQuery, setTeamQuery] = useState("");
 
   const computed = useMemo(() => {
     if (!teamsQ.data || !matchesQ.data) return null;
