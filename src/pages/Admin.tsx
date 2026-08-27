@@ -344,6 +344,37 @@ function ApiTeamIdCell({ team, onSave }: { team: Team; onSave: (value: string) =
   );
 }
 
+function TeamAdvancedDialog({ team, onSave }: { team: Team; onSave: (value: string) => void | Promise<void> }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" title="Opciones avanzadas">
+          <Settings className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Opciones avanzadas: {team.name}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div>
+            <Label htmlFor={`api-id-${team.id}`} className="text-sm font-medium">
+              ID API-Football <span className="text-xs font-normal text-muted-foreground">(opcional)</span>
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Se usa como fuente preferente para el widget. Si lo dejas vacío, el sistema buscará el equipo automáticamente.
+            </p>
+            <div className="mt-2">
+              <ApiTeamIdCell team={team} onSave={async (v) => { await onSave(v); }} />
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 
 
 /* ================== TEAM COMBOBOX ================== */
