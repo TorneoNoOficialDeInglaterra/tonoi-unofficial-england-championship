@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowUpDown, Crown } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Crown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TeamBadge } from "@/components/TeamBadge";
@@ -35,11 +36,13 @@ export function StandingsTable({
   championId,
   loading,
   maxHeight = "88vh",
+  pageSize,
 }: {
   rows: PositionedRow[];
   championId: string | null;
   loading?: boolean;
   maxHeight?: string;
+  pageSize?: number;
 }) {
   const { t } = useTranslation("standings");
   const COLS = useMemo(
@@ -48,6 +51,7 @@ export function StandingsTable({
   );
   const [sortKey, setSortKey] = useState<SortKey>("pos");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(0);
 
   const sorted = useMemo(() => {
     if (sortKey === "pos") return rows;
@@ -62,10 +66,22 @@ export function StandingsTable({
     });
   }, [rows, sortKey, sortDir]);
 
+  const totalPages = pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1;
+  const currentPage = Math.min(page, totalPages - 1);
+  const visible = useMemo(
+    () => (pageSize ? sorted.slice(currentPage * pageSize, currentPage * pageSize + pageSize) : sorted),
+    [sorted, pageSize, currentPage],
+  );
+
+  useEffect(() => {
+    setPage(0);
+  }, [rows, sortKey, sortDir]);
+
   function toggleSort(k: SortKey) {
     if (sortKey === k) setSortDir(sortDir === "asc" ? "desc" : "asc");
     else { setSortKey(k); setSortDir(k === "team" ? "asc" : "desc"); }
   }
+
 
   return (
     <Card className="overflow-hidden">
@@ -92,14 +108,31 @@ export function StandingsTable({
             ) : sorted.length === 0 ? (
               <tr><td colSpan={COLS.length + 2} className="p-8 text-center text-muted-foreground">{t("table.empty")}</td></tr>
             ) : (
-              sorted.map((r) => (
+              visible.map((r) => (
                 <Row key={r.team.id} row={r} pos={r._pos} isChampion={r.team.id === championId} />
               ))
             )}
           </tbody>
         </table>
       </div>
+      {!loading && pageSize && sorted.length > pageSize && (
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-3 py-2 text-sm">
+          <span className="text-muted-foreground tabular-nums">
+            {currentPage * pageSize + 1}–{Math.min(sorted.length, (currentPage + 1) * pageSize)} / {sorted.length}
+          </span>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="tabular-nums text-muted-foreground">{currentPage + 1} / {totalPages}</span>
+            <Button variant="outline" size="sm" disabled={currentPage >= totalPages - 1} onClick={() => setPage(currentPage + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </Card>
+
   );
 }
 
