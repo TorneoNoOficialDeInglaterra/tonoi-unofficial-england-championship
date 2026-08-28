@@ -29,6 +29,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <Analytics />
+
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
