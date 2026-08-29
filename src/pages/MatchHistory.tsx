@@ -146,6 +146,22 @@ export default function MatchHistory() {
 
   const filtering = h2hActive || !!teamFilter;
   const matches = filteredMatches ?? grouped.get(decade) ?? [];
+
+  // Para cada parón, el id del último partido real disputado antes de la interrupción
+  // (sobre TODOS los partidos, no solo los de la década visible).
+  const breakAnchorByMatchId = useMemo(() => {
+    const map = new Map<string, (typeof BREAKS)[number]>();
+    const all = matchesQ.data ?? [];
+    for (const b of BREAKS) {
+      let anchor: Match | null = null;
+      for (const m of all) {
+        if (m.match_date <= b.after && (!anchor || m.match_date > anchor.match_date)) anchor = m;
+      }
+      if (anchor) map.set(anchor.id, b);
+    }
+    return map;
+  }, [matchesQ.data]);
+
   const idx = decades.indexOf(decade);
   const prevDecade = idx >= 0 && idx + 1 < decades.length ? decades[idx + 1] : null;
   const nextDecade = idx > 0 ? decades[idx - 1] : null;
@@ -247,19 +263,9 @@ export default function MatchHistory() {
                   const localGoals = sideScore(m, localId);
                   const visitorGoals = sideScore(m, visitorId);
 
-                  const prev = matches[i - 1];
-                  const next = matches[i + 1];
-                  // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
-                  const breakAbove = filtering
-                    ? undefined
-                    : BREAKS.find(
-                        (b) =>
-                          m.match_date <= b.after &&
-                          (!prev || prev.match_date >= b.before),
-                      );
-                  const breakBelow = filtering
-                    ? undefined
-                    : BREAKS.find((b) => !next && m.match_date === b.before);
+                  // Lista en orden descendente: el banner va justo encima del último
+                  // partido disputado antes del parón.
+                  const breakAbove = filtering ? undefined : breakAnchorByMatchId.get(m.id);
                   return (
                     <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
@@ -285,7 +291,6 @@ export default function MatchHistory() {
                           </div>
                         </td>
                       </tr>
-                      {breakBelow && <BreakRow key={`${m.id}-a`} text={t(`history.breaks.${breakBelow.key}`)} />}
                     </Fragment>
                   );
                 })
