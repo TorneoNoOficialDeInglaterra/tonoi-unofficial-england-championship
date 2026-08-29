@@ -61,10 +61,10 @@ export function ResultadoCopa({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           bottom: 140,
-          left: 60,
-          right: 60,
+          left: 40,
+          right: 50,
           display: "grid",
-          gridTemplateColumns: "1fr 240px 1fr",
+          gridTemplateColumns: "1.35fr 220px 1fr",
           alignItems: "center",
           gap: 20,
         }}
