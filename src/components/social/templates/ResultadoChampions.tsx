@@ -64,10 +64,10 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           top: 780,
-          left: 200,
-          right: 200,
+          left: 150,
+          right: 170,
           display: "grid",
-          gridTemplateColumns: "1fr 220px 1fr",
+          gridTemplateColumns: "1.35fr 200px 1fr",
           alignItems: "center",
           gap: 20,
         }}

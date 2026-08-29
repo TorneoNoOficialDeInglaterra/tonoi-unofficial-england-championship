@@ -71,10 +71,10 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           top: 720,
-          left: 145,
-          right: 145,
+          left: 110,
+          right: 130,
           display: "grid",
-          gridTemplateColumns: "1fr 240px 1fr",
+          gridTemplateColumns: "1.4fr 210px 1fr",
           alignItems: "center",
           gap: 20,
         }}

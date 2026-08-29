@@ -69,10 +69,10 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           top: 800,
-          left: 200,
-          right: 200,
+          left: 150,
+          right: 180,
           display: "grid",
-          gridTemplateColumns: "1fr 240px 1fr",
+          gridTemplateColumns: "1.35fr 220px 1fr",
           alignItems: "center",
           gap: 20,
         }}
