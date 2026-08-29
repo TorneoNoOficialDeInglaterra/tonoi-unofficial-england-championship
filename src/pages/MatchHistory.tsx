@@ -146,6 +146,22 @@ export default function MatchHistory() {
 
   const filtering = h2hActive || !!teamFilter;
   const matches = filteredMatches ?? grouped.get(decade) ?? [];
+
+  // Para cada parón, el id del último partido real disputado antes de la interrupción
+  // (sobre TODOS los partidos, no solo los de la década visible).
+  const breakAnchorByMatchId = useMemo(() => {
+    const map = new Map<string, (typeof BREAKS)[number]>();
+    const all = matchesQ.data ?? [];
+    for (const b of BREAKS) {
+      let anchor: Match | null = null;
+      for (const m of all) {
+        if (m.match_date <= b.after && (!anchor || m.match_date > anchor.match_date)) anchor = m;
+      }
+      if (anchor) map.set(anchor.id, b);
+    }
+    return map;
+  }, [matchesQ.data]);
+
   const idx = decades.indexOf(decade);
   const prevDecade = idx >= 0 && idx + 1 < decades.length ? decades[idx + 1] : null;
   const nextDecade = idx > 0 ? decades[idx - 1] : null;
