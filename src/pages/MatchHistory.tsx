@@ -291,7 +291,6 @@ export default function MatchHistory() {
                           </div>
                         </td>
                       </tr>
-                      {breakBelow && <BreakRow key={`${m.id}-a`} text={t(`history.breaks.${breakBelow.key}`)} />}
                     </Fragment>
                   );
                 })
