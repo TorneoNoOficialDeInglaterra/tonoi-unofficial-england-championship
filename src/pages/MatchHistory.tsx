@@ -263,19 +263,9 @@ export default function MatchHistory() {
                   const localGoals = sideScore(m, localId);
                   const visitorGoals = sideScore(m, visitorId);
 
-                  const prev = matches[i - 1];
-                  const next = matches[i + 1];
-                  // Lista en orden descendente: el banner va justo encima del partido anterior al parón.
-                  const breakAbove = filtering
-                    ? undefined
-                    : BREAKS.find(
-                        (b) =>
-                          m.match_date <= b.after &&
-                          (!prev || prev.match_date >= b.before),
-                      );
-                  const breakBelow = filtering
-                    ? undefined
-                    : BREAKS.find((b) => !next && m.match_date === b.before);
+                  // Lista en orden descendente: el banner va justo encima del último
+                  // partido disputado antes del parón.
+                  const breakAbove = filtering ? undefined : breakAnchorByMatchId.get(m.id);
                   return (
                     <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
