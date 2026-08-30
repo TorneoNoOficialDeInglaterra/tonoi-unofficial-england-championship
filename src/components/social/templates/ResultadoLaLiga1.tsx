@@ -2,7 +2,7 @@ import { competitionLogo, formatDateEs, groupScorers, splitIntoColumns, type Sco
 import { TLogo } from "./TeamLogo";
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
-  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const cols = splitIntoColumns(groupScorers(scorers, side), 4);
   return (
     <div style={{ display: "flex", gap: 12, justifyContent: align === "right" ? "flex-end" : "flex-start", width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 28, lineHeight: 1.47, color: "#1a2540", fontFamily: "'Playfair Display', Georgia, serif" }}>
       {cols.map((col, ci) => (
@@ -61,7 +61,7 @@ export function ResultadoLiga1({ data }: { data: TemplateData }) {
       <div
         style={{
           position: "absolute",
-          top: 700,
+          top: 690,
           left: 110,
           right: 130,
           display: "grid",
@@ -71,7 +71,7 @@ export function ResultadoLiga1({ data }: { data: TemplateData }) {
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ position: "relative", top: 10, fontSize: 140, fontWeight: 900, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a253a", lineHeight: 1 }}>
+        <div style={{ position: "relative", top: 10, right: 35, fontSize: 140, fontWeight: 900, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a253a", lineHeight: 1 }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="right" />
