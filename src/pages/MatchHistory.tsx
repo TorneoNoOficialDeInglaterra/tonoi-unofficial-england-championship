@@ -1,5 +1,7 @@
 import { useMemo, useState, useEffect, useRef, Fragment } from "react";
-import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X, Info } from "lucide-react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -124,7 +126,10 @@ export default function MatchHistory() {
     if (decades.length && !decades.includes(decade)) setDecade(decades[0]);
   }, [decades, decade]);
 
+  const [noteMatch, setNoteMatch] = useState<Match | null>(null);
+
   const h2hActive = !!h2hA && !!h2hB && h2hA !== h2hB;
+
 
   const filteredMatches = useMemo(() => {
     if (h2hActive) {
@@ -269,7 +274,12 @@ export default function MatchHistory() {
                   return (
                     <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
-                      <tr key={m.id} className="border-t border-border hover:bg-accent/40">
+                      <tr
+                        key={m.id}
+                        className={cn("border-t border-border hover:bg-accent/40", m.notes && "cursor-pointer")}
+                        onClick={m.notes ? () => setNoteMatch(m) : undefined}
+                        title={m.notes ? t("history.noteDialog.hint") : undefined}
+                      >
                         <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
                           {new Date(m.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "short", year: "numeric" })}
                         </td>
@@ -282,8 +292,22 @@ export default function MatchHistory() {
                         <td className="px-3 py-2.5 text-center">
                           <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
                             {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
+                            {m.notes && (
+                              <button
+                                type="button"
+                                aria-label={t("history.noteDialog.hint")}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setNoteMatch(m);
+                                }}
+                                className="text-primary transition-opacity hover:opacity-70"
+                              >
+                                <Info className="h-4 w-4" />
+                              </button>
+                            )}
                           </span>
                         </td>
+
                         <td className="px-3 py-2.5">
                           <div className="flex items-center gap-2">
                             <TeamBadge team={visitor} size={24} />
@@ -326,6 +350,48 @@ export default function MatchHistory() {
           )}
         </div>
       )}
+
+      <Dialog open={!!noteMatch} onOpenChange={(o) => !o && setNoteMatch(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("history.noteDialog.title")}</DialogTitle>
+          </DialogHeader>
+          {noteMatch && (() => {
+            const localId = noteMatch.home_team_id ?? localByMatch.get(noteMatch.id) ?? noteMatch.winner_team_id;
+            const visitorId = localId === noteMatch.winner_team_id ? noteMatch.loser_team_id : noteMatch.winner_team_id;
+            const local = teamById.get(localId);
+            const visitor = teamById.get(visitorId);
+            return (
+              <div className="space-y-4">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  {new Date(noteMatch.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "long", year: "numeric" })}
+                </p>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    <TeamBadge team={local} size={28} />
+                    <span className="truncate font-semibold">{local?.name ?? "—"}</span>
+                  </div>
+                  <span className="shrink-0 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
+                    {sideScore(noteMatch, localId)} – {sideScore(noteMatch, visitorId)}
+                  </span>
+                  <div className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
+                    <span className="truncate font-semibold">{visitor?.name ?? "—"}</span>
+                    <TeamBadge team={visitor} size={28} />
+                  </div>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/40 p-4">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-primary">{t("history.noteDialog.reason")}</h3>
+                  <p className="mt-2 text-sm text-foreground/90">{noteMatch.notes}</p>
+                </div>
+              </div>
+            );
+          })()}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNoteMatch(null)}>{t("history.noteDialog.close")}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+
   );
 }

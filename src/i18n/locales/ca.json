@@ -249,6 +249,12 @@
         "previous": "Dècada anterior",
         "next": "Dècada següent",
         "jumpTo": "Saltar a dècada"
+      },
+      "noteDialog": {
+        "title": "Detall del partit",
+        "reason": "Per què va canviar de campió?",
+        "close": "Tanca",
+        "hint": "Prem per veure el motiu"
       }
     }
   },

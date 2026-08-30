@@ -44,6 +44,12 @@
       "previous": "Decennio precedente",
       "next": "Decennio successivo",
       "jumpTo": "Vai al decennio"
+    },
+    "noteDialog": {
+      "title": "Dettaglio della partita",
+      "reason": "Perché è cambiato il campione?",
+      "close": "Chiudi",
+      "hint": "Tocca per vedere il motivo"
     }
   }
 }
