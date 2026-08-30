@@ -44,6 +44,12 @@
       "previous": "Década anterior",
       "next": "Década siguiente",
       "jumpTo": "Saltar a década"
+    },
+    "noteDialog": {
+      "title": "Detalle del partido",
+      "reason": "¿Por qué cambió de campeón?",
+      "close": "Cerrar",
+      "hint": "Pulsa para ver el motivo"
     }
   }
 }

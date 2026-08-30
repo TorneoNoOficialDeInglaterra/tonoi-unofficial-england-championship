@@ -249,6 +249,12 @@
         "previous": "Aurreko hamarkada",
         "next": "Hurrengo hamarkada",
         "jumpTo": "Hamarkadara joan"
+      },
+      "noteDialog": {
+        "title": "Partidaren xehetasuna",
+        "reason": "Zergatik aldatu zen txapelduna?",
+        "close": "Itxi",
+        "hint": "Sakatu arrazoia ikusteko"
       }
     }
   },

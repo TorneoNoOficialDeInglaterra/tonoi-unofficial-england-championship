@@ -44,6 +44,12 @@
       "previous": "Previous decade",
       "next": "Next decade",
       "jumpTo": "Jump to decade"
+    },
+    "noteDialog": {
+      "title": "Match detail",
+      "reason": "Why did the title change?",
+      "close": "Close",
+      "hint": "Tap to see the reason"
     }
   }
 }

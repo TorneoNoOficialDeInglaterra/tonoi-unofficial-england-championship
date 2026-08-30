@@ -249,6 +249,12 @@
         "previous": "Década anterior",
         "next": "Década seguinte",
         "jumpTo": "Saltar para década"
+      },
+      "noteDialog": {
+        "title": "Detalhe do jogo",
+        "reason": "Por que mudou de campeão?",
+        "close": "Fechar",
+        "hint": "Toque para ver o motivo"
       }
     }
   },
