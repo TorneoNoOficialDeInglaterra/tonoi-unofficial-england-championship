@@ -1,5 +1,7 @@
 import { useMemo, useState, useEffect, useRef, Fragment } from "react";
-import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ChevronsUpDown, X, Info } from "lucide-react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
