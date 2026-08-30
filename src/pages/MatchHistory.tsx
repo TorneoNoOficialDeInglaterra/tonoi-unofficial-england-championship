@@ -126,7 +126,10 @@ export default function MatchHistory() {
     if (decades.length && !decades.includes(decade)) setDecade(decades[0]);
   }, [decades, decade]);
 
+  const [noteMatch, setNoteMatch] = useState<Match | null>(null);
+
   const h2hActive = !!h2hA && !!h2hB && h2hA !== h2hB;
+
 
   const filteredMatches = useMemo(() => {
     if (h2hActive) {
