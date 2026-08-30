@@ -274,7 +274,12 @@ export default function MatchHistory() {
                   return (
                     <Fragment key={m.id}>
                       {breakAbove && <BreakRow key={`${m.id}-b`} text={t(`history.breaks.${breakAbove.key}`)} />}
-                      <tr key={m.id} className="border-t border-border hover:bg-accent/40">
+                      <tr
+                        key={m.id}
+                        className={cn("border-t border-border hover:bg-accent/40", m.notes && "cursor-pointer")}
+                        onClick={m.notes ? () => setNoteMatch(m) : undefined}
+                        title={m.notes ? t("history.noteDialog.hint") : undefined}
+                      >
                         <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
                           {new Date(m.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "short", year: "numeric" })}
                         </td>
@@ -287,8 +292,22 @@ export default function MatchHistory() {
                         <td className="px-3 py-2.5 text-center">
                           <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
                             {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
+                            {m.notes && (
+                              <button
+                                type="button"
+                                aria-label={t("history.noteDialog.hint")}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setNoteMatch(m);
+                                }}
+                                className="text-primary transition-opacity hover:opacity-70"
+                              >
+                                <Info className="h-4 w-4" />
+                              </button>
+                            )}
                           </span>
                         </td>
+
                         <td className="px-3 py-2.5">
                           <div className="flex items-center gap-2">
                             <TeamBadge team={visitor} size={24} />
