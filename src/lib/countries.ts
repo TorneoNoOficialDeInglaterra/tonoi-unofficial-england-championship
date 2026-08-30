@@ -13,10 +13,9 @@ export const UK_NATIONS: Record<string, Record<string, string>> = {
 export const COUNTRY_CODES: string[] = [
   "gb-eng", "gb-sct", "gb-wls", "gb-nir",
   "ad", "ae", "al", "am", "ar", "at", "au", "az", "ba", "be", "bg", "bo", "br", "by",
-  "ca", "cl", "cn", "co", "cr", "cy", "cz", "de", "dk", "dz", "ec", "ee", "eg", "es",
+  "ca", "ch", "cl", "cn", "co", "cr", "cy", "cz", "de", "dk", "dz", "ec", "ee", "eg", "es",
   "fi", "fo", "fr", "ge", "gr", "gt", "hn", "hr", "hu", "id", "ie", "il", "in", "iq",
   "ir", "is", "it", "jm", "jp", "kr", "kz", "lt", "lu", "lv", "ly", "ma", "mc", "md",
-  "ch",
   "me", "mk", "mt", "mx", "my", "ng", "nl", "no", "nz", "pa", "pe", "pl", "pt", "py",
   "qa", "ro", "rs", "ru", "sa", "se", "si", "sk", "sn", "sv", "th", "tn", "tr", "ua",
   "us", "uy", "uz", "ve", "vn", "xk", "za",
