@@ -16,6 +16,7 @@ export const COUNTRY_CODES: string[] = [
   "ca", "cl", "cn", "co", "cr", "cy", "cz", "de", "dk", "dz", "ec", "ee", "eg", "es",
   "fi", "fo", "fr", "ge", "gr", "gt", "hn", "hr", "hu", "id", "ie", "il", "in", "iq",
   "ir", "is", "it", "jm", "jp", "kr", "kz", "lt", "lu", "lv", "ly", "ma", "mc", "md",
+  "ch",
   "me", "mk", "mt", "mx", "my", "ng", "nl", "no", "nz", "pa", "pe", "pl", "pt", "py",
   "qa", "ro", "rs", "ru", "sa", "se", "si", "sk", "sn", "sv", "th", "tn", "tr", "ua",
   "us", "uy", "uz", "ve", "vn", "xk", "za",
