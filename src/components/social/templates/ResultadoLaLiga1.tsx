@@ -63,15 +63,15 @@ export function ResultadoLiga1({ data }: { data: TemplateData }) {
           position: "absolute",
           top: 690,
           left: 110,
-          right: 130,
+          right: 110,
           display: "grid",
-          gridTemplateColumns: "1.45fr 190px 1fr",
+          gridTemplateColumns: "1fr 190px 1fr",
           alignItems: "center",
           gap: 20,
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ position: "relative", top: 10, right: 35, fontSize: 140, fontWeight: 900, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a253a", lineHeight: 1 }}>
+        <div style={{ position: "relative", top: 10, fontSize: 140, fontWeight: 900, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a253a", lineHeight: 1 }}>
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="right" />
