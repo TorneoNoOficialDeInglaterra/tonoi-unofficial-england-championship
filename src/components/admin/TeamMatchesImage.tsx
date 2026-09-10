@@ -9,15 +9,22 @@ import { TeamCombobox } from "@/components/social/TeamCombobox";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, sideScore, type Match } from "@/lib/tonoi";
 
-type Row = { date: string; local: string; visitor: string; score: string };
+type Row = { date: string; local: Team | null; visitor: Team | null; score: string };
 
 const slug = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+/** Splits into `columns` groups of as-equal-as-possible size, keeping order. */
 function chunkIntoColumns<T>(items: T[], columns: number): T[][] {
-  const perCol = Math.ceil(items.length / columns);
+  const base = Math.floor(items.length / columns);
+  const rem = items.length % columns;
   const out: T[][] = [];
-  for (let i = 0; i < columns; i++) out.push(items.slice(i * perCol, (i + 1) * perCol));
+  let i = 0;
+  for (let c = 0; c < columns; c++) {
+    const size = base + (c < rem ? 1 : 0);
+    out.push(items.slice(i, i + size));
+    i += size;
+  }
   return out.filter((c) => c.length > 0);
 }
 
