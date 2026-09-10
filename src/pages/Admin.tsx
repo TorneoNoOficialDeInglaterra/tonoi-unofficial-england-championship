@@ -143,6 +143,7 @@ export default function Admin() {
         <TabsContent value="faqs" className="mt-4"><FaqsAdmin /></TabsContent>
         <TabsContent value="messages" className="mt-4"><MessagesAdmin /></TabsContent>
         <TabsContent value="images" className="mt-4"><ImageGenerator /></TabsContent>
+        <TabsContent value="team-matches" className="mt-4"><TeamMatchesImage /></TabsContent>
         
       </Tabs>
     </div>
