@@ -7,17 +7,25 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { TeamCombobox } from "@/components/social/TeamCombobox";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { buildLocalByMatchMap, sideScore, type Match } from "@/lib/tonoi";
+import { buildLocalByMatchMap, sideScore, type Match, type Team } from "@/lib/tonoi";
+import { TLogo } from "@/components/social/templates/TeamLogo";
 
-type Row = { date: string; local: string; visitor: string; score: string };
+type Row = { date: string; local: Team | null; visitor: Team | null; score: string };
 
 const slug = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+/** Splits into `columns` groups of as-equal-as-possible size, keeping order. */
 function chunkIntoColumns<T>(items: T[], columns: number): T[][] {
-  const perCol = Math.ceil(items.length / columns);
+  const base = Math.floor(items.length / columns);
+  const rem = items.length % columns;
   const out: T[][] = [];
-  for (let i = 0; i < columns; i++) out.push(items.slice(i * perCol, (i + 1) * perCol));
+  let i = 0;
+  for (let c = 0; c < columns; c++) {
+    const size = base + (c < rem ? 1 : 0);
+    out.push(items.slice(i, i + size));
+    i += size;
+  }
   return out.filter((c) => c.length > 0);
 }
 
@@ -49,15 +57,18 @@ export function TeamMatchesImage() {
       const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
       const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
       return {
-        date: m.match_date.split("-").reverse().join("/"),
-        local: teamById.get(localId)?.name ?? "—",
-        visitor: teamById.get(visitorId)?.name ?? "—",
+        date: new Date(m.match_date)
+          .toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
+          .toUpperCase()
+          .replace(/\./g, ""),
+        local: teamById.get(localId) ?? null,
+        visitor: teamById.get(visitorId) ?? null,
         score: `${sideScore(m, localId)} – ${sideScore(m, visitorId)}`,
       };
     });
   }, [teamId, matchesQ.data, localByMatch, teamById]);
 
-  const columns = rows.length > 60 ? 3 : 2;
+  const columns = rows.length <= 25 ? 1 : rows.length <= 80 ? 2 : 3;
   const cols = useMemo(() => chunkIntoColumns(rows, columns), [rows, columns]);
 
   async function handleDownload() {
