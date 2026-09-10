@@ -104,26 +104,21 @@ export function TeamMatchesImage() {
       </Card>
 
       {rows.length > 0 && (
-        <Card className="overflow-auto p-4">
-          <div className="origin-top-left scale-[0.5]" style={{ width: "fit-content" }}>
-            <MatchesCanvas ref={renderRef} cols={cols} />
+        <Card className="p-4">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Previsualización</p>
+          <div className="max-h-[60vh] overflow-auto rounded-md border border-border">
+            <div ref={renderRef} style={{ width: "fit-content" }}>
+              <MatchesCanvas cols={cols} />
+            </div>
           </div>
         </Card>
-      )}
-
-      {/* Nodo real usado para exportar (fuera de pantalla, tamaño completo) */}
-      {rows.length > 0 && (
-        <div className="pointer-events-none fixed left-[-10000px] top-0" aria-hidden>
-          <MatchesCanvas ref={renderRef} cols={cols} />
-        </div>
       )}
     </div>
   );
 }
 
-const MatchesCanvas = ({ ref, cols }: { ref?: React.Ref<HTMLDivElement>; cols: Row[][] }) => (
+const MatchesCanvas = ({ cols }: { cols: Row[][] }) => (
   <div
-    ref={ref}
     style={{
       display: "flex",
       gap: 28,
