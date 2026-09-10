@@ -131,6 +131,7 @@ export default function Admin() {
             <TabsTrigger value="faqs" className="whitespace-nowrap">FAQ</TabsTrigger>
             <TabsTrigger value="messages" className="whitespace-nowrap">Mensajes</TabsTrigger>
             <TabsTrigger value="images" className="whitespace-nowrap">Generar imagen</TabsTrigger>
+            <TabsTrigger value="team-matches" className="whitespace-nowrap">Partidos por equipo</TabsTrigger>
             
           </TabsList>
         </div>
