@@ -272,38 +272,37 @@ export default function MatchHistory() {
                         onClick={m.notes ? () => setNoteMatch(m) : undefined}
                         title={m.notes ? t("history.noteDialog.hint") : undefined}
                       >
-                        <td className="whitespace-nowrap px-3 py-2.5 text-muted-foreground">
-                          {new Date(m.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "short", year: "numeric" })}
-                        </td>
-                        <td className="px-3 py-2.5">
-                          <div className="flex items-center justify-end gap-2">
-                            <span className="font-medium">{local?.name ?? "—"}</span>
-                            <TeamBadge team={local} size={24} />
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 text-center">
-                          <span className="inline-flex items-center gap-2 rounded-md bg-muted px-2.5 py-1 font-mono font-bold tabular-nums">
-                            {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
-                            {m.notes && (
-                              <button
-                                type="button"
-                                aria-label={t("history.noteDialog.hint")}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setNoteMatch(m);
-                                }}
-                                className="text-primary transition-opacity hover:opacity-70"
-                              >
-                                <Info className="h-4 w-4" />
-                              </button>
-                            )}
-                          </span>
-                        </td>
-
-                        <td className="px-3 py-2.5">
-                          <div className="flex items-center gap-2">
-                            <TeamBadge team={visitor} size={24} />
-                            <span className="font-medium">{visitor?.name ?? "—"}</span>
+                        <td className="px-2 py-2 sm:px-3">
+                          <div className="flex flex-col items-center gap-1">
+                            <span className="whitespace-nowrap text-[10px] uppercase tracking-wider text-muted-foreground sm:text-xs">
+                              {new Date(m.match_date).toLocaleDateString(localeTag(), { day: "2-digit", month: "short", year: "numeric" })}
+                            </span>
+                            <div className="flex w-full items-center justify-center gap-1.5 sm:gap-3">
+                              <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
+                                <span className="truncate text-right font-medium">{local?.name ?? "—"}</span>
+                                <TeamBadge team={local} size={22} />
+                              </div>
+                              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-muted px-2 py-1 font-mono font-bold tabular-nums">
+                                {localGoals} <span className="text-muted-foreground">–</span> {visitorGoals}
+                                {m.notes && (
+                                  <button
+                                    type="button"
+                                    aria-label={t("history.noteDialog.hint")}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setNoteMatch(m);
+                                    }}
+                                    className="text-primary transition-opacity hover:opacity-70"
+                                  >
+                                    <Info className="h-4 w-4" />
+                                  </button>
+                                )}
+                              </span>
+                              <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
+                                <TeamBadge team={visitor} size={22} />
+                                <span className="truncate font-medium">{visitor?.name ?? "—"}</span>
+                              </div>
+                            </div>
                           </div>
                         </td>
                       </tr>
