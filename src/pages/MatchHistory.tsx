@@ -37,7 +37,7 @@ const BREAKS = [
 function BreakRow({ text }: { text: string }) {
   return (
     <tr className="border-t border-border bg-muted/60">
-      <td colSpan={4} className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
+      <td className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">
         {text}
       </td>
     </tr>
