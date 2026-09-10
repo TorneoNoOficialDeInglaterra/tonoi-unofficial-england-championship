@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { TeamCombobox } from "@/components/social/TeamCombobox";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
-import { buildLocalByMatchMap, sideScore, type Match } from "@/lib/tonoi";
+import { buildLocalByMatchMap, sideScore, type Match, type Team } from "@/lib/tonoi";
+import { TLogo } from "@/components/social/templates/TeamLogo";
 
 type Row = { date: string; local: Team | null; visitor: Team | null; score: string };
 
