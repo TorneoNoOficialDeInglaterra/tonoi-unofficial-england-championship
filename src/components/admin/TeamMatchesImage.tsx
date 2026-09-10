@@ -57,15 +57,18 @@ export function TeamMatchesImage() {
       const localId = m.home_team_id ?? localByMatch.get(m.id) ?? m.winner_team_id;
       const visitorId = localId === m.winner_team_id ? m.loser_team_id : m.winner_team_id;
       return {
-        date: m.match_date.split("-").reverse().join("/"),
-        local: teamById.get(localId)?.name ?? "—",
-        visitor: teamById.get(visitorId)?.name ?? "—",
+        date: new Date(m.match_date)
+          .toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
+          .toUpperCase()
+          .replace(/\./g, ""),
+        local: teamById.get(localId) ?? null,
+        visitor: teamById.get(visitorId) ?? null,
         score: `${sideScore(m, localId)} – ${sideScore(m, visitorId)}`,
       };
     });
   }, [teamId, matchesQ.data, localByMatch, teamById]);
 
-  const columns = rows.length > 60 ? 3 : 2;
+  const columns = rows.length <= 25 ? 1 : rows.length <= 80 ? 2 : 3;
   const cols = useMemo(() => chunkIntoColumns(rows, columns), [rows, columns]);
 
   async function handleDownload() {
