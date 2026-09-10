@@ -237,7 +237,7 @@ export default function MatchHistory() {
 
       <Card className="mt-3 overflow-hidden">
         <div ref={scrollBoxRef} className="max-h-[92vh] overflow-auto">
-          <table className="w-full text-sm">
+          <table className="w-full table-fixed text-sm">
             <tbody>
               {loading ? (
                 Array.from({ length: 8 }).map((_, i) => (
