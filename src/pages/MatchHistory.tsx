@@ -236,24 +236,16 @@ export default function MatchHistory() {
       </div>
 
       <Card className="mt-3 overflow-hidden">
-        <div ref={scrollBoxRef} className="max-h-[80vh] overflow-auto">
-          <table className="min-w-full text-sm">
-            <thead className="sticky top-0 z-10 bg-muted/95 text-xs uppercase tracking-wider text-muted-foreground backdrop-blur">
-              <tr>
-                <th className="px-3 py-3 text-left">{t("history.table.date")}</th>
-                <th className="px-3 py-3 text-right">{t("history.table.home")}</th>
-                <th className="px-3 py-3 text-center">{t("history.table.result")}</th>
-                <th className="px-3 py-3 text-left">{t("history.table.away")}</th>
-              </tr>
-            </thead>
+        <div ref={scrollBoxRef} className="max-h-[92vh] overflow-auto">
+          <table className="w-full text-sm">
             <tbody>
               {loading ? (
-                Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i} className="border-t border-border"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
+                Array.from({ length: 8 }).map((_, i) => (
+                  <tr key={i} className="border-t border-border"><td className="p-3"><Skeleton className="h-8 w-full" /></td></tr>
                 ))
               ) : matches.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-muted-foreground">
+                  <td className="p-8 text-center text-muted-foreground">
                     {h2hActive
                       ? t("history.empty.h2h")
                       : t("history.empty.none")}
