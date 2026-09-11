@@ -59,7 +59,7 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
       </div>
 
       {/* Escudos */}
-      <div style={{ position: "absolute", top: 450, left: 100, width: 280, display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "absolute", top: 450, left: 110, width: 280, display: "flex", justifyContent: "center" }}>
         <TLogo team={data.homeTeam} size={280} />
       </div>
       <div style={{ position: "absolute", top: 450, right: 100, width: 280, display: "flex", justifyContent: "center" }}>
@@ -67,24 +67,66 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
       </div>
 
       {/* Marcador + goleadores */}
-      <div
-        style={{
-          position: "absolute",
-          top: 720,
-          left: 110,
-          right: 130,
-          display: "grid",
-          gridTemplateColumns: "1.4fr 210px 1fr",
-          alignItems: "center",
-          gap: 20,
-        }}
-      >
-        <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ position: "relative", top: -20, fontSize: 140, fontWeight: 900, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a253a", lineHeight: 1 }}>
-          {data.homeGoals}-{data.awayGoals}
+        <div
+          style={{
+            position: "absolute",
+            top: 720,
+            left: 110,
+            right: 130,
+            height: 180,
+          }}
+        >
+          {/* Goleadores izquierda */}
+          <div
+            style={{
+              position: "absolute",
+              left: 20,
+              top: 40,
+              width: "40%",
+            }}
+          >
+            <ScorersList
+              scorers={data.scorers}
+              side="home"
+              align="left"
+            />
+          </div>
+
+          {/* MARCADOR EXACTAMENTE EN EL CENTRO */}
+          <div
+            style={{
+              position: "absolute",
+              left: "52%",
+              top: 15,
+              transform: "translateX(-50%)",
+              fontSize: 140,
+              fontWeight: 900,
+              fontFamily: "'PT Serif', serif",
+              textAlign: "center",
+              color: "#1a253a",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {data.homeGoals}-{data.awayGoals}
+          </div>
+
+          {/* Goleadores derecha */}
+          <div
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 40,
+              width: "40%",
+            }}
+          >
+            <ScorersList
+              scorers={data.scorers}
+              side="away"
+              align="right"
+            />
+          </div>
         </div>
-        <ScorersList scorers={data.scorers} side="away" align="right" />
-      </div>
 
       {/* Estadio y fecha inferior */}
       <div style={{ position: "absolute", bottom: 135, left: 200, right: 200, textAlign: "center", color: "#1a253a", fontFamily: "system-ui, -apple-system, sans-serif" }}>
