@@ -134,11 +134,17 @@ export function TeamMatchesImage() {
         pixelRatio: 2,
         backgroundColor: "#ffffff",
       });
+      const blob = await (await fetch(dataUrl)).blob();
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = dataUrl;
+      a.href = url;
       a.download = `partidos-${slug(team.name)}.png`;
+      document.body.appendChild(a);
       a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
       toast.success("Imagen descargada");
+
     } catch (e: any) {
       toast.error("Error generando imagen: " + (e?.message ?? "desconocido"));
     } finally {
