@@ -8,7 +8,35 @@ import { Label } from "@/components/ui/label";
 import { TeamCombobox } from "@/components/social/TeamCombobox";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, sideScore, type Match, type Team } from "@/lib/tonoi";
-import { TLogo } from "@/components/social/templates/TeamLogo";
+
+const TLogo = ({ team, size }: { team: Team | null; size: number }) =>
+  team?.logo_url ? (
+    <img
+      src={team.logo_url}
+      alt=""
+      crossOrigin="anonymous"
+      style={{ width: size, height: size, objectFit: "contain", flexShrink: 0 }}
+    />
+  ) : (
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: 4,
+        border: "1px solid #d4d4d8",
+        color: "#52525b",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: 800,
+        fontSize: size * 0.32,
+        flexShrink: 0,
+      }}
+    >
+      {(team?.name ?? "?").slice(0, 3).toUpperCase()}
+    </div>
+  );
+
 
 type Row = { date: string; local: Team | null; visitor: Team | null; score: string };
 
