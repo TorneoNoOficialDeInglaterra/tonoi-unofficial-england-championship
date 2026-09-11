@@ -146,7 +146,9 @@ export function TeamMatchesImage() {
       toast.success("Imagen descargada");
 
     } catch (e: any) {
+      console.error("[TeamMatchesImage] download failed", e);
       toast.error("Error generando imagen: " + (e?.message ?? "desconocido"));
+
     } finally {
       setBusy(false);
     }
