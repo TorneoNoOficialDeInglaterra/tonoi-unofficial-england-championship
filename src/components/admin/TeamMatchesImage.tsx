@@ -132,48 +132,78 @@ const MatchesCanvas = ({ cols }: { cols: Row[][] }) => (
   <div
     style={{
       display: "flex",
-      gap: 28,
+      gap: 24,
       padding: 32,
       background: "#ffffff",
       color: "#111111",
       fontFamily: "Inter, system-ui, sans-serif",
       width: "fit-content",
+      alignItems: "flex-start",
     }}
   >
     {cols.map((col, i) => (
-      <div key={i} style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 420 }}>
+      <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 460 }}>
         {col.map((r, j) => (
           <div
             key={j}
             style={{
-              display: "grid",
-              gridTemplateColumns: "104px 1fr 96px 1fr",
+              display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              gap: 10,
-              padding: "6px 8px",
-              background: j % 2 === 0 ? "#f4f4f5" : "#ffffff",
-              borderRadius: 4,
-              fontSize: 15,
-              lineHeight: 1.2,
+              gap: 2,
+              padding: "8px 10px",
+              background: "#ffffff",
+              borderBottom: "1px solid #e4e4e7",
             }}
           >
-            <span style={{ color: "#71717a", fontVariantNumeric: "tabular-nums" }}>{r.date}</span>
-            <span style={{ textAlign: "right", fontWeight: 600, whiteSpace: "nowrap" }}>{r.local}</span>
             <span
               style={{
-                textAlign: "center",
-                fontWeight: 700,
-                fontFamily: "ui-monospace, monospace",
-                fontVariantNumeric: "tabular-nums",
+                fontSize: 12,
+                letterSpacing: 1,
+                textTransform: "uppercase",
+                color: "#71717a",
                 whiteSpace: "nowrap",
               }}
             >
-              {r.score}
+              {r.date}
             </span>
-            <span style={{ fontWeight: 600, whiteSpace: "nowrap" }}>{r.visitor}</span>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 110px 1fr",
+                alignItems: "center",
+                gap: 10,
+                width: "100%",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+                <span style={{ fontWeight: 600, fontSize: 16, whiteSpace: "nowrap" }}>{r.local?.name ?? "—"}</span>
+                <TLogo team={r.local} size={24} />
+              </div>
+              <span
+                style={{
+                  textAlign: "center",
+                  fontWeight: 700,
+                  fontSize: 16,
+                  fontFamily: "ui-monospace, monospace",
+                  fontVariantNumeric: "tabular-nums",
+                  background: "#f4f4f5",
+                  borderRadius: 6,
+                  padding: "4px 8px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {r.score}
+              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <TLogo team={r.visitor} size={24} />
+                <span style={{ fontWeight: 600, fontSize: 16, whiteSpace: "nowrap" }}>{r.visitor?.name ?? "—"}</span>
+              </div>
+            </div>
           </div>
         ))}
       </div>
     ))}
   </div>
 );
+
