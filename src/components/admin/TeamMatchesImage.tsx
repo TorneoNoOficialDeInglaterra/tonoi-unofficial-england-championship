@@ -106,6 +106,8 @@ export function TeamMatchesImage() {
     try {
       const node = renderRef.current;
       // Pre-cargar los escudos como data URL para que no fallen por CORS al exportar.
+      const BLANK =
+        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       const imgs = Array.from(node.querySelectorAll("img"));
       await Promise.all(
         imgs.map(async (img) => {
@@ -118,15 +120,20 @@ export function TeamMatchesImage() {
             const dataUrl = await new Promise<string>((resolve, reject) => {
               const fr = new FileReader();
               fr.onload = () => resolve(String(fr.result));
-              fr.onerror = () => reject(fr.error);
+              fr.onerror = () => reject(new Error("read"));
               fr.readAsDataURL(blob);
             });
+            img.removeAttribute("crossorigin");
             img.setAttribute("src", dataUrl);
           } catch {
-            img.style.visibility = "hidden";
+            // Escudo no accesible: se sustituye por un pixel transparente
+            img.removeAttribute("crossorigin");
+            img.setAttribute("src", BLANK);
           }
         }),
       );
+      await new Promise((r) => setTimeout(r, 100));
+
 
       const dataUrl = await toPng(node, {
         cacheBust: false,
@@ -134,13 +141,21 @@ export function TeamMatchesImage() {
         pixelRatio: 2,
         backgroundColor: "#ffffff",
       });
+      const blob = await (await fetch(dataUrl)).blob();
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = dataUrl;
+      a.href = url;
       a.download = `partidos-${slug(team.name)}.png`;
+      document.body.appendChild(a);
       a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
       toast.success("Imagen descargada");
+
     } catch (e: any) {
+      console.error("[TeamMatchesImage] download failed", e);
       toast.error("Error generando imagen: " + (e?.message ?? "desconocido"));
+
     } finally {
       setBusy(false);
     }
