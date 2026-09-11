@@ -104,8 +104,33 @@ export function TeamMatchesImage() {
     if (!renderRef.current || rows.length === 0) return toast.error("Ese equipo no tiene partidos");
     setBusy(true);
     try {
-      const dataUrl = await toPng(renderRef.current, {
-        cacheBust: true,
+      const node = renderRef.current;
+      // Pre-cargar los escudos como data URL para que no fallen por CORS al exportar.
+      const imgs = Array.from(node.querySelectorAll("img"));
+      await Promise.all(
+        imgs.map(async (img) => {
+          const src = img.getAttribute("src") ?? "";
+          if (!src || src.startsWith("data:")) return;
+          try {
+            const res = await fetch(src, { mode: "cors" });
+            if (!res.ok) throw new Error(String(res.status));
+            const blob = await res.blob();
+            const dataUrl = await new Promise<string>((resolve, reject) => {
+              const fr = new FileReader();
+              fr.onload = () => resolve(String(fr.result));
+              fr.onerror = () => reject(fr.error);
+              fr.readAsDataURL(blob);
+            });
+            img.setAttribute("src", dataUrl);
+          } catch {
+            img.style.visibility = "hidden";
+          }
+        }),
+      );
+
+      const dataUrl = await toPng(node, {
+        cacheBust: false,
+        skipFonts: true,
         pixelRatio: 2,
         backgroundColor: "#ffffff",
       });
@@ -120,6 +145,7 @@ export function TeamMatchesImage() {
       setBusy(false);
     }
   }
+
 
   return (
     <div className="space-y-4">
