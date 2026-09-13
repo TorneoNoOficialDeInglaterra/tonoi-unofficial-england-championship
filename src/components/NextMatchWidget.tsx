@@ -86,14 +86,14 @@ export default function NextMatchWidget() {
   const liveMinute = live && fixture ? estimateLiveMinute(fixture, now) : 0;
 
   return (
-    <Card className="p-6 shadow-[var(--shadow-card)]">
+    <Card className="overflow-hidden p-6 shadow-[var(--shadow-card)]">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
-          {live ? <Radio className="h-4 w-4 text-primary" /> : <CalendarClock className="h-4 w-4" />}
-          {live ? t("next.liveTitle") : finished ? t("next.finishedTitle") : t("next.title")}
+        <div className="flex min-w-0 items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          {live ? <Radio className="h-4 w-4 flex-none text-primary" /> : <CalendarClock className="h-4 w-4 flex-none" />}
+          <span className="truncate">{live ? t("next.liveTitle") : finished ? t("next.finishedTitle") : t("next.title")}</span>
         </div>
         {live && (
-          <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+          <span className="flex flex-none items-center gap-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
             <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
             {t("next.liveBadge")}
           </span>
@@ -105,15 +105,15 @@ export default function NextMatchWidget() {
       ) : !fixture ? (
         <p className="mt-4 text-sm text-muted-foreground">{t("next.none")}</p>
       ) : (
-        <div className="mt-4">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            {fixture.league_logo && <img src={fixture.league_logo} alt="" className="h-4 w-4 object-contain" loading="lazy" />}
+        <div className="mt-4 min-w-0">
+          <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+            {fixture.league_logo && <img src={fixture.league_logo} alt="" className="h-4 w-4 flex-none object-contain" loading="lazy" />}
             <span className="truncate">{fixture.league_name ?? ""}</span>
           </div>
 
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <div className="flex flex-1 items-center gap-2">
-              {fixture.home_logo && <img src={fixture.home_logo} alt="" className="h-8 w-8 object-contain" loading="lazy" />}
+          <div className="mt-3 flex min-w-0 items-center justify-between gap-2 sm:gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              {fixture.home_logo && <img src={fixture.home_logo} alt="" className="h-8 w-8 flex-none object-contain" loading="lazy" />}
               <span className="min-w-0 truncate font-semibold">{fixture.home_name}</span>
             </div>
             <div className="shrink-0 whitespace-nowrap rounded-md bg-primary px-2 py-1 font-mono text-sm font-bold text-primary-foreground sm:px-3 sm:py-1.5 sm:text-lg">
@@ -121,13 +121,13 @@ export default function NextMatchWidget() {
                 ? `${fixture.home_goals ?? 0} – ${fixture.away_goals ?? 0}`
                 : new Date(fixture.kickoff_at).toLocaleTimeString(localeTag(), { hour: "2-digit", minute: "2-digit" })}
             </div>
-            <div className="flex flex-1 items-center justify-end gap-2 text-right">
+            <div className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
               <span className="min-w-0 truncate font-semibold">{fixture.away_name}</span>
-              {fixture.away_logo && <img src={fixture.away_logo} alt="" className="h-8 w-8 object-contain" loading="lazy" />}
+              {fixture.away_logo && <img src={fixture.away_logo} alt="" className="h-8 w-8 flex-none object-contain" loading="lazy" />}
             </div>
           </div>
 
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="mt-2 min-w-0 truncate text-xs text-muted-foreground">
             {live
               ? fixture.status_short === "HT"
                 ? t("next.halfTime")
