@@ -239,14 +239,27 @@ const MatchesCanvas = ({ cols }: { cols: Row[][] }) => (
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1fr 110px 1fr",
+                 gridTemplateColumns: "minmax(0, 1fr) 110px minmax(0, 1fr)",
                 alignItems: "center",
                 gap: 10,
                 width: "100%",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
-                <span style={{ fontWeight: 600, fontSize: 16, whiteSpace: "nowrap" }}>{r.local?.name ?? "—"}</span>
+               <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, minWidth: 0 }}>
+                 <span
+                   title={r.local?.name ?? "—"}
+                   style={{
+                     minWidth: 0,
+                     overflow: "hidden",
+                     textOverflow: "ellipsis",
+                     whiteSpace: "nowrap",
+                     textAlign: "right",
+                     fontWeight: 600,
+                     fontSize: 16,
+                   }}
+                 >
+                   {r.local?.name ?? "—"}
+                 </span>
                 <TLogo team={r.local} size={24} />
               </div>
               <span
@@ -264,9 +277,22 @@ const MatchesCanvas = ({ cols }: { cols: Row[][] }) => (
               >
                 {r.score}
               </span>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+               <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                 <TLogo team={r.visitor} size={24} />
-                <span style={{ fontWeight: 600, fontSize: 16, whiteSpace: "nowrap" }}>{r.visitor?.name ?? "—"}</span>
+                 <span
+                   title={r.visitor?.name ?? "—"}
+                   style={{
+                     minWidth: 0,
+                     overflow: "hidden",
+                     textOverflow: "ellipsis",
+                     whiteSpace: "nowrap",
+                     textAlign: "left",
+                     fontWeight: 600,
+                     fontSize: 16,
+                   }}
+                 >
+                   {r.visitor?.name ?? "—"}
+                 </span>
               </div>
             </div>
           </div>
