@@ -118,7 +118,7 @@ export default function Header() {
 
         <div className="ml-auto flex items-center gap-1">
           <Button variant="ghost" size="icon" asChild aria-label={t("header.twitter")}>
-            <a href="https://twitter.com/ToNOI_Oficial" target="_blank" rel="noreferrer">
+            <a href="https://x.com/ToNOI_oficial" target="_blank" rel="noreferrer">
               <Twitter className="h-5 w-5" />
             </a>
           </Button>
