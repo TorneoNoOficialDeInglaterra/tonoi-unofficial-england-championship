@@ -62,7 +62,7 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
           position: "absolute",
           left: 243,
           top: 443,
-          width: 210,
+          width: 200,
           height: 210,
           display: "flex",
           alignItems: "center",
@@ -76,8 +76,8 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
       <div
         style={{
           position: "absolute",
-          left: 647,
-          top: 443,
+          left: 637,
+          top: 403,
           width: 210,
           height: 230,
           display: "flex",
