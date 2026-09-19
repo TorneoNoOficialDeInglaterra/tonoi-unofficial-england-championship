@@ -77,7 +77,7 @@ export function AnuncioPartido({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           left: 637,
-          top: 403,
+          top: 433,
           width: 210,
           height: 230,
           display: "flex",
