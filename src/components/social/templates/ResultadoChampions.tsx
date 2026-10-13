@@ -40,7 +40,7 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
 /**
  * Champions template — el fondo ya incluye marco dorado, escudos ToNOI, "RESULTADO", caja/barra del marcador.
  * La caja pintada ocupa x 152→928 e y 776→919: la capa de goleadores y marcador se sitúa
- * simétricamente (left/right 170) para que el marcador quede centrado y los goleadores no
+ * simétricamente (left/right 185) para que el marcador quede centrado y los goleadores no
  * se salgan del recuadro.
  * Solo superponemos: escudos equipos, "V", marcador, goleadores, fecha+hora, estadio.
  */
@@ -90,8 +90,8 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           top: 786,
-          left: 170,
-          right: 170,
+          left: 185,
+          right: 185,
           height: 120,
           display: "grid",
           gridTemplateColumns: "1fr 230px 1fr",
