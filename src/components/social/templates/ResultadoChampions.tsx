@@ -1,13 +1,36 @@
 import { formatDateEn, groupScorers, splitIntoColumns, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
+/** Máximo de filas de goleadores por columna. */
+const MAX_ROWS = 4;
+
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
-  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
+  const size = cols.length > 1 ? 20 : 24;
   return (
-    <div style={{ display: "flex", gap: 12, justifyContent: align === "right" ? "flex-end" : "flex-start", width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 24, lineHeight: 1.45, color: "#ffffff", fontFamily: "'Montserrat', sans-serif" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: 10,
+        justifyContent: align === "right" ? "flex-end" : "flex-start",
+        width: "100%",
+        minWidth: 0,
+        maxWidth: "100%",
+        overflow: "hidden",
+        fontSize: size,
+        lineHeight: 1.25,
+        color: "#ffffff",
+        fontFamily: "'Montserrat', sans-serif",
+        fontWeight: 600,
+      }}
+    >
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
-          {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
+        <div key={ci} style={{ flex: "1 1 0", minWidth: 0, textAlign: align }}>
+          {col.map((line, i) => (
+            <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {line}
+            </div>
+          ))}
         </div>
       ))}
     </div>
@@ -16,7 +39,10 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
 
 /**
  * Champions template — el fondo ya incluye marco dorado, escudos ToNOI, "RESULTADO", caja/barra del marcador.
- * Solo superponemos: logo Champions, escudos equipos, "V", marcador, goleadores, fecha+hora, estadio.
+ * La caja pintada ocupa x 152→928 e y 776→919: la capa de goleadores y marcador se sitúa
+ * simétricamente (left/right 170) para que el marcador quede centrado y los goleadores no
+ * se salgan del recuadro.
+ * Solo superponemos: escudos equipos, "V", marcador, goleadores, fecha+hora, estadio.
  */
 export function ResultadoChampions({ data }: { data: TemplateData }) {
   return (
@@ -42,7 +68,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         <TLogo team={data.awayTeam} size={260} />
       </div>
 
-            {/* "V" central */}
+      {/* "V" central */}
       <div
         style={{
           position: "absolute",
@@ -59,21 +85,32 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         V
       </div>
 
-      {/* Barra de marcador (ya pintada en el fondo) */}
+      {/* Caja de marcador (pintada en el fondo): 170→910 horizontal, 786→906 vertical */}
       <div
         style={{
           position: "absolute",
-          top: 780,
-          left: 150,
+          top: 786,
+          left: 170,
           right: 170,
+          height: 120,
           display: "grid",
-          gridTemplateColumns: "1.35fr 200px 1fr",
+          gridTemplateColumns: "1fr 230px 1fr",
           alignItems: "center",
-          gap: 20,
+          gap: 16,
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ position: "relative", top: 0, left: 10 , fontSize: 130, fontWeight: 700, textAlign: "center", color: "#fff", lineHeight: 1, fontFamily: "'Montserrat', sans-serif" }}>
+        <div
+          style={{
+            fontSize: 128,
+            fontWeight: 700,
+            textAlign: "center",
+            color: "#fff",
+            lineHeight: 1,
+            fontFamily: "'Montserrat', sans-serif",
+            whiteSpace: "nowrap",
+          }}
+        >
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="right" />
