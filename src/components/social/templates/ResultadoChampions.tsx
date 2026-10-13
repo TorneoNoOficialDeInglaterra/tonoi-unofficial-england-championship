@@ -6,7 +6,7 @@ const MAX_ROWS = 4;
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
   const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
-  const size = cols.length > 1 ? 16 : 24;
+  const size = cols.length > 1 ? 15 : 24;
   return (
     <div
       style={{
@@ -45,6 +45,11 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
  * Solo superponemos: escudos equipos, "V", marcador, goleadores, fecha+hora, estadio.
  */
 export function ResultadoChampions({ data }: { data: TemplateData }) {
+  // Con más de MAX_ROWS goleadores a un lado hacen falta 2 columnas: el marcador
+  // cede algo de anchura y de tamaño para que los nombres no se recorten.
+  const many =
+    groupScorers(data.scorers, "home").length > MAX_ROWS ||
+    groupScorers(data.scorers, "away").length > MAX_ROWS;
   return (
     <div
       style={{
