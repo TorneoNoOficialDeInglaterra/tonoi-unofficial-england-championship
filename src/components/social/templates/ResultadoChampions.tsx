@@ -90,7 +90,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         V
       </div>
 
-      {/* Caja de marcador (pintada en el fondo): 170→910 horizontal, 786→906 vertical */}
+      {/* Caja de marcador (pintada en el fondo): 185→895 horizontal, 786→906 vertical */}
       <div
         style={{
           position: "absolute",
@@ -99,7 +99,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
           right: 185,
           height: 120,
           display: "grid",
-          gridTemplateColumns: "1fr 230px 1fr",
+          gridTemplateColumns: many ? "1fr 190px 1fr" : "1fr 230px 1fr",
           alignItems: "center",
           gap: 16,
         }}
@@ -107,7 +107,7 @@ export function ResultadoChampions({ data }: { data: TemplateData }) {
         <ScorersList scorers={data.scorers} side="home" align="left" />
         <div
           style={{
-            fontSize: 128,
+            fontSize: many ? 110 : 128,
             fontWeight: 700,
             textAlign: "center",
             color: "#fff",
