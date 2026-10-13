@@ -6,7 +6,7 @@ const MAX_ROWS = 4;
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
   const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
-  const size = cols.length > 1 ? 18 : 24;
+  const size = cols.length > 1 ? 16 : 24;
   return (
     <div
       style={{
