@@ -6,12 +6,12 @@ const MAX_ROWS = 4;
 
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
   const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
-  const size = cols.length > 1 ? 20 : 24;
+  const size = cols.length > 1 ? 18 : 24;
   return (
     <div
       style={{
         display: "flex",
-        gap: 10,
+        gap: 8,
         justifyContent: align === "right" ? "flex-end" : "flex-start",
         width: "100%",
         minWidth: 0,
@@ -25,7 +25,7 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
       }}
     >
       {cols.map((col, ci) => (
-        <div key={ci} style={{ flex: "1 1 0", minWidth: 0, textAlign: align }}>
+        <div key={ci} style={{ flex: "1 1 auto", minWidth: 0, textAlign: align }}>
           {col.map((line, i) => (
             <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {line}
