@@ -1,13 +1,17 @@
 import { competitionLogo, formatDateEs, groupScorers, splitIntoColumns, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
+/** Máximo de filas de goleadores por columna. */
+const MAX_ROWS = 4;
+
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" | "center" }) {
-  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
+  const size = cols.length > 1 ? 18 : 26;
   const justify = align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start";
   return (
-    <div style={{ display: "flex", gap: 12, justifyContent: justify, width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 26, lineHeight: 1.45, color: "#1a253a", fontFamily: "'Lora', Georgia, serif", fontWeight: 600 }}>
+    <div style={{ display: "flex", gap: 8, justifyContent: justify, width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: size, lineHeight: 1.45, color: "#1a253a", fontFamily: "'Lora', Georgia, serif", fontWeight: 600 }}>
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
+        <div key={ci} style={{ flex: "1 1 auto", minWidth: 0, textAlign: align }}>
           {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
         </div>
       ))}
@@ -66,67 +70,36 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
         <TLogo team={data.awayTeam} size={280} />
       </div>
 
-      {/* Marcador + goleadores */}
+      {/* Marcador + goleadores (grid simétrico: marcador centrado) */}
+      <div
+        style={{
+          position: "absolute",
+          top: 720,
+          left: 110,
+          right: 110,
+          height: 180,
+          display: "grid",
+          gridTemplateColumns: many ? "1fr 190px 1fr" : "1fr 230px 1fr",
+          alignItems: "center",
+          gap: 16,
+        }}
+      >
+        <ScorersList scorers={data.scorers} side="home" align="left" />
         <div
           style={{
-            position: "absolute",
-            top: 720,
-            left: 110,
-            right: 130,
-            height: 180,
+            fontSize: many ? 110 : 140,
+            fontWeight: 900,
+            fontFamily: "'PT Serif', serif",
+            textAlign: "center",
+            color: "#1a253a",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
           }}
         >
-          {/* Goleadores izquierda */}
-          <div
-            style={{
-              position: "absolute",
-              left: 20,
-              top: 40,
-              width: "40%",
-            }}
-          >
-            <ScorersList
-              scorers={data.scorers}
-              side="home"
-              align="left"
-            />
-          </div>
-
-          {/* MARCADOR EXACTAMENTE EN EL CENTRO */}
-          <div
-            style={{
-              position: "absolute",
-              left: "52%",
-              top: 15,
-              transform: "translateX(-50%)",
-              fontSize: 140,
-              fontWeight: 900,
-              fontFamily: "'PT Serif', serif",
-              textAlign: "center",
-              color: "#1a253a",
-              lineHeight: 1,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {data.homeGoals}-{data.awayGoals}
-          </div>
-
-          {/* Goleadores derecha */}
-          <div
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 40,
-              width: "40%",
-            }}
-          >
-            <ScorersList
-              scorers={data.scorers}
-              side="away"
-              align="right"
-            />
-          </div>
+          {data.homeGoals}-{data.awayGoals}
         </div>
+        <ScorersList scorers={data.scorers} side="away" align="right" />
+      </div>
 
       {/* Estadio y fecha inferior */}
       <div style={{ position: "absolute", bottom: 135, left: 200, right: 200, textAlign: "center", color: "#1a253a", fontFamily: "system-ui, -apple-system, sans-serif" }}>
