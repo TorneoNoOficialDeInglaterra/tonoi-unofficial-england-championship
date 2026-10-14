@@ -34,9 +34,9 @@ const base = {
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div>
+    <div data-row={label}>
       <div style={{ font: "16px monospace", padding: 4, background: "#eee" }}>{label}</div>
-      <div style={{ transform: "scale(0.45)", transformOrigin: "top left", width: 1080, height: 1080, marginBottom: -594 }}>
+      <div data-canvas style={{ transform: "scale(0.45)", transformOrigin: "top left", width: 1080, height: 1080, marginBottom: -594 }}>
         {children}
       </div>
     </div>
