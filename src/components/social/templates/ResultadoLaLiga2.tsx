@@ -25,6 +25,11 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
  * Solo superponemos: logo de liga, escudos equipos, nombres en las cajas, marcador, goleadores, fecha y estadio en la banda azul.
  */
 export function ResultadoLiga2({ data }: { data: TemplateData }) {
+  // Con más de MAX_ROWS goleadores a un lado hacen falta 2 columnas: el marcador
+  // cede algo de anchura y de tamaño para que los nombres no se recorten.
+  const many =
+    groupScorers(data.scorers, "home").length > MAX_ROWS ||
+    groupScorers(data.scorers, "away").length > MAX_ROWS;
   return (
     <div
       style={{
