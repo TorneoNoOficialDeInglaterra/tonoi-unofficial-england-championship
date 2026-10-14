@@ -32,9 +32,9 @@ const base = {
   awayTeam: null,
 };
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+function Row({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
-    <div data-row={label}>
+    <div data-row={id}>
       <div style={{ font: "16px monospace", padding: 4, background: "#eee" }}>{label}</div>
       <div data-canvas style={{ transform: "scale(0.45)", transformOrigin: "top left", width: 1080, height: 1080, marginBottom: -594 }}>
         {children}
@@ -54,14 +54,14 @@ export default function TplTest() {
   const europaB: TemplateData = { ...base, competition: "europa", scorers: scorersB };
   return (
     <div>
-      <Row label="liga1 A (4/3)"><ResultadoLiga1 data={liga1A} /></Row>
-      <Row label="liga1 B (6/3)"><ResultadoLiga1 data={liga1B} /></Row>
-      <Row label="liga2 A (4/3)"><ResultadoLiga2 data={liga2A} /></Row>
-      <Row label="liga2 B (6/3)"><ResultadoLiga2 data={liga2B} /></Row>
-      <Row label="copa A (4/3)"><ResultadoCopa data={copaA} /></Row>
-      <Row label="copa B (6/3)"><ResultadoCopa data={copaB} /></Row>
-      <Row label="europa A (4/3)"><ResultadoEuropa data={europaA} /></Row>
-      <Row label="europa B (6/3)"><ResultadoEuropa data={europaB} /></Row>
+      <Row id="liga1a" label="liga1 A (4/3)"><ResultadoLiga1 data={liga1A} /></Row>
+      <Row id="liga1b" label="liga1 B (6/3)"><ResultadoLiga1 data={liga1B} /></Row>
+      <Row id="liga2a" label="liga2 A (4/3)"><ResultadoLiga2 data={liga2A} /></Row>
+      <Row id="liga2b" label="liga2 B (6/3)"><ResultadoLiga2 data={liga2B} /></Row>
+      <Row id="copaa" label="copa A (4/3)"><ResultadoCopa data={copaA} /></Row>
+      <Row id="copab" label="copa B (6/3)"><ResultadoCopa data={copaB} /></Row>
+      <Row id="europaa" label="europa A (4/3)"><ResultadoEuropa data={europaA} /></Row>
+      <Row id="europab" label="europa B (6/3)"><ResultadoEuropa data={europaB} /></Row>
     </div>
   );
 }
