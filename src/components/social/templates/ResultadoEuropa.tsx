@@ -1,12 +1,16 @@
 import { formatDateEn, groupScorers, splitIntoColumns, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
+/** Máximo de filas de goleadores por columna. */
+const MAX_ROWS = 4;
+
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" }) {
-  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
+  const size = cols.length > 1 ? 22 : 32;
   return (
-    <div style={{ display: "flex", gap: 12, justifyContent: align === "right" ? "flex-end" : "flex-start", width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 32, lineHeight: 1.45, color: "#000000", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 1000 }}>
+    <div style={{ display: "flex", gap: 8, justifyContent: align === "right" ? "flex-end" : "flex-start", width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: size, lineHeight: 1.45, color: "#000000", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 1000 }}>
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
+        <div key={ci} style={{ flex: "1 1 auto", minWidth: 0, textAlign: align }}>
           {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
         </div>
       ))}
@@ -20,6 +24,11 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
  * estadio y fecha+hora dentro del tablón inferior.
  */
 export function ResultadoEuropa({ data }: { data: TemplateData }) {
+  // Con más de MAX_ROWS goleadores a un lado hacen falta 2 columnas: el marcador
+  // cede algo de anchura y de tamaño para que los nombres no se recorten.
+  const many =
+    groupScorers(data.scorers, "home").length > MAX_ROWS ||
+    groupScorers(data.scorers, "away").length > MAX_ROWS;
   return (
     <div
       style={{
@@ -69,16 +78,26 @@ export function ResultadoEuropa({ data }: { data: TemplateData }) {
         style={{
           position: "absolute",
           top: 800,
-          left: 150,
-          right: 180,
+          left: 165,
+          right: 165,
           display: "grid",
-          gridTemplateColumns: "1.35fr 220px 1fr",
+          gridTemplateColumns: many ? "1fr 200px 1fr" : "1fr 220px 1fr",
           alignItems: "center",
           gap: 20,
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="left" />
-        <div style={{ fontSize: 120, fontWeight: 700, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
+        <div
+          style={{
+            fontSize: many ? 100 : 120,
+            fontWeight: 700,
+            fontFamily: "'PT Serif', serif",
+            textAlign: "center",
+            color: "#1a1a1a",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
+          }}
+        >
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="right" />
