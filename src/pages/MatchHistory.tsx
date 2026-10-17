@@ -280,8 +280,10 @@ export default function MatchHistory() {
                             </span>
                             <div className="flex w-full items-center justify-center gap-1.5 sm:gap-3">
                               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
-                                <CountryFlag code={local?.country_code} width={18} />
-                                <span className="truncate text-right font-medium">{local?.name ?? "—"}</span>
+                                <div className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+                                  <CountryFlag code={local?.country_code} width={18} />
+                                  <span className="min-w-0 truncate text-right font-medium">{local?.name ?? "—"}</span>
+                                </div>
                                 <TeamBadge team={local} size={22} />
                               </div>
                               <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-muted px-2 py-1 font-mono font-bold tabular-nums">
@@ -302,8 +304,10 @@ export default function MatchHistory() {
                               </span>
                               <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
                                 <TeamBadge team={visitor} size={22} />
-                                <span className="truncate font-medium">{visitor?.name ?? "—"}</span>
-                                <CountryFlag code={visitor?.country_code} width={18} />
+                                <div className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+                                  <span className="min-w-0 truncate font-medium">{visitor?.name ?? "—"}</span>
+                                  <CountryFlag code={visitor?.country_code} width={18} />
+                                </div>
                               </div>
                             </div>
                           </div>
