@@ -79,10 +79,10 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
       <div
         style={{
           position: "absolute",
-          top: 720,
+          top: 710,
           left: 110,
           right: 110,
-          height: 180,
+          height: 154,
           display: "grid",
           gridTemplateColumns: many ? "1fr 190px 1fr" : "1fr 230px 1fr",
           alignItems: "center",
@@ -107,7 +107,7 @@ export function ResultadoLiga2({ data }: { data: TemplateData }) {
       </div>
 
       {/* Estadio y fecha inferior */}
-      <div style={{ position: "absolute", bottom: 135, left: 200, right: 200, textAlign: "center", color: "#1a253a", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+      <div style={{ position: "absolute", bottom: 120, left: 200, right: 200, textAlign: "center", color: "#1a253a", fontFamily: "system-ui, -apple-system, sans-serif" }}>
         <div style={{ fontSize: 32, fontWeight: 700 }}>{data.stadium}</div>
         <div style={{ fontSize: 32, fontWeight: 700, marginTop: -2}}>{formatDateEs(data.date)}</div>
       </div>
