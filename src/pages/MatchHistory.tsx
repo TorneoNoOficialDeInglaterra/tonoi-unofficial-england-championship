@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { CountryFlag } from "@/components/CountryFlag";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, decadeOf, sideScore, type Match, type Team } from "@/lib/tonoi";
@@ -279,6 +280,7 @@ export default function MatchHistory() {
                             </span>
                             <div className="flex w-full items-center justify-center gap-1.5 sm:gap-3">
                               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
+                                <CountryFlag code={local?.country_code} width={18} />
                                 <span className="truncate text-right font-medium">{local?.name ?? "—"}</span>
                                 <TeamBadge team={local} size={22} />
                               </div>
@@ -301,6 +303,7 @@ export default function MatchHistory() {
                               <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
                                 <TeamBadge team={visitor} size={22} />
                                 <span className="truncate font-medium">{visitor?.name ?? "—"}</span>
+                                <CountryFlag code={visitor?.country_code} width={18} />
                               </div>
                             </div>
                           </div>
