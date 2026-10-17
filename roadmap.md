@@ -1,0 +1,2 @@
+- [x] Finish Liga 2 spacing and verify centered scores and four scorer rows in all four result templates.
+- [x] Remove the temporary template preview page and route.

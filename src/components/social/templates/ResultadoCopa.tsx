@@ -1,13 +1,17 @@
 import { competitionLogo, formatDateEn, groupScorers, splitIntoColumns, type Scorer, type TemplateData } from "./shared";
 import { TLogo } from "./TeamLogo";
 
+/** Máximo de filas de goleadores por columna. */
+const MAX_ROWS = 4;
+
 function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home" | "away"; align: "left" | "right" | "center" }) {
-  const cols = splitIntoColumns(groupScorers(scorers, side), 3);
+  const cols = splitIntoColumns(groupScorers(scorers, side), MAX_ROWS);
+  const size = cols.length > 1 ? 20 : 28;
   const justify = align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start";
   return (
-    <div style={{ display: "flex", gap: 12, justifyContent: justify, width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: 28, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+    <div style={{ display: "flex", gap: 8, justifyContent: justify, width: "100%", minWidth: 0, maxWidth: "100%", overflow: "hidden", fontSize: size, lineHeight: 1.45, color: "#1a1a1a", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
       {cols.map((col, ci) => (
-        <div key={ci} style={{ textAlign: align, minWidth: 0 }}>
+        <div key={ci} style={{ flex: "1 1 auto", minWidth: 0, textAlign: align }}>
           {col.map((line, i) => <div key={i} style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line}</div>)}
         </div>
       ))}
@@ -21,6 +25,11 @@ function ScorersList({ scorers, side, align }: { scorers: Scorer[]; side: "home"
  * escudos equipos, "V", marcador y goleadores en la caja inferior.
  */
 export function ResultadoCopa({ data }: { data: TemplateData }) {
+  // Con más de MAX_ROWS goleadores a un lado hacen falta 2 columnas: el marcador
+  // cede algo de anchura y de tamaño para que los nombres no se recorten.
+  const many =
+    groupScorers(data.scorers, "home").length > MAX_ROWS ||
+    groupScorers(data.scorers, "away").length > MAX_ROWS;
   return (
     <div
       style={{
@@ -56,21 +65,31 @@ export function ResultadoCopa({ data }: { data: TemplateData }) {
         <TLogo team={data.awayTeam} size={280} />
       </div>
 
-      {/* Marcador + goleadores en la caja crema inferior */}
+      {/* Marcador + goleadores en la caja crema inferior (grid simétrico: marcador centrado) */}
       <div
         style={{
           position: "absolute",
           bottom: 140,
-          left: 40,
-          right: 50,
+          left: 45,
+          right: 45,
           display: "grid",
-          gridTemplateColumns: "1.35fr 220px 1fr",
+          gridTemplateColumns: many ? "1fr 200px 1fr" : "1fr 220px 1fr",
           alignItems: "center",
           gap: 20,
         }}
       >
         <ScorersList scorers={data.scorers} side="home" align="center" />
-        <div style={{ position: "relative", top: -5, fontSize: 120, fontWeight: 700, fontFamily: "'PT Serif', serif", textAlign: "center", color: "#1a1a1a", lineHeight: 1 }}>
+        <div
+          style={{
+            fontSize: many ? 100 : 120,
+            fontWeight: 700,
+            fontFamily: "'PT Serif', serif",
+            textAlign: "center",
+            color: "#1a1a1a",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
+          }}
+        >
           {data.homeGoals}-{data.awayGoals}
         </div>
         <ScorersList scorers={data.scorers} side="away" align="center" />
