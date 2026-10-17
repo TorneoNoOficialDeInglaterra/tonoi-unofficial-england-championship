@@ -18,7 +18,6 @@ import Auditoria from "./pages/Auditoria";
 import Contact from "./pages/Contact";
 import Faq from "./pages/Faq";
 import Unsubscribe from "./pages/Unsubscribe";
-import TplTest from "./__tpl_test";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -46,7 +45,6 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/auditoria" element={<Auditoria />} />
-            <Route path="/__tpl-test" element={<TplTest />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
