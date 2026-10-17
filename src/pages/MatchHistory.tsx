@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { CountryFlag } from "@/components/CountryFlag";
 import { TeamBadge } from "@/components/TeamBadge";
 import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { buildLocalByMatchMap, decadeOf, sideScore, type Match, type Team } from "@/lib/tonoi";
@@ -55,8 +56,9 @@ function TeamCombo({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" className="mt-1 w-full justify-between font-normal">
-          <span className={cn("truncate", !selected && "text-muted-foreground")}>
-            {selected?.name ?? placeholder}
+          <span className={cn("flex min-w-0 items-center gap-2", !selected && "text-muted-foreground")}>
+            <CountryFlag code={selected?.country_code} width={18} />
+            <span className="min-w-0 truncate">{selected?.name ?? placeholder}</span>
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -69,8 +71,9 @@ function TeamCombo({
             <CommandGroup>
               {teams.map((t) => (
                 <CommandItem key={t.id} value={t.name} onSelect={() => { onChange(t.id); setOpen(false); }}>
-                  <Check className={cn("mr-2 h-4 w-4", value === t.id ? "opacity-100" : "opacity-0")} />
-                  {t.name}
+                  <Check className={cn("mr-2 h-4 w-4 shrink-0", value === t.id ? "opacity-100" : "opacity-0")} />
+                  <CountryFlag code={t.country_code} width={18} className="mr-2" />
+                  <span className="min-w-0 truncate">{t.name}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -279,7 +282,10 @@ export default function MatchHistory() {
                             </span>
                             <div className="flex w-full items-center justify-center gap-1.5 sm:gap-3">
                               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
-                                <span className="truncate text-right font-medium">{local?.name ?? "—"}</span>
+                                <div className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+                                  <CountryFlag code={local?.country_code} width={18} />
+                                  <span className="min-w-0 truncate text-right font-medium">{local?.name ?? "—"}</span>
+                                </div>
                                 <TeamBadge team={local} size={22} />
                               </div>
                               <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-muted px-2 py-1 font-mono font-bold tabular-nums">
@@ -300,7 +306,10 @@ export default function MatchHistory() {
                               </span>
                               <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
                                 <TeamBadge team={visitor} size={22} />
-                                <span className="truncate font-medium">{visitor?.name ?? "—"}</span>
+                                <div className="flex min-w-0 items-center gap-1 sm:gap-1.5">
+                                  <span className="min-w-0 truncate font-medium">{visitor?.name ?? "—"}</span>
+                                  <CountryFlag code={visitor?.country_code} width={18} />
+                                </div>
                               </div>
                             </div>
                           </div>
