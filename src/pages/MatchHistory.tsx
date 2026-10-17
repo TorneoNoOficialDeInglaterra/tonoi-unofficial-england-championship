@@ -56,8 +56,9 @@ function TeamCombo({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" className="mt-1 w-full justify-between font-normal">
-          <span className={cn("truncate", !selected && "text-muted-foreground")}>
-            {selected?.name ?? placeholder}
+          <span className={cn("flex min-w-0 items-center gap-2", !selected && "text-muted-foreground")}>
+            <CountryFlag code={selected?.country_code} width={18} />
+            <span className="min-w-0 truncate">{selected?.name ?? placeholder}</span>
           </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -70,8 +71,9 @@ function TeamCombo({
             <CommandGroup>
               {teams.map((t) => (
                 <CommandItem key={t.id} value={t.name} onSelect={() => { onChange(t.id); setOpen(false); }}>
-                  <Check className={cn("mr-2 h-4 w-4", value === t.id ? "opacity-100" : "opacity-0")} />
-                  {t.name}
+                  <Check className={cn("mr-2 h-4 w-4 shrink-0", value === t.id ? "opacity-100" : "opacity-0")} />
+                  <CountryFlag code={t.country_code} width={18} className="mr-2" />
+                  <span className="min-w-0 truncate">{t.name}</span>
                 </CommandItem>
               ))}
             </CommandGroup>
