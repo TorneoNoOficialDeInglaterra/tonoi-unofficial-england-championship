@@ -303,6 +303,7 @@ export default function MatchHistory() {
                               <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
                                 <TeamBadge team={visitor} size={22} />
                                 <span className="truncate font-medium">{visitor?.name ?? "—"}</span>
+                                <CountryFlag code={visitor?.country_code} width={18} />
                               </div>
                             </div>
                           </div>
