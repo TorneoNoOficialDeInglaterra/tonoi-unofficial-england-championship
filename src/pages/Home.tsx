@@ -13,11 +13,11 @@ import { useMatches, useTeams } from "@/hooks/useTonoiData";
 import { computeStandings, daysBetween, buildLocalByMatchMap, sideScore, isPenaltyMatch } from "@/lib/tonoi";
 
 import logoImg from "@/assets/logo.png";
-import hero1 from "@/assets/hero/hero1.jpg";
-import hero2 from "@/assets/hero/hero2.jpg";
-import hero3 from "@/assets/hero/hero3.jpg";
-import hero4 from "@/assets/hero/hero4.jpg";
-import hero5 from "@/assets/hero/hero5.jpg";
+import hero1 from "@/assets/hero/hero1.jpg.asset.json";
+import hero2 from "@/assets/hero/hero2.jpg.asset.json";
+import hero3 from "@/assets/hero/hero3.jpg.asset.json";
+import hero4 from "@/assets/hero/hero4.jpg.asset.json";
+import hero5 from "@/assets/hero/hero5.webp.asset.json";
 
 const HERO_IMAGES = [hero1, hero5, hero2, hero4, hero3];
 
