@@ -76,8 +76,8 @@ export default function Home() {
         <div className="absolute inset-0">
           {HERO_IMAGES.map((src, i) => (
             <img
-              key={src}
-              src={src}
+              key={src.url}
+              src={src.url}
               alt=""
               aria-hidden="true"
               loading={i === 0 ? "eager" : "lazy"}
