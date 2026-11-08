@@ -24,6 +24,7 @@ import caAll from "./locales/ca.json";
 import euAll from "./locales/eu.json";
 import ptAll from "./locales/pt.json";
 import glAll from "./locales/gl.json";
+import frAll from "./locales/fr.json";
 
 export const SUPPORTED_LANGUAGES = [
   { code: "es", label: "Español", short: "ES" },
@@ -33,6 +34,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: "eu", label: "Euskara", short: "EU" },
   { code: "pt", label: "Português", short: "PT" },
   { code: "gl", label: "Galego", short: "GL" },
+  { code: "fr", label: "Français", short: "FR" },
 ] as const;
 
 export type LangCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];
@@ -45,6 +47,7 @@ export const resources = {
   eu: euAll,
   pt: ptAll,
   gl: glAll,
+  fr: frAll,
 };
 
 i18n
@@ -53,7 +56,7 @@ i18n
   .init({
     resources,
     fallbackLng: "es",
-    supportedLngs: ["es", "en", "it", "ca", "eu", "pt", "gl"],
+    supportedLngs: ["es", "en", "it", "ca", "eu", "pt", "gl", "fr"],
     defaultNS: "common",
     ns: ["common", "home", "standings", "matches", "stats", "pages"],
     detection: {
@@ -92,6 +95,8 @@ export function localeTag(lng?: string) {
       return "pt-PT";
     case "gl":
       return "gl-ES";
+    case "fr":
+      return "fr-FR";
     default:
       return "es-ES";
   }

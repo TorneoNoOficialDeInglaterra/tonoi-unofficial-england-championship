@@ -1,0 +1,338 @@
+{
+  "common": {
+    "nav": {
+      "home": "Accueil",
+      "standings": "Classement",
+      "matchHistory": "Historique des matches",
+      "stats": "Statistiques",
+      "history": "Histoire du tournoi",
+      "faq": "Foire aux questions",
+      "contact": "Contact",
+      "standingsHistoric": "Classement historique",
+      "standingsNational": "Classements nationaux"
+    },
+    "header": {
+      "openMenu": "Ouvrir le menu",
+      "tournamentName": "Torneio Não Oficial de Inglaterra",
+      "logoAlt": "Logo ToNOI",
+      "twitter": "Twitter du tournoi",
+      "tiktok": "TikTok du tournoi",
+      "contact": "Contact",
+      "language": "Changer de langue"
+    },
+    "footer": {
+      "copyright": "© {{year}} Torneio Não Oficial de Inglaterra (ToNOI)",
+      "tagline": "Site officiel du tournoi — créé et géré par ses fondateurs."
+    },
+    "scrollTop": "Retour en haut de page",
+    "meta": {
+      "title": "ToNOI — Torneio Não Oficial de Inglaterra",
+      "description": "Suivez le ToNOI : champion actuel, classement historique, historique des matches et statistiques du Torneio Não Oficial de Inglaterra."
+    }
+  },
+  "home": {
+    "hero": {
+      "tagline": "Torneio Não Oficial de Inglaterra",
+      "titleLine1": "Pour être champion,",
+      "titleLine2": "bats le champion.",
+      "subtitle": "Un seul titre. Une seule règle. Suivez l'histoire vivante du ToNOI match après match.",
+      "viewStandings": "Voir le classement",
+      "matchHistory": "Historique des matches",
+      "logoAlt": "Logo ToNOI",
+      "imageAlt": "Image {{n}}"
+    },
+    "champion": {
+      "current": "Champion actuel",
+      "daysAsChampion_one": "{{count}} jour en tant que champion",
+      "daysAsChampion_other": "{{count}} jours en tant que champion",
+      "noData": "—",
+      "noMatches": "Aucun match enregistré pour le moment."
+    },
+    "lastMatch": {
+      "title": "Dernier match",
+      "penalties": "Décidé aux tirs au but.",
+      "draw": "Match nul.",
+      "titleChanged": "Changement de champion !",
+      "noMatches": "Aucun match pour le moment."
+    },
+    "about": {
+      "heading": "Qu'est-ce que le ToNOI ?",
+      "paragraph1": "Imaginez ce qui se passerait si dans le football on décidait du champion comme à la boxe ? Eh bien, nous sommes là pour vous le raconter.",
+      "paragraph2": "Le <strong>Torneio Não Oficial de Inglaterra (ToNOI)</strong> est un championnat dans lequel, pour être champion, il faut battre le champion en titre. Il n'y a pas de phase de groupes, pas d'éliminatoires ni rien de ce genre : <strong>uniquement des finales</strong>. Si vous affrontez l'équipe championne et que vous l'emportez, vous serez le nouveau <strong>CHAMPION NON OFFICIEL D'ANGLETERRE</strong> et vous commencerez à écrire l'histoire jusqu'à ce qu'une autre équipe vous batte.",
+      "paragraph3": "Le titre change de mains match après match, traversant les décennies, les générations et les rivalités. Ici, peu importe la ligue ou la coupe : la seule chose qui compte, c'est ce duel précis où un club défie le champion du moment.",
+      "closing": "Plongez avec nous dans cette aventure et vivez le football comme jamais auparavant."
+    },
+    "rules": {
+      "title": "Règlement officiel",
+      "items": [
+        "Si tu bats le champion actuel, tu deviens champion.",
+        "Seuls les matches officiels comptent.",
+        "Si dans une ligue il n'existe pas d'enregistrements officiels, le match officiel suivant sera pris en compte.",
+        "En cas de disparition du club champion, le titre revient au champion précédent.",
+        "Les prolongations ne comptent que si le match s'est terminé sur un score de parité au bout des 90 minutes.",
+        "Les tirs au but comptent si au bout de 90 minutes (ou 120 minutes en cas de prolongation) le résultat est nul et que les tirs au but sont nécessaires pour départager les équipes."
+      ]
+    },
+    "top10": {
+      "title": "Top 10",
+      "viewAll": "Tout voir →",
+      "noData": "Aucune donnée."
+    },
+    "last5": {
+      "title": "5 derniers matches",
+      "viewAll": "Tout voir →",
+      "noMatches": "Aucun match."
+    },
+    "video": {
+      "label": "Vidéo d'origine",
+      "heading": "Découvrez le tournoi en vidéo",
+      "iframeTitle": "Qu'est-ce que le ToNOI ?"
+    },
+    "next": {
+      "title": "Prochain match",
+      "liveTitle": "Match en direct",
+      "finishedTitle": "Match terminé",
+      "liveBadge": "En direct",
+      "none": "Aucun prochain match confirmé.",
+      "minute": "Minute {{n}}",
+      "halfTime": "Mi-temps",
+      "fullTime": "Fin du match",
+      "startsIn": "commence dans {{time}}",
+      "titleChanges": "Avec ce résultat, le titre change de mains !",
+      "titleRetained": "Avec ce résultat, le champion conserve son titre."
+    }
+  },
+  "standings": {
+    "title": "Classement historique",
+    "subtitle": "Calculé match par match depuis le premier ToNOI jusqu'à aujourd'hui.",
+    "legend": {
+      "title": "Légende",
+      "pj": "<strong>PJ</strong>: Matches joués",
+      "ved": "<strong>V/N/D</strong>: Victoires / Nuls / Défaites (le nul du challenger compte comme une défaite)",
+      "p": "<strong>P</strong>: Points totaux",
+      "ppp": "<strong>PPM</strong>: Points par match",
+      "gfgcdg": "<strong>BP/BC/DB</strong>: Buts pour / Buts contre / Différence de buts",
+      "pct": "<strong>PcT</strong>: Matches avec trophée",
+      "mj": "<strong>MS</strong>: Meilleure série (matches consécutifs avec le trophée)",
+      "intentos": "<strong>T</strong>: Nombre de tentatives pour détrôner le champion",
+      "destronamientos": "<strong>Dét</strong>: Détrônements (titres conquis)",
+      "id": "<strong>ID</strong>: Pourcentage de réussite (Dét/T)"
+    },
+    "cols": {
+      "pj": {
+        "label": "PJ",
+        "desc": "Matches joués"
+      },
+      "v": {
+        "label": "V",
+        "desc": "Victoires"
+      },
+      "e": {
+        "label": "N",
+        "desc": "Matches nuls"
+      },
+      "d": {
+        "label": "D",
+        "desc": "Défaites"
+      },
+      "p": {
+        "label": "P",
+        "desc": "Points"
+      },
+      "gf": {
+        "label": "BP",
+        "desc": "Buts pour"
+      },
+      "gc": {
+        "label": "BC",
+        "desc": "Buts contre"
+      },
+      "dg": {
+        "label": "DB",
+        "desc": "Différence de buts"
+      },
+      "ppp": {
+        "label": "PPM",
+        "desc": "Points par match"
+      },
+      "pct": {
+        "label": "PcT",
+        "desc": "Matches avec trophée"
+      },
+      "mj": {
+        "label": "MS",
+        "desc": "Meilleure série"
+      },
+      "intentos": {
+        "label": "T",
+        "desc": "Tentatives"
+      },
+      "destronamientos": {
+        "label": "Dét",
+        "desc": "Détrônements"
+      },
+      "idPct": {
+        "label": "ID",
+        "desc": "Indice de détrônement (%)"
+      }
+    },
+    "filter": {
+      "placeholder": "Filtrer par équipe…",
+      "searchPlaceholder": "Rechercher une équipe...",
+      "noResults": "Aucun résultat.",
+      "clear": "Effacer",
+      "teamsCount": "{{count}} équipe",
+      "teamsCount_other": "{{count}} équipes"
+    },
+    "table": {
+      "pos": "#",
+      "team": "Équipe",
+      "empty": "Aucune donnée pour le moment."
+    },
+    "scoring": {
+      "title": "Système de points",
+      "win": "<strong>Victoire</strong>: 2 points",
+      "pens": "<strong>Victoire aux tirs au but</strong>: 2 points (le perdant, 0)",
+      "drawChampion": "<strong>Match nul du champion</strong>: 1 point et compte comme un match nul",
+      "drawChallenger": "<strong>Match nul du challenger</strong>: 0 point et compte comme une défaite",
+      "loss": "<strong>Défaite</strong>: 0 point"
+    },
+    "national": {
+      "title": "Classements nationaux",
+      "subtitle": "Choisissez un pays pour voir le classement uniquement avec ses équipes.",
+      "back": "Retour aux pays"
+    }
+  },
+  "matches": {
+    "history": {
+      "title": "Historique des matches",
+      "subtitle": "Chaque match pour le titre, regroupé par décennies.",
+      "filters": {
+        "teamLabel": "Équipe",
+        "teamPlaceholder": "Toutes les équipes",
+        "clear": "Effacer",
+        "h2hClub1Label": "Face-à-face — Club 1",
+        "h2hClub2Label": "Face-à-face — Club 2",
+        "clubPlaceholder": "Sélectionner un club",
+        "clearH2h": "Effacer le face-à-face",
+        "searchTeam": "Rechercher une équipe...",
+        "noTeamsFound": "Aucune équipe trouvée."
+      },
+      "heading": {
+        "h2h": "{{teamA}} vs {{teamB}}",
+        "teamMatches": "Matches de {{team}}",
+        "decade": "Années {{decade}}"
+      },
+      "matchCount": "{{count}} match",
+      "matchCount_other": "{{count}} matches",
+      "table": {
+        "date": "Date",
+        "home": "Domicile",
+        "result": "Résultat",
+        "away": "Extérieur"
+      },
+      "empty": {
+        "h2h": "Il n'y a aucun match entre ces deux clubs.",
+        "none": "Aucun match."
+      },
+      "status": {
+        "draw": "Match nul",
+        "penalties": "Décidé aux tirs au but",
+        "titleChange": "Changement de titre"
+      },
+      "breaks": {
+        "wwi": "La compétition a été interrompue entre 1915 et 1919 en raison de la Première Guerre mondiale",
+        "wwii": "La compétition a été interrompue entre 1939 et 1945 en raison de la Seconde Guerre mondiale",
+        "covid": "La compétition a été suspendue en raison de la pandémie de COVID-19"
+      },
+      "decadeNav": {
+        "previous": "Décennie précédente",
+        "next": "Décennie suivante",
+        "jumpTo": "Aller à la décennie"
+      },
+      "noteDialog": {
+        "title": "Détail du match",
+        "reason": "Pourquoi le champion a-t-il changé ?",
+        "close": "Fermer",
+        "hint": "Appuyez pour voir le motif"
+      }
+    }
+  },
+  "stats": {
+    "stats": {
+      "title": "Statistiques individuelles",
+      "subtitle": "Buteurs, passeurs et clean sheets — saison actuelle ou historique.",
+      "season": "Saison",
+      "seasonPlaceholder": "Sélectionner...",
+      "seasonCurrentSuffix": " · actuelle",
+      "historic": "Historique (toutes les saisons)",
+      "note": "Les statistiques individuelles ne sont disponibles qu'à partir de la saison 2025/2026.",
+      "tabs": {
+        "players": "Buteurs et passeurs",
+        "keepers": "Clean sheets"
+      },
+      "searchPlayerPlaceholder": "Rechercher un joueur...",
+      "playersCount": "{{count}} joueur",
+      "playersCount_other": "{{count}} joueurs",
+      "table": {
+        "player": "Joueur",
+        "goals": "Buts",
+        "assists": "Passes décisives",
+        "ga": "B+P",
+        "keeper": "Gardien",
+        "cleanSheets": "Clean sheets"
+      },
+      "noData": "Aucune donnée."
+    },
+    "history": {
+      "title": "Histoire du tournoi",
+      "subtitle": "Tout ce que le ToNOI a vécu au fil des ans.",
+      "comingSoon": "Bientôt disponible",
+      "body": "Nous préparons un voyage complet à travers l'histoire du tournoi : champions légendaires, séries inoubliables et les matches qui ont changé le cours du titre. Revenez très bientôt."
+    }
+  },
+  "pages": {
+    "contact": {
+      "title": "Contact",
+      "intro": "Tu as une question, une suggestion ou tu veux signaler un match ? Écris-nous et nous te répondrons dès que possible.",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Ton nom",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "toi@email.com",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Raconte-nous...",
+      "sendButton": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "errors": {
+        "name": "Indique ton nom",
+        "email": "E-mail invalide",
+        "message": "Écris un message"
+      },
+      "success": "Message envoyé. Nous te répondrons dès que possible."
+    },
+    "faq": {
+      "title": "Foire aux questions",
+      "intro": "Les questions les plus fréquentes sur le ToNOI.",
+      "empty": "Aucune question fréquente n'est encore publiée."
+    },
+    "notFound": {
+      "title": "404",
+      "message": "Oups ! Page introuvable",
+      "backHome": "Retour à l'accueil"
+    },
+    "unsubscribe": {
+      "title": "ToNOI",
+      "subtitle": "Gestion des abonnements e-mail",
+      "noToken": "Aucun jeton de désabonnement n'a été fourni.",
+      "invalidLink": "Le lien de désabonnement n'est pas valide ou a déjà été utilisé.",
+      "verifyError": "Impossible de vérifier le lien. Réessaie plus tard.",
+      "confirmError": "Impossible de finaliser le désabonnement.",
+      "connectionError": "Erreur de connexion. Réessaie plus tard.",
+      "verifying": "Vérification du lien...",
+      "confirmText": "Si tu confirmes, tu ne recevras plus d'e-mails de cet expéditeur.",
+      "confirmButton": "Confirmer le désabonnement",
+      "confirmed": "Tu t'es désabonné avec succès.",
+      "invalidGeneric": "Le lien n'est pas valide."
+    }
+  }
+}
