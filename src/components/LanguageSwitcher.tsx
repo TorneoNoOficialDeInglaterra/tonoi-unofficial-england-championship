@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -107,17 +108,22 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[9rem]">
-        {SUPPORTED_LANGUAGES.map((l) => {
+        {SUPPORTED_LANGUAGES.map((l, index) => {
           const Flag = FLAG_BY_LANG[l.code] ?? FlagSpain;
+          const isRegional = REGIONAL_LANGUAGES.has(l.code);
+          const previousIsRegional =
+            index > 0 && REGIONAL_LANGUAGES.has(SUPPORTED_LANGUAGES[index - 1].code);
           return (
-            <DropdownMenuItem
-              key={l.code}
-              onClick={() => i18n.changeLanguage(l.code)}
-              className={l.code === current.code ? "font-semibold" : undefined}
-            >
-              <Flag className="mr-2 h-3.5 w-[1.45rem] rounded-sm border border-border/40 shadow-sm object-cover" />
-              {l.label}
-            </DropdownMenuItem>
+            <Fragment key={l.code}>
+              {isRegional && !previousIsRegional && <DropdownMenuSeparator />}
+              <DropdownMenuItem
+                onClick={() => i18n.changeLanguage(l.code)}
+                className={l.code === current.code ? "font-semibold" : undefined}
+              >
+                <Flag className="mr-2 h-3.5 w-[1.45rem] rounded-sm border border-border/40 shadow-sm object-cover" />
+                {l.label}
+              </DropdownMenuItem>
+            </Fragment>
           );
         })}
       </DropdownMenuContent>
