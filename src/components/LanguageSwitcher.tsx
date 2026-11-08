@@ -71,6 +71,14 @@ const FlagGalicia = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const FlagFrance = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
+    <rect width="8" height="18" fill="#0055A4" />
+    <rect x="8" width="8" height="18" fill="#FFFFFF" />
+    <rect x="16" width="8" height="18" fill="#EF4135" />
+  </svg>
+);
+
 const FLAG_BY_LANG: Record<string, React.FC<{ className?: string }>> = {
   es: FlagSpain,
   en: FlagEn,
@@ -79,6 +87,7 @@ const FLAG_BY_LANG: Record<string, React.FC<{ className?: string }>> = {
   eu: FlagBasque,
   pt: FlagPortugal,
   gl: FlagGalicia,
+  fr: FlagFrance,
 };
 
 export default function LanguageSwitcher({ className }: { className?: string }) {

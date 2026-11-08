@@ -3,10 +3,10 @@
 // las naciones futbolísticas (gb-eng, gb-sct, gb-wls, gb-nir).
 
 export const UK_NATIONS: Record<string, Record<string, string>> = {
-  "gb-eng": { es: "Inglaterra", en: "England", it: "Inghilterra", ca: "Anglaterra", eu: "Ingalaterra", pt: "Inglaterra", gl: "Inglaterra" },
-  "gb-sct": { es: "Escocia", en: "Scotland", it: "Scozia", ca: "Escòcia", eu: "Eskozia", pt: "Escócia", gl: "Escocia" },
-  "gb-wls": { es: "Gales", en: "Wales", it: "Galles", ca: "Gal·les", eu: "Gales", pt: "País de Gales", gl: "Gales" },
-  "gb-nir": { es: "Irlanda del Norte", en: "Northern Ireland", it: "Irlanda del Nord", ca: "Irlanda del Nord", eu: "Ipar Irlanda", pt: "Irlanda do Norte", gl: "Irlanda do Norte" },
+  "gb-eng": { es: "Inglaterra", en: "England", it: "Inghilterra", ca: "Anglaterra", eu: "Ingalaterra", pt: "Inglaterra", gl: "Inglaterra", fr: "Angleterre" },
+  "gb-sct": { es: "Escocia", en: "Scotland", it: "Scozia", ca: "Escòcia", eu: "Eskozia", pt: "Escócia", gl: "Escocia", fr: "Écosse" },
+  "gb-wls": { es: "Gales", en: "Wales", it: "Galles", ca: "Gal·les", eu: "Gales", pt: "País de Gales", gl: "Gales", fr: "Pays de Galles" },
+  "gb-nir": { es: "Irlanda del Norte", en: "Northern Ireland", it: "Irlanda del Nord", ca: "Irlanda del Nord", eu: "Ipar Irlanda", pt: "Irlanda do Norte", gl: "Irlanda do Norte", fr: "Irlande du Nord" },
 };
 
 /** Códigos disponibles en el selector del panel de administración. */

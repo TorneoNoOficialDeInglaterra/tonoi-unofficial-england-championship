@@ -23,6 +23,8 @@ const SCHEMA = {
     answer_pt: { type: "string" },
     question_gl: { type: "string" },
     answer_gl: { type: "string" },
+    question_fr: { type: "string" },
+    answer_fr: { type: "string" },
   },
   required: [
     "question_en",
@@ -37,6 +39,8 @@ const SCHEMA = {
     "answer_pt",
     "question_gl",
     "answer_gl",
+    "question_fr",
+    "answer_fr",
   ],
 };
 
@@ -81,7 +85,7 @@ Deno.serve(async (req) => {
         stream: true,
         store: false,
         instructions:
-          "Eres traductor especializado en fútbol. Traduces preguntas frecuentes de una web de un torneo histórico de fútbol (ToNOI) del español al inglés (en), italiano (it), catalán (ca), euskera/vasco (eu) y portugués de Portugal (pt). Mantén nombres propios de clubes y competiciones sin traducir, conserva el tono y no añadas información nueva.",
+          "Eres traductor especializado en fútbol. Traduces preguntas frecuentes de una web de un torneo histórico de fútbol (ToNOI) del español al inglés (en), italiano (it), catalán (ca), euskera/vasco (eu) y portugués de Portugal (pt), gallego (gl) y francés (fr). Mantén nombres propios de clubes y competiciones sin traducir, conserva el tono y no añadas información nueva.",
         input: [
           {
             role: "user",
@@ -145,7 +149,7 @@ Deno.serve(async (req) => {
     } catch {
       parsed = null;
     }
-    const LANGS = ["en", "it", "ca", "eu", "pt", "gl"];
+    const LANGS = ["en", "it", "ca", "eu", "pt", "gl", "fr"];
     const missing = LANGS.some((l) => !parsed?.[`question_${l}`] || !parsed?.[`answer_${l}`]);
     if (missing) {
       return json({ error: "La IA no devolvió una traducción válida. Inténtalo de nuevo." }, 502);
