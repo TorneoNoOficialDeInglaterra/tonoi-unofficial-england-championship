@@ -1232,6 +1232,7 @@ const FAQ_LANGS = [
   { code: "eu", label: "euskera" },
   { code: "pt", label: "portugués" },
   { code: "gl", label: "gallego" },
+  { code: "fr", label: "francés" },
 ] as const;
 
 function FaqsAdmin() {

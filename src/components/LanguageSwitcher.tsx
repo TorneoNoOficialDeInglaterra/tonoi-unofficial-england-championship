@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -5,9 +6,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
+
+const REGIONAL_LANGUAGES = new Set(["ca", "eu", "gl"]);
 
 const FlagSpain = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
@@ -71,6 +75,14 @@ const FlagGalicia = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const FlagFrance = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 18" className={className} aria-hidden="true">
+    <rect width="8" height="18" fill="#0055A4" />
+    <rect x="8" width="8" height="18" fill="#FFFFFF" />
+    <rect x="16" width="8" height="18" fill="#EF4135" />
+  </svg>
+);
+
 const FLAG_BY_LANG: Record<string, React.FC<{ className?: string }>> = {
   es: FlagSpain,
   en: FlagEn,
@@ -79,6 +91,7 @@ const FLAG_BY_LANG: Record<string, React.FC<{ className?: string }>> = {
   eu: FlagBasque,
   pt: FlagPortugal,
   gl: FlagGalicia,
+  fr: FlagFrance,
 };
 
 export default function LanguageSwitcher({ className }: { className?: string }) {
@@ -95,17 +108,22 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[9rem]">
-        {SUPPORTED_LANGUAGES.map((l) => {
+        {SUPPORTED_LANGUAGES.map((l, index) => {
           const Flag = FLAG_BY_LANG[l.code] ?? FlagSpain;
+          const isRegional = REGIONAL_LANGUAGES.has(l.code);
+          const previousIsRegional =
+            index > 0 && REGIONAL_LANGUAGES.has(SUPPORTED_LANGUAGES[index - 1].code);
           return (
-            <DropdownMenuItem
-              key={l.code}
-              onClick={() => i18n.changeLanguage(l.code)}
-              className={l.code === current.code ? "font-semibold" : undefined}
-            >
-              <Flag className="mr-2 h-3.5 w-[1.45rem] rounded-sm border border-border/40 shadow-sm object-cover" />
-              {l.label}
-            </DropdownMenuItem>
+            <Fragment key={l.code}>
+              {isRegional && !previousIsRegional && <DropdownMenuSeparator />}
+              <DropdownMenuItem
+                onClick={() => i18n.changeLanguage(l.code)}
+                className={l.code === current.code ? "font-semibold" : undefined}
+              >
+                <Flag className="mr-2 h-3.5 w-[1.45rem] rounded-sm border border-border/40 shadow-sm object-cover" />
+                {l.label}
+              </DropdownMenuItem>
+            </Fragment>
           );
         })}
       </DropdownMenuContent>
