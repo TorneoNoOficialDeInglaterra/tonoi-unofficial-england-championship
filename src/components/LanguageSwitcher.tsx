@@ -5,9 +5,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
+
+const REGIONAL_LANGUAGES = new Set(["ca", "eu", "gl"]);
 
 const FlagSpain = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 18" className={className} aria-hidden="true">

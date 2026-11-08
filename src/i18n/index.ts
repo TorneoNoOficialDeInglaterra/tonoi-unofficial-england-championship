@@ -29,12 +29,12 @@ import frAll from "./locales/fr.json";
 export const SUPPORTED_LANGUAGES = [
   { code: "es", label: "Español", short: "ES" },
   { code: "en", label: "English", short: "EN" },
+  { code: "fr", label: "Français", short: "FR" },
   { code: "it", label: "Italiano", short: "IT" },
+  { code: "pt", label: "Português", short: "PT" },
   { code: "ca", label: "Català", short: "CA" },
   { code: "eu", label: "Euskara", short: "EU" },
-  { code: "pt", label: "Português", short: "PT" },
   { code: "gl", label: "Galego", short: "GL" },
-  { code: "fr", label: "Français", short: "FR" },
 ] as const;
 
 export type LangCode = (typeof SUPPORTED_LANGUAGES)[number]["code"];
