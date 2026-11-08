@@ -18,7 +18,7 @@ type Faq = {
   [key: string]: unknown;
 };
 
-const TRANSLATED_LANGS = ["en", "it", "ca", "eu", "pt"];
+const TRANSLATED_LANGS = ["en", "it", "ca", "eu", "pt", "gl", "fr"];
 
 function localizedFaq(f: Faq, lang?: string) {
   if (lang && TRANSLATED_LANGS.includes(lang)) {

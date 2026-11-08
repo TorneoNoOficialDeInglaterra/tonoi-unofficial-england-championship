@@ -137,6 +137,7 @@ export type Database = {
           answer_ca: string | null
           answer_en: string | null
           answer_eu: string | null
+          answer_fr: string | null
           answer_gl: string | null
           answer_it: string | null
           answer_pt: string | null
@@ -147,6 +148,7 @@ export type Database = {
           question_ca: string | null
           question_en: string | null
           question_eu: string | null
+          question_fr: string | null
           question_gl: string | null
           question_it: string | null
           question_pt: string | null
@@ -157,6 +159,7 @@ export type Database = {
           answer_ca?: string | null
           answer_en?: string | null
           answer_eu?: string | null
+          answer_fr?: string | null
           answer_gl?: string | null
           answer_it?: string | null
           answer_pt?: string | null
@@ -167,6 +170,7 @@ export type Database = {
           question_ca?: string | null
           question_en?: string | null
           question_eu?: string | null
+          question_fr?: string | null
           question_gl?: string | null
           question_it?: string | null
           question_pt?: string | null
@@ -177,6 +181,7 @@ export type Database = {
           answer_ca?: string | null
           answer_en?: string | null
           answer_eu?: string | null
+          answer_fr?: string | null
           answer_gl?: string | null
           answer_it?: string | null
           answer_pt?: string | null
@@ -187,6 +192,7 @@ export type Database = {
           question_ca?: string | null
           question_en?: string | null
           question_eu?: string | null
+          question_fr?: string | null
           question_gl?: string | null
           question_it?: string | null
           question_pt?: string | null
